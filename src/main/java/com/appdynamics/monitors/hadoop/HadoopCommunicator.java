@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
@@ -45,6 +46,7 @@ public class HadoopCommunicator {
 
     public void populate(Map<String, String> metrics) {
         getClusterMetrics(metrics);
+        getClusterScheduler(metrics);
     }
 
     private Reader getResponse(String location) throws Exception {
@@ -82,29 +84,47 @@ public class HadoopCommunicator {
 
     private void getClusterScheduler(Map<String, String> metrics) {
         try {
-//            Reader response = getResponse("/ws/v1/cluster/scheduler");
-            String test = "{\"scheduler\":{\"schedulerInfo\":{\"type\":\"capacityScheduler\",\"capacity\":100.0,\"usedCapacity\":0.0,\"maxCapacity\":100.0,\"queueName\":\"root\",\"queues\":{\"queue\":[{\"type\":\"capacitySchedulerLeafQueueInfo\",\"capacity\":100.0,\"usedCapacity\":0.0,\"maxCapacity\":100.0,\"absoluteCapacity\":100.0,\"absoluteMaxCapacity\":100.0,\"absoluteUsedCapacity\":0.0,\"numApplications\":0,\"usedResources\":\"memory: 0\",\"queueName\":\"default\",\"state\":\"RUNNING\",\"resourcesUsed\":{\"memory\":0},\"numActiveApplications\":0,\"numPendingApplications\":0,\"numContainers\":0,\"maxApplications\":10000,\"maxApplicationsPerUser\":10000,\"maxActiveApplications\":1,\"maxActiveApplicationsPerUser\":1,\"userLimit\":100,\"users\":null,\"userLimitFactor\":1.0}]}}}}";
-            Reader response = new StringReader(test);
+            Reader response = getResponse("/ws/v1/cluster/scheduler");
+//            String test = "{\"scheduler\":{\"schedulerInfo\":{\"type\":\"capacityScheduler\",\"capacity\":100.0,\"usedCapacity\":0.0,\"maxCapacity\":100.0,\"queueName\":\"root\",\"queues\":{\"queue\":[{\"type\":\"capacitySchedulerLeafQueueInfo\",\"capacity\":100.0,\"usedCapacity\":0.0,\"maxCapacity\":100.0,\"absoluteCapacity\":100.0,\"absoluteMaxCapacity\":100.0,\"absoluteUsedCapacity\":0.0,\"numApplications\":0,\"usedResources\":\"memory: 0\",\"queueName\":\"default\",\"state\":\"RUNNING\",\"resourcesUsed\":{\"memory\":0},\"numActiveApplications\":0,\"numPendingApplications\":0,\"numContainers\":0,\"maxApplications\":10000,\"maxApplicationsPerUser\":10000,\"maxActiveApplications\":1,\"maxActiveApplicationsPerUser\":1,\"userLimit\":100,\"users\":null,\"userLimitFactor\":1.0}]}}}}";
+//            Reader response = new FileReader("C:\\cygwin64\\home\\stephen.dong\\test.json");
 
             Map json = (Map) parser.parse(response, simpleContainer);
             try {
-                Map scheduler = (Map) json.get("scheduler");
-                Iterator iter = scheduler.entrySet().iterator();
+                Map<String, Object> scheduler = (Map<String, Object>) json.get("scheduler");
+                scheduler = (Map<String, Object>) scheduler.get("schedulerInfo");
 
-                //TODO: flatten scheduler
-                while (iter.hasNext()) {
-                    Map.Entry entry = (Map.Entry) iter.next();
-                    //round float/double to long
-                    Long val = Math.round((Double) entry.getValue());
+                ArrayList schedulerInfoList = new ArrayList();
+                schedulerInfoList.add(scheduler);
 
-                    metrics.put("scheduler|" + entry.getKey(), val.toString());
-                }
+//                String queueName = (String) scheduler.get("queueName");
+                metrics.putAll(getQueue(schedulerInfoList, "schedulerInfo"));
+
+//                metrics.putAll(getQueue((ArrayList) ((Map) scheduler.get("queues")).get("queue"), "schedulerInfo|" + queueName));
+//                for (Map.Entry<String, Object> entry : scheduler.entrySet()){
+//
+//                    //round float/double to long
+//                    Long val = Math.round((Double) entry.getValue());
+//
+//                    metrics.put("scheduler|" + entry.getKey(), val.toString());
+//                }
+//                Iterator iter = scheduler.entrySet().iterator();
+
+//                //TODO: flatten scheduler
+//                while (iter.hasNext()) {
+//                    Map.Entry entry = (Map.Entry) iter.next();
+//                    //round float/double to long
+//                    Long val = Math.round((Double) entry.getValue());
+//
+//                    metrics.put("scheduler|" + entry.getKey(), val.toString());
+//                }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
                 logger.error("cluster err "+e);
+                e.printStackTrace();
             }
         } catch (Exception e) {
             logger.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -113,10 +133,18 @@ public class HadoopCommunicator {
         Map<String, String> queueMap = new HashMap<String, String>();
 
         for (Map<String, Object> item : (ArrayList<Map>) queue){
+//            System.out.println(item);
+
             String queueName = (String) item.get("queueName");
-            ArrayList queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
-            Map childQueue = getQueue(queueList, hierarchy+"|"+queueName);
-            queueMap.putAll(childQueue);
+//            System.out.println(queueName);
+
+            if (item.get("queues") != null){
+                ArrayList queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
+                Map childQueue = getQueue(queueList, hierarchy+"|"+queueName);
+                queueMap.putAll(childQueue);
+            } else{
+                System.out.println("current queue is a leaf queue:" + hierarchy+"|"+queueName);
+            }
 
             //remove all non numerical type attributes
             item.remove("queueName");
@@ -128,14 +156,21 @@ public class HadoopCommunicator {
             for (Map.Entry entry : item.entrySet()){
                 String key = (String) entry.getKey();
                 Object val = entry.getValue();
+//                System.out.println(key+" : "+val);
 
                 if (key.equals("resourcesUsed")){
                     queueMap.putAll(getResourcesUsed((Map) val, hierarchy + "|" + queueName));
-                } else if (key.equals("users") && val != null) {
-                    queueMap.putAll(getUsers((ArrayList)((Map) val).get("user"), hierarchy + "|" + queueName));
+                } else if (key.equals("users")) {
+                    if (val != null){
+                        queueMap.putAll(getUsers((ArrayList)((Map) val).get("user"), hierarchy + "|" + queueName));
+                    }
                 } else {
-                    queueMap.put(hierarchy + "|" + queueName + "|" + key,
-                            String.valueOf(entry.getValue()));
+                    if (val.getClass() == Float.class || val.getClass() == Double.class){
+                        val = Math.round((Double) val);
+                    }
+//                    long roundedVal = Math.round((Double) entry.getValue());
+//                    Math.round((Double) entry.getValue())).toString()
+                    queueMap.put(hierarchy + "|" + queueName + "|" + key, val.toString());
                 }
             }
         }
@@ -145,8 +180,11 @@ public class HadoopCommunicator {
     private Map<String, String> getResourcesUsed(Map resources, String hierarchy){
         Map<String, String> rtn = new HashMap<String, String>();
 
-        rtn.put(hierarchy + "|resourcesUsed|memory", resources.get("memory").toString());
-        rtn.put(hierarchy + "|resourcesUsed|vCores", resources.get("vCores").toString());
+        for (Map.Entry<String, Object> entry : ((Map<String, Object>) resources).entrySet()){
+            rtn.put(hierarchy + "|resourcesUsed|" + entry.getKey(), entry.getValue().toString());
+        }
+//        rtn.put(hierarchy + "|resourcesUsed|memory", resources.get("memory").toString());
+//        rtn.put(hierarchy + "|resourcesUsed|vCores", resources.get("vCores").toString());
 
         return rtn;
     }
@@ -158,8 +196,11 @@ public class HadoopCommunicator {
             String username = (String) user.get("username");
 
             rtn.putAll(getResourcesUsed((Map) user.get("resourcesUsed"), hierarchy + "|" + username));
-            rtn.put(hierarchy + "|users|" + username + "|numActiveApplications", user.get("numActiveApplications").toString());
-            rtn.put(hierarchy + "|users|" + username + "|numPendingApplications", user.get("numPendingApplications").toString());
+            for (Map.Entry<String, Object> entry : user.entrySet()){
+                rtn.put(hierarchy + "|users|" + username + "|" + entry.getKey(), entry.getValue().toString());
+            }
+//            rtn.put(hierarchy + "|users|" + username + "|numActiveApplications", user.get("numActiveApplications").toString());
+//            rtn.put(hierarchy + "|users|" + username + "|numPendingApplications", user.get("numPendingApplications").toString());
         }
 
         return rtn;
