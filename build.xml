@@ -17,7 +17,7 @@
             <fileset dir="${conf.dir}" includes="monitor.xml"/>
         </copy>
     	<copy todir="${build.dir}/HadoopMonitor/lib/">
-    	   	<fileset dir="${lib.dir}" includes="json-simple-1.1.1.jar"/>
+    	   	<fileset dir="${lib.dir}/json-simple" includes="json-simple-1.1.1.jar"/>
     	</copy>
     	<copy todir="${build.dir}/HadoopMonitor/lib/">
     	    <fileset dir="${lib.dir}" includes="httpcomponents/*"/>
