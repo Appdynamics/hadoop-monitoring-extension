@@ -81,8 +81,9 @@ public class HadoopMonitor extends AManagedMonitor
         hadoopCommunicator.populate(hadoopMetrics);
 
         try{
-            for (String key : hadoopMetrics.keySet()){
-                printMetric(metricPath+key,hadoopMetrics.get(key),
+//            for (String key : hadoopMetrics.keySet()){
+            for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
+                printMetric(metricPath + entry.getKey(), entry.getValue(),
                         MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                         MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
                         MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
