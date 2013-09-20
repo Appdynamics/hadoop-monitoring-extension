@@ -143,7 +143,7 @@ public class HadoopMonitor extends AManagedMonitor
         );
 
         metricWriter.printMetric(String.valueOf(metricValue));
-        logger.info("Printed metrics for HadoopMonitor");
+//        logger.info("Printed metrics for HadoopMonitor");
     }
 
 //    public HttpExecutionResponse connect(String location){

@@ -8,10 +8,8 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.*;
 
 /**
@@ -41,18 +39,18 @@ public class HadoopCommunicator {
     public HadoopCommunicator(String host, String port, Logger logger) {
         this.logger = logger;
         baseAddress = "http://" + host + ":" + port;
-
     }
 
     public void populate(Map<String, String> metrics) {
         getClusterMetrics(metrics);
         getClusterScheduler(metrics);
+        getClusterApps(metrics);
+        getclusterNodes(metrics);
     }
 
     private Reader getResponse(String location) throws Exception {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(baseAddress + location);
-        logger.info("GET "+baseAddress+location);
         CloseableHttpResponse response = client.execute(httpGet);
 
         Reader reader = new InputStreamReader(response.getEntity().getContent());
@@ -85,38 +83,37 @@ public class HadoopCommunicator {
     private void getClusterScheduler(Map<String, String> metrics) {
         try {
             Reader response = getResponse("/ws/v1/cluster/scheduler");
-//            String test = "{\"scheduler\":{\"schedulerInfo\":{\"type\":\"capacityScheduler\",\"capacity\":100.0,\"usedCapacity\":0.0,\"maxCapacity\":100.0,\"queueName\":\"root\",\"queues\":{\"queue\":[{\"type\":\"capacitySchedulerLeafQueueInfo\",\"capacity\":100.0,\"usedCapacity\":0.0,\"maxCapacity\":100.0,\"absoluteCapacity\":100.0,\"absoluteMaxCapacity\":100.0,\"absoluteUsedCapacity\":0.0,\"numApplications\":0,\"usedResources\":\"memory: 0\",\"queueName\":\"default\",\"state\":\"RUNNING\",\"resourcesUsed\":{\"memory\":0},\"numActiveApplications\":0,\"numPendingApplications\":0,\"numContainers\":0,\"maxApplications\":10000,\"maxApplicationsPerUser\":10000,\"maxActiveApplications\":1,\"maxActiveApplicationsPerUser\":1,\"userLimit\":100,\"users\":null,\"userLimitFactor\":1.0}]}}}}";
-//            Reader response = new FileReader("C:\\cygwin64\\home\\stephen.dong\\test.json");
 
             Map json = (Map) parser.parse(response, simpleContainer);
             try {
                 Map<String, Object> scheduler = (Map<String, Object>) json.get("scheduler");
                 scheduler = (Map<String, Object>) scheduler.get("schedulerInfo");
 
-                ArrayList schedulerInfoList = new ArrayList();
-                schedulerInfoList.add(scheduler);
+                if (scheduler.get("type").equals("capacityScheduler")){
+                    ArrayList schedulerInfoList = new ArrayList();
+                    schedulerInfoList.add(scheduler);
 
-//                String queueName = (String) scheduler.get("queueName");
-                metrics.putAll(getQueue(schedulerInfoList, "schedulerInfo"));
+                    metrics.putAll(getQueue(schedulerInfoList, "schedulerInfo"));
+                } else if (scheduler.get("type").equals("fifoScheduler")){
+                    if (scheduler.get("qstate").equals("RUNNING")){
+                        metrics.put("schedulerInfo|qstate", "1");
+                    } else{
+                        metrics.put("schedulerInfo|qstate", "0");
+                    }
+                    scheduler.remove("type");
+                    scheduler.remove("qstate");
 
-//                metrics.putAll(getQueue((ArrayList) ((Map) scheduler.get("queues")).get("queue"), "schedulerInfo|" + queueName));
-//                for (Map.Entry<String, Object> entry : scheduler.entrySet()){
-//
-//                    //round float/double to long
-//                    Long val = Math.round((Double) entry.getValue());
-//
-//                    metrics.put("scheduler|" + entry.getKey(), val.toString());
-//                }
-//                Iterator iter = scheduler.entrySet().iterator();
+                    for (Map.Entry<String, Object> entry : scheduler.entrySet()){
+                        Object val = entry.getValue();
+                        if (val.getClass() == Float.class || val.getClass() == Double.class){
+                            val = Math.round((Double) val);
+                        }
 
-//                //TODO: flatten scheduler
-//                while (iter.hasNext()) {
-//                    Map.Entry entry = (Map.Entry) iter.next();
-//                    //round float/double to long
-//                    Long val = Math.round((Double) entry.getValue());
-//
-//                    metrics.put("scheduler|" + entry.getKey(), val.toString());
-//                }
+                        metrics.put("schedulerInfo|" + entry.getKey(), val.toString());
+                    }
+                } else {
+                    logger.error("type != expected values. ->"+scheduler.get("type"));
+                }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
                 logger.error("cluster err "+e);
@@ -128,15 +125,11 @@ public class HadoopCommunicator {
         }
     }
 
-    //TODO: recursive function to flatten scheduler queue
     private Map<String, String> getQueue(ArrayList queue, String hierarchy){
         Map<String, String> queueMap = new HashMap<String, String>();
 
         for (Map<String, Object> item : (ArrayList<Map>) queue){
-//            System.out.println(item);
-
             String queueName = (String) item.get("queueName");
-//            System.out.println(queueName);
 
             if (item.get("queues") != null){
                 ArrayList queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
@@ -156,7 +149,6 @@ public class HadoopCommunicator {
             for (Map.Entry entry : item.entrySet()){
                 String key = (String) entry.getKey();
                 Object val = entry.getValue();
-//                System.out.println(key+" : "+val);
 
                 if (key.equals("resourcesUsed")){
                     queueMap.putAll(getResourcesUsed((Map) val, hierarchy + "|" + queueName));
@@ -168,8 +160,7 @@ public class HadoopCommunicator {
                     if (val.getClass() == Float.class || val.getClass() == Double.class){
                         val = Math.round((Double) val);
                     }
-//                    long roundedVal = Math.round((Double) entry.getValue());
-//                    Math.round((Double) entry.getValue())).toString()
+
                     queueMap.put(hierarchy + "|" + queueName + "|" + key, val.toString());
                 }
             }
@@ -183,9 +174,6 @@ public class HadoopCommunicator {
         for (Map.Entry<String, Object> entry : ((Map<String, Object>) resources).entrySet()){
             rtn.put(hierarchy + "|resourcesUsed|" + entry.getKey(), entry.getValue().toString());
         }
-//        rtn.put(hierarchy + "|resourcesUsed|memory", resources.get("memory").toString());
-//        rtn.put(hierarchy + "|resourcesUsed|vCores", resources.get("vCores").toString());
-
         return rtn;
     }
 
@@ -196,13 +184,75 @@ public class HadoopCommunicator {
             String username = (String) user.get("username");
 
             rtn.putAll(getResourcesUsed((Map) user.get("resourcesUsed"), hierarchy + "|" + username));
+            user.remove("resourcesUsed");
             for (Map.Entry<String, Object> entry : user.entrySet()){
                 rtn.put(hierarchy + "|users|" + username + "|" + entry.getKey(), entry.getValue().toString());
             }
-//            rtn.put(hierarchy + "|users|" + username + "|numActiveApplications", user.get("numActiveApplications").toString());
-//            rtn.put(hierarchy + "|users|" + username + "|numPendingApplications", user.get("numPendingApplications").toString());
         }
+        return rtn;
+    }
+
+    private void getClusterApps(Map<String, String> metrics) {
+        try {
+            Reader response = getResponse("/ws/v1/cluster/apps");
+
+            Map json = (Map) parser.parse(response, simpleContainer);
+            try {
+                Map<String, Object> apps = (Map<String, Object>) json.get("apps");
+                ArrayList<Map> appList = (ArrayList) apps.get("app");
+
+                for (Map<String, Object> app : appList){
+                    metrics.putAll(getApp(app, "Apps"));
+                }
+            } catch (Exception e) {
+                logger.error("cluster err "+e);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
+    private void getclusterNodes(Map<String, String> metrics) {
+        try {
+            Reader response = getResponse("/ws/v1/cluster/nodes");
+
+            Map json = (Map) parser.parse(response, simpleContainer);
+            try {
+                Map<String, Object> nodes = (Map<String, Object>) json.get("nodes");
+                ArrayList<Map> nodeList = (ArrayList) nodes.get("node");
+
+                for (Map<String, Object> node : nodeList){
+                    metrics.putAll(getNode(node, "Nodes"));
+                }
+            } catch (Exception e) {
+                logger.error("node err "+e);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
+    private Map<String, String> getApp(Map<String,Object> app, String hierarchy) {
+        Map<String, String> rtn = new HashMap<String, String>();
+        //app doesn't seem to have any usable metrics except progress%
+
+        String appName = (String) app.get("name");
+        Long progress = Math.round((Double) app.get("progress"));
+        rtn.put(hierarchy+"|"+appName, progress.toString());
 
         return rtn;
     }
+
+    private Map<String, String> getNode(Map<String,Object> node, String hierarchy) {
+        Map<String, String> rtn = new HashMap<String, String>();
+
+        String id = (String) node.get("id");
+        rtn.put(hierarchy+"|"+id, node.get("usedMemoryMB").toString());
+        rtn.put(hierarchy+"|"+id, node.get("availMemoryMB").toString());
+        rtn.put(hierarchy+"|"+id, node.get("numContainers").toString());
+
+        return rtn;
+    }
+
+    //TODO: fix up type casting format so they're consistent
 }
