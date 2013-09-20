@@ -238,7 +238,7 @@ public class HadoopCommunicator {
 
         String appName = (String) app.get("name");
         Long progress = Math.round((Double) app.get("progress"));
-        rtn.put(hierarchy+"|"+appName, progress.toString());
+        rtn.put(hierarchy+"|"+appName+"|progress", progress.toString());
 
         return rtn;
     }
@@ -247,9 +247,9 @@ public class HadoopCommunicator {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
-        rtn.put(hierarchy+"|"+id, node.get("usedMemoryMB").toString());
-        rtn.put(hierarchy+"|"+id, node.get("availMemoryMB").toString());
-        rtn.put(hierarchy+"|"+id, node.get("numContainers").toString());
+        rtn.put(hierarchy+"|"+id+"|usedMemoryMB", node.get("usedMemoryMB").toString());
+        rtn.put(hierarchy+"|"+id+"|availMemoryMB", node.get("availMemoryMB").toString());
+        rtn.put(hierarchy+"|"+id+"|numContainers", node.get("numContainers").toString());
 
         return rtn;
     }
