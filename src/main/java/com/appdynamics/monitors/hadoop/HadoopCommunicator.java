@@ -185,6 +185,7 @@ public class HadoopCommunicator {
 
             rtn.putAll(getResourcesUsed((Map) user.get("resourcesUsed"), hierarchy + "|" + username));
             user.remove("resourcesUsed");
+            user.remove("username");
             for (Map.Entry<String, Object> entry : user.entrySet()){
                 rtn.put(hierarchy + "|users|" + username + "|" + entry.getKey(), entry.getValue().toString());
             }
