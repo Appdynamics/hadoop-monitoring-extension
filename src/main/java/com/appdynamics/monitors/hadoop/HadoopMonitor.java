@@ -91,7 +91,7 @@ public class HadoopMonitor extends AManagedMonitor
                         "Error: " + e);
                 xmlParser = new Parser(logger);
             }
-            logger.warn("user.dir is: "+System.getProperty("user.dir"));
+//            logger.error("user.dir is: "+System.getProperty("user.dir"));
         }
 
         hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);

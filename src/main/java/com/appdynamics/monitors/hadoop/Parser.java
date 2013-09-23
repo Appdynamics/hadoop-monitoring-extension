@@ -73,7 +73,7 @@ public class Parser {
                     }
                 }
             } else {
-                logger.warn("Unknown element '" + element.getName() + "' in properties file");
+                logger.error("Unknown element '" + element.getName() + "' in properties file");
             }
         }
     }
