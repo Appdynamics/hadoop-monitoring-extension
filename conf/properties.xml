@@ -1,0 +1,25 @@
+<hadoop-monitor>
+	<!-- fill this tag with comma-separated names of processes you want to
+		 be filtered out of the reported metrics. (OPTIONAL)
+		 Example Linux  : <exclude-processes>java,bash,sshd</exclude-processes>
+		 Example Windows: <exclude-processes>java.exe,chrome.exe</exclude-processes>
+		 DO NOT include spaces or quotes in this tag! 
+	-->
+	<exclude-appid></exclude-appid>
+
+	<!-- fill this tag with comma-separated Process IDs (pids) you want to
+		 be filtered out of the reported metrics. (OPTIONAL)
+		 Example: <exclude-processes>2,343,1235,34</exclude-processes>
+		 DO NOT include spaces or quotes in this tag! 
+	-->
+	<exclude-app-name>QuasiMonteCarlo</exclude-app-name>
+
+	<!-- fill this tag with a non-negative whole number. (OPTIONAL)
+		 Processes with an aggregated absolute memory consumption of LESS
+		 than this number in Megabytes will be filtered out of the
+		 reported metrics.
+		 (Fill with 0 to turn off filtering. Default value is 100 [MB])
+		 Example: <memory-threshold>250</memory-threshold> 
+	-->
+	<exclude-nodeid></exclude-nodeid>
+</hadoop-monitor>

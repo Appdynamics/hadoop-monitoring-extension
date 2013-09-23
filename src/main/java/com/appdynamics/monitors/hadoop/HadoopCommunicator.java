@@ -64,12 +64,9 @@ public class HadoopCommunicator {
             Map json = (Map) parser.parse(response, simpleContainer);
             try {
                 Map clusterMetrics = (Map) json.get("clusterMetrics");
-                Iterator iter = clusterMetrics.entrySet().iterator();
 
-                while (iter.hasNext()) {
-                    Map.Entry entry = (Map.Entry) iter.next();
-
-                    metrics.put("clusterMetrics|" + entry.getKey(), String.valueOf(entry.getValue()));
+                for (Map.Entry<String, Object> entry : ((Map<String, Object>) clusterMetrics).entrySet()){
+                    metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue().toString());
                 }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
@@ -248,6 +245,11 @@ public class HadoopCommunicator {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
+        if (node.get("healthStatus").equals("Healthy")){
+            rtn.put(hierarchy+"|"+id+"|healthStatus", "1");
+        } else {
+            rtn.put(hierarchy+"|"+id+"|healthStatus", "0");
+        }
         rtn.put(hierarchy+"|"+id+"|usedMemoryMB", node.get("usedMemoryMB").toString());
         rtn.put(hierarchy+"|"+id+"|availMemoryMB", node.get("availMemoryMB").toString());
         rtn.put(hierarchy+"|"+id+"|numContainers", node.get("numContainers").toString());
@@ -256,4 +258,11 @@ public class HadoopCommunicator {
     }
 
     //TODO: fix up type casting format so they're consistent
+    //add pid appid for include metrics? or rather app_attempts since apps and nodes would have those?
+    //exclude on pid, appid
+    //exclude on specific metric path?(clustermetric|xxx)
+    //
+    //exclude by: appid, app name, node id
+    //TODO: patch up with proper exception handling
+
 }

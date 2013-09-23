@@ -20,7 +20,6 @@ import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException
  * Time: 1:53 PM
  * To change this template use File | Settings | File Templates.
  */
-//TODO: import agent libs
 public class HadoopMonitor extends AManagedMonitor
 {
 
@@ -53,7 +52,6 @@ public class HadoopMonitor extends AManagedMonitor
         }
     }
 
-
     public TaskOutput execute(Map<String, String> args, TaskExecutionContext arg1)
             throws TaskExecutionException
     {
@@ -81,7 +79,6 @@ public class HadoopMonitor extends AManagedMonitor
         hadoopCommunicator.populate(hadoopMetrics);
 
         try{
-//            for (String key : hadoopMetrics.keySet()){
             for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
                 printMetric(metricPath + entry.getKey(), entry.getValue(),
                         MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
@@ -92,10 +89,6 @@ public class HadoopMonitor extends AManagedMonitor
             logger.error("Error printing metrics: " + e);
         }
 
-//        printMetric(metricPath+"HadoopStatus","1",
-//                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-//                MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
-//                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
         return new TaskOutput("Hadoop Metric Upload Complete");
 //        while(true){
 //            (new PrintMetricsThread()).start();
@@ -123,16 +116,6 @@ public class HadoopMonitor extends AManagedMonitor
 //        }
     }
 
-//    private void populate() {
-//        //To change body of created methods use File | Settings | File Templates.
-//
-//        HttpExecutionResponse response = connect("ws/v1/cluster/info");
-//        //get response body, parse json
-//
-//
-//
-//    }
-
 
     public void printMetric(String metricName, Object metricValue, String aggregation, String timeRollup, String cluster)
     {
@@ -143,24 +126,6 @@ public class HadoopMonitor extends AManagedMonitor
         );
 
         metricWriter.printMetric(String.valueOf(metricValue));
-//        logger.info("Printed metrics for HadoopMonitor");
     }
-
-//    public HttpExecutionResponse connect(String location){
-//        String connectionURL = "http://" + host + ":" + port + "/" + location;
-//
-//        HttpExecutionRequest request = new HttpExecutionRequest(connectionURL, "", HttpOperation.GET);
-//        HttpExecutionResponse response = httpClient.executeHttpOperation(request, new Log4JLogger(logger));
-//
-//        return response;
-//    }
-
-//    private class PrintMetricsThread extends Thread{
-//        public void run(){
-//            hadoopCommunicator.populate(hadoopMetrics);
-//            //TODO: add print fn
-//
-//            hadoopMetrics.clear();
-//        }
-//    }
+    //TODO: add metric filtering
 }
