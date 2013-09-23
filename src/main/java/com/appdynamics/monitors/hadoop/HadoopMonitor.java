@@ -12,6 +12,7 @@ import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
 import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
+import org.dom4j.DocumentException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +23,7 @@ import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException
  */
 public class HadoopMonitor extends AManagedMonitor
 {
-
+    private Parser xmlParser;
     private Map<String, String> hadoopMetrics;
 
     private String host;
@@ -42,8 +43,9 @@ public class HadoopMonitor extends AManagedMonitor
 
         HadoopMonitor hm = new HadoopMonitor();
         hm.logger = Logger.getLogger(HadoopMonitor.class);
+        hm.xmlParser = new Parser(hm.logger);
 
-        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger);
+        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
         Map<String, String> metrics = new HashMap<String, String>();
         hcom.populate(metrics);
 
@@ -59,7 +61,7 @@ public class HadoopMonitor extends AManagedMonitor
 
         if (!args.containsKey("host") || !args.containsKey("port")){
             logger.error("monitor.xml must contain task arguments 'host' and 'port'!\n" +
-                        "Terminating monitor.");
+                        "Terminating Hadoop Monitor");
             return null;
         }
 
@@ -73,7 +75,26 @@ public class HadoopMonitor extends AManagedMonitor
             }
         }
 
-        hadoopCommunicator = new HadoopCommunicator(host,port,logger);
+        if (xmlParser == null){
+            if (!args.containsKey("properties-path")){
+                logger.error("monitor.xml must contain task argument 'properties-path' describing " +
+                        "the path to the XML properties file.\n" +
+                        "Terminating Hadoop Monitor");
+                return null;
+            }
+
+            String xml = args.get("properties-path");
+            try {
+                xmlParser = new Parser(logger, xml);
+            } catch (DocumentException e) {
+                logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
+                        "Error: " + e);
+                xmlParser = new Parser(logger);
+            }
+            logger.warn("user.dir is: "+System.getProperty("user.dir"));
+        }
+
+        hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
 
         hadoopMetrics = new HashMap<String, String>();
         hadoopCommunicator.populate(hadoopMetrics);

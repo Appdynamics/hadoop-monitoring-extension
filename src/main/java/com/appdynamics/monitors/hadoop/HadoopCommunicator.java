@@ -23,6 +23,7 @@ public class HadoopCommunicator {
     private String baseAddress;
     private Logger logger;
     private JSONParser parser = new JSONParser();
+    private Parser xmlParser;
 
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
@@ -36,8 +37,9 @@ public class HadoopCommunicator {
         }
     };
 
-    public HadoopCommunicator(String host, String port, Logger logger) {
+    public HadoopCommunicator(String host, String port, Logger logger, Parser xmlParser) {
         this.logger = logger;
+        this.xmlParser = xmlParser;
         baseAddress = "http://" + host + ":" + port;
     }
 

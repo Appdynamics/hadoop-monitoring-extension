@@ -32,6 +32,11 @@ public class Parser {
         excludedNodeid = new ArrayList<String>();
     }
 
+    public Parser(Logger logger, String xml) throws DocumentException{
+        this(logger);
+        parseXML(xml);
+    }
+
     public void parseXML(String xml) throws DocumentException{
         SAXReader reader = new SAXReader();
         Document doc = reader.read(xml);
@@ -46,29 +51,29 @@ public class Parser {
             if (element.getName().equals("exclude-appid")){
                 if (!(text = element.getText()).equals("")){
 
-                    String[] appid = text.split(",");
-                    for (String id : appid){
+                    String[] appId = text.split(",");
+                    for (String id : appId){
                         excludedAppid.add(id);
                     }
                 }
             } else if (element.getName().equals("exclude-app-name")){
                 if (!(text = element.getText()).equals("")){
 
-                    String[] appname = text.split(",");
-                    for (String name : appname){
+                    String[] appName = text.split(",");
+                    for (String name : appName){
                         excludedAppName.add(name);
                     }
                 }
             } else if (element.getName().equals("exclude-nodeid")){
                 if (!(text = element.getText()).equals("")){
 
-                    String[] nodeid = text.split(",");
-                    for (String id : nodeid){
+                    String[] nodeId = text.split(",");
+                    for (String id : nodeId){
                         excludedNodeid.add(id);
                     }
                 }
             } else {
-                logger.warn("Unknown element '" + element.getName() + "' in properties.xml");
+                logger.warn("Unknown element '" + element.getName() + "' in properties file");
             }
         }
     }
