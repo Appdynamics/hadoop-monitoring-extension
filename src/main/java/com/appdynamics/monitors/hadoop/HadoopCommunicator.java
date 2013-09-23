@@ -232,21 +232,36 @@ public class HadoopCommunicator {
         }
     }
 
+    //TODO: add state info as ints
     private Map<String, String> getApp(Map<String,Object> app, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
         //app doesn't seem to have any usable metrics except progress%
 
         String appName = (String) app.get("name");
+        if (xmlParser.getExcludedAppName().contains(appName)){
+//            logger.error("App in excluded name list: "+appName);
+            return rtn;
+        } else if (xmlParser.getExcludedAppid().contains(app.get("id"))){
+//            logger.error("App in excluded appid list:"+app.get("id"));
+            return rtn;
+        }
+
         Long progress = Math.round((Double) app.get("progress"));
         rtn.put(hierarchy+"|"+appName+"|progress", progress.toString());
 
         return rtn;
     }
 
+    //TODO: add state info as ints
     private Map<String, String> getNode(Map<String,Object> node, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
+        if (xmlParser.getExcludedNodeid().contains(id)){
+//            logger.error("Node in excluded nodeid list: "+id);
+            return rtn;
+        }
+
         if (node.get("healthStatus").equals("Healthy")){
             rtn.put(hierarchy+"|"+id+"|healthStatus", "1");
         } else {

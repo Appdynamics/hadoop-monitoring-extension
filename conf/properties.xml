@@ -11,7 +11,7 @@
 		 Example: <exclude-app-name>TeraSort,TeraGen</exclude-app-name>
 		 DO NOT include spaces or quotes in this tag! 
 	-->
-	<exclude-app-name>QuasiMonteCarlo</exclude-app-name>
+	<exclude-app-name></exclude-app-name>
 
 	<!-- fill this tag with comma-separated node IDs you want to
 		 be filtered out of the reported metrics. (OPTIONAL)
