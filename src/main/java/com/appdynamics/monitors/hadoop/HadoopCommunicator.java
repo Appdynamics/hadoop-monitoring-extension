@@ -12,13 +12,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Stephen.Dong
- * Date: 9/14/13
- * Time: 4:08 PM
- * To change this template use File | Settings | File Templates.
- */
 public class HadoopCommunicator {
     private String baseAddress;
     private Logger logger;
@@ -55,19 +48,18 @@ public class HadoopCommunicator {
         HttpGet httpGet = new HttpGet(baseAddress + location);
         CloseableHttpResponse response = client.execute(httpGet);
 
-        Reader reader = new InputStreamReader(response.getEntity().getContent());
-        return reader;
+        return new InputStreamReader(response.getEntity().getContent());
     }
 
     private void getClusterMetrics(Map<String, String> metrics) {
         try {
             Reader response = getResponse("/ws/v1/cluster/metrics");
 
-            Map json = (Map) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
-                Map clusterMetrics = (Map) json.get("clusterMetrics");
+                json = (Map<String, Object>) json.get("clusterMetrics");
 
-                for (Map.Entry<String, Object> entry : ((Map<String, Object>) clusterMetrics).entrySet()){
+                for (Map.Entry<String, Object> entry : json.entrySet()){
                     metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue().toString());
                 }
             } catch (Exception e) {
@@ -83,35 +75,28 @@ public class HadoopCommunicator {
         try {
             Reader response = getResponse("/ws/v1/cluster/scheduler");
 
-            Map json = (Map) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
-                Map<String, Object> scheduler = (Map<String, Object>) json.get("scheduler");
-                scheduler = (Map<String, Object>) scheduler.get("schedulerInfo");
+                json = (Map<String, Object>) json.get("scheduler");
+                json = (Map<String, Object>) json.get("schedulerInfo");
 
-                if (scheduler.get("type").equals("capacityScheduler")){
+                if (json.get("type").equals("capacityScheduler")){
                     ArrayList schedulerInfoList = new ArrayList();
-                    schedulerInfoList.add(scheduler);
-
-                    metrics.putAll(getQueue(schedulerInfoList, "schedulerInfo"));
-                } else if (scheduler.get("type").equals("fifoScheduler")){
-                    if (scheduler.get("qstate").equals("RUNNING")){
+                    schedulerInfoList.add(json);
+                    metrics.putAll(getQueues(schedulerInfoList, "schedulerInfo"));
+                } else {    //fifoScheduler
+                    if (json.get("qstate").equals("RUNNING")){
                         metrics.put("schedulerInfo|qstate", "1");
                     } else{
                         metrics.put("schedulerInfo|qstate", "0");
                     }
-                    scheduler.remove("type");
-                    scheduler.remove("qstate");
 
-                    for (Map.Entry<String, Object> entry : scheduler.entrySet()){
-                        Object val = entry.getValue();
-                        if (val.getClass() == Float.class || val.getClass() == Double.class){
-                            val = Math.round((Double) val);
-                        }
+                    json.remove("type");
+                    json.remove("qstate");
 
-                        metrics.put("schedulerInfo|" + entry.getKey(), val.toString());
+                    for (Map.Entry<String, Object> entry : json.entrySet()){
+                        metrics.put("schedulerInfo|" + entry.getKey(), roundDecimal((Number) entry.getValue()).toString());
                     }
-                } else {
-                    logger.error("type != expected values. ->"+scheduler.get("type"));
                 }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
@@ -124,7 +109,7 @@ public class HadoopCommunicator {
         }
     }
 
-    private Map<String, String> getQueue(ArrayList queue, String hierarchy){
+    private Map<String, String> getQueues(ArrayList queue, String hierarchy){
         Map<String, String> queueMap = new HashMap<String, String>();
 
         for (Map<String, Object> item : (ArrayList<Map>) queue){
@@ -132,10 +117,13 @@ public class HadoopCommunicator {
 
             if (item.get("queues") != null){
                 ArrayList queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
-                Map childQueue = getQueue(queueList, hierarchy+"|"+queueName);
+                Map<String, String> childQueue = getQueues(queueList, hierarchy + "|" + queueName);
                 queueMap.putAll(childQueue);
-            } else{
-                System.out.println("current queue is a leaf queue:" + hierarchy+"|"+queueName);
+            }
+
+            queueMap.putAll(getResourcesUsed((Map) item.get("resourcesUsed"), hierarchy + "|" + queueName));
+            if (item.get("users") != null){
+                queueMap.putAll(getUsers((ArrayList) ((Map) item.get("users")).get("user"), hierarchy + "|" + queueName));
             }
 
             //remove all non numerical type attributes
@@ -144,33 +132,21 @@ public class HadoopCommunicator {
             item.remove("state");
             item.remove("usedResources");
             item.remove("type");
+            item.remove("resourcesUsed");
+            item.remove("users");
 
-            for (Map.Entry entry : item.entrySet()){
-                String key = (String) entry.getKey();
-                Object val = entry.getValue();
-
-                if (key.equals("resourcesUsed")){
-                    queueMap.putAll(getResourcesUsed((Map) val, hierarchy + "|" + queueName));
-                } else if (key.equals("users")) {
-                    if (val != null){
-                        queueMap.putAll(getUsers((ArrayList)((Map) val).get("user"), hierarchy + "|" + queueName));
-                    }
-                } else {
-                    if (val.getClass() == Float.class || val.getClass() == Double.class){
-                        val = Math.round((Double) val);
-                    }
-
-                    queueMap.put(hierarchy + "|" + queueName + "|" + key, val.toString());
-                }
+            for (Map.Entry<String, Object> entry : item.entrySet()){
+                queueMap.put(hierarchy + "|" + queueName + "|" + entry.getKey(),
+                        roundDecimal((Number) entry.getValue()).toString());
             }
         }
         return queueMap;
     }
 
-    private Map<String, String> getResourcesUsed(Map resources, String hierarchy){
+    private Map<String, String> getResourcesUsed(Map<String, Object> resources, String hierarchy){
         Map<String, String> rtn = new HashMap<String, String>();
 
-        for (Map.Entry<String, Object> entry : ((Map<String, Object>) resources).entrySet()){
+        for (Map.Entry<String, Object> entry : resources.entrySet()){
             rtn.put(hierarchy + "|resourcesUsed|" + entry.getKey(), entry.getValue().toString());
         }
         return rtn;
@@ -182,9 +158,11 @@ public class HadoopCommunicator {
         for (Map<String, Object> user : (ArrayList<Map>)users){
             String username = (String) user.get("username");
 
-            rtn.putAll(getResourcesUsed((Map) user.get("resourcesUsed"), hierarchy + "|" + username));
+            rtn.putAll(getResourcesUsed((Map<String, Object>) user.get("resourcesUsed"), hierarchy + "|" + username));
+
             user.remove("resourcesUsed");
             user.remove("username");
+
             for (Map.Entry<String, Object> entry : user.entrySet()){
                 rtn.put(hierarchy + "|users|" + username + "|" + entry.getKey(), entry.getValue().toString());
             }
@@ -196,10 +174,10 @@ public class HadoopCommunicator {
         try {
             Reader response = getResponse("/ws/v1/cluster/apps");
 
-            Map json = (Map) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
-                Map<String, Object> apps = (Map<String, Object>) json.get("apps");
-                ArrayList<Map> appList = (ArrayList) apps.get("app");
+                json = (Map<String, Object>) json.get("apps");
+                ArrayList<Map> appList = (ArrayList<Map>) json.get("app");
 
                 for (Map<String, Object> app : appList){
                     metrics.putAll(getApp(app, "Apps"));
@@ -216,10 +194,10 @@ public class HadoopCommunicator {
         try {
             Reader response = getResponse("/ws/v1/cluster/nodes");
 
-            Map json = (Map) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
-                Map<String, Object> nodes = (Map<String, Object>) json.get("nodes");
-                ArrayList<Map> nodeList = (ArrayList) nodes.get("node");
+                json = (Map<String, Object>) json.get("nodes");
+                ArrayList<Map> nodeList = (ArrayList<Map>) json.get("node");
 
                 for (Map<String, Object> node : nodeList){
                     metrics.putAll(getNode(node, "Nodes"));
@@ -235,42 +213,63 @@ public class HadoopCommunicator {
     //TODO: add state info as ints
     private Map<String, String> getApp(Map<String,Object> app, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
-        //app doesn't seem to have any usable metrics except progress%
 
         String appName = (String) app.get("name");
         if (xmlParser.getExcludedAppName().contains(appName)){
-//            logger.error("App in excluded name list: "+appName);
             return rtn;
         } else if (xmlParser.getExcludedAppid().contains(app.get("id"))){
-//            logger.error("App in excluded appid list:"+app.get("id"));
             return rtn;
         }
 
+        ArrayList<String> states = new ArrayList<String>();
+        states.add("NEW");
+        states.add("SUBMITTED");
+        states.add("ACCEPTED");
+        states.add("RUNNING");
+        states.add("FINISHED");
+        states.add("FAILED");
+        states.add("KILLED");
+        rtn.put(hierarchy + "|" + appName + "|state", String.valueOf(states.indexOf(app.get("state"))));
+
+        ArrayList<String> finalStatus = new ArrayList<String>();
+        finalStatus.add("UNDEFINED");
+        finalStatus.add("SUCCEEDED");
+        finalStatus.add("FAILED");
+        finalStatus.add("KILLED");
+        rtn.put(hierarchy + "|" + appName + "|finalStatus", String.valueOf(finalStatus.indexOf(app.get("finalStatus"))));
+
         Long progress = Math.round((Double) app.get("progress"));
         rtn.put(hierarchy+"|"+appName+"|progress", progress.toString());
-
         return rtn;
     }
 
-    //TODO: add state info as ints
     private Map<String, String> getNode(Map<String,Object> node, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
         if (xmlParser.getExcludedNodeid().contains(id)){
-//            logger.error("Node in excluded nodeid list: "+id);
             return rtn;
         }
 
+        //should this be standardized?
         if (node.get("healthStatus").equals("Healthy")){
             rtn.put(hierarchy+"|"+id+"|healthStatus", "1");
         } else {
             rtn.put(hierarchy+"|"+id+"|healthStatus", "0");
         }
+
+        ArrayList<String> states = new ArrayList<String>();
+        states.add("NEW");
+        states.add("RUNNING");
+        states.add("UNHEALTHY");
+        states.add("DECOMMISSIONED");
+        states.add("LOST");
+        states.add("REBOOTED");
+        rtn.put(hierarchy+"|"+id+"|state", String.valueOf(states.indexOf(node.get("state"))));
+
         rtn.put(hierarchy+"|"+id+"|usedMemoryMB", node.get("usedMemoryMB").toString());
         rtn.put(hierarchy+"|"+id+"|availMemoryMB", node.get("availMemoryMB").toString());
         rtn.put(hierarchy+"|"+id+"|numContainers", node.get("numContainers").toString());
-
         return rtn;
     }
 
@@ -281,5 +280,12 @@ public class HadoopCommunicator {
     //
     //exclude by: appid, app name, node id
     //TODO: patch up with proper exception handling
+
+    private Number roundDecimal(Number num){
+        if (num.getClass() == Float.class || num.getClass() == Double.class){
+            return Math.round((Double) num);
+        }
+        return num;
+    }
 
 }
