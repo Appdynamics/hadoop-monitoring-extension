@@ -1,9 +1,11 @@
 package com.appdynamics.monitors.hadoop;
 
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.singularity.ee.agent.systemagent.api.MetricWriter;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 
 //import net.sf.json.JSON;
@@ -12,6 +14,7 @@ import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
 import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
+import org.apache.log4j.SimpleLayout;
 import org.dom4j.DocumentException;
 
 /**
@@ -28,26 +31,33 @@ public class HadoopMonitor extends AManagedMonitor
 
     private String host;
     private String port;
-    private String metricPath = "Custom Metrics|Hadoop Resource Manager|";
+    private String metricPath = "Custom Metrics|";
     HadoopCommunicator hadoopCommunicator;
+    AmbariCommunicator ambariCommunicator;
 
     private static Logger logger = Logger.getLogger(HadoopMonitor.class);
 
     //for testing
     public static void main(String[] args){
 
-        if (args.length != 2){
-            System.err.println("2 arguments required: Host, Port");
-            return;
-        }
+//        if (args.length != 2){
+//            System.err.println("2 arguments required: Host, Port");
+//            return;
+//        }
 
         HadoopMonitor hm = new HadoopMonitor();
         hm.logger = Logger.getLogger(HadoopMonitor.class);
+        ConsoleAppender app = new ConsoleAppender(new SimpleLayout());
+        app.setName("DEFAULT");
+        app.setWriter(new OutputStreamWriter(System.out));
+        hm.logger.addAppender(app);
         hm.xmlParser = new Parser(hm.logger);
 
         HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
+//        AmbariCommunicator acom = new AmbariCommunicator(args[0],args[1],args[2],args[3],hm.logger,hm.xmlParser);
         Map<String, String> metrics = new HashMap<String, String>();
         hcom.populate(metrics);
+//        acom.populate(metrics);
 
         for (String key: metrics.keySet()){
             System.out.println(key+" : "+metrics.get(key));
@@ -68,8 +78,8 @@ public class HadoopMonitor extends AManagedMonitor
         host = args.get("host");
         port = args.get("port");
 
-        if (args.containsKey("Metric-Path") && !args.get("Metric-Path").equals("")){
-            metricPath = args.get("Metric-Path");
+        if (args.containsKey("metric-path") && !args.get("metric-path").equals("")){
+            metricPath = args.get("metric-path");
             if (!metricPath.endsWith("|")){
                 metricPath += "|";
             }
@@ -101,7 +111,7 @@ public class HadoopMonitor extends AManagedMonitor
 
         try{
             for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
-                printMetric(metricPath + entry.getKey(), entry.getValue(),
+                printMetric(metricPath + "Hadoop Resource Manager|" + entry.getKey(), entry.getValue(),
                         MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                         MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
                         MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
@@ -148,5 +158,4 @@ public class HadoopMonitor extends AManagedMonitor
 
         metricWriter.printMetric(String.valueOf(metricValue));
     }
-    //TODO: add metric filtering
 }

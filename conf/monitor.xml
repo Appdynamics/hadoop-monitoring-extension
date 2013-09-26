@@ -15,6 +15,15 @@
                         <argument name="host" is-required="true" default-value="localhost" />
                         <argument name="port" is-required="true" default-value="8088" />
                         
+                        <!-- CONFIGURE METRIC PATH (OPTIONAL):
+                     		You can configure a metric path, such that only one tier is going to receive
+                     		metrics from this monitor. The pattern is: Server|Component:<id or name>
+                     		Component id or name is the id or name of the tier.
+                     		Default (if default-value="") is "Custom Metrics|<Hadoop Resource Manager/Ambardi>" under 
+                     		Application Infrastructure Performance in every tier
+                        -->
+                        <argument name="metric-path" is-required="false" default-value=""/>
+                        
                         <argument name="properties-path" is-required="true" default-value="/mnt/appdynamics/machineagent/monitors/HadoopMonitor/properties.xml"/>
                 </task-arguments>
                 <java-task>

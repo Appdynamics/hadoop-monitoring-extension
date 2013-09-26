@@ -95,7 +95,7 @@ public class HadoopCommunicator {
                     json.remove("qstate");
 
                     for (Map.Entry<String, Object> entry : json.entrySet()){
-                        metrics.put("schedulerInfo|" + entry.getKey(), roundDecimal((Number) entry.getValue()).toString());
+                        metrics.put("schedulerInfo|" + entry.getKey(), roundDecimal((Number) entry.getValue()));
                     }
                 }
             } catch (Exception e) {
@@ -137,7 +137,7 @@ public class HadoopCommunicator {
 
             for (Map.Entry<String, Object> entry : item.entrySet()){
                 queueMap.put(hierarchy + "|" + queueName + "|" + entry.getKey(),
-                        roundDecimal((Number) entry.getValue()).toString());
+                        roundDecimal((Number) entry.getValue()));
             }
         }
         return queueMap;
@@ -281,11 +281,11 @@ public class HadoopCommunicator {
     //exclude by: appid, app name, node id
     //TODO: patch up with proper exception handling
 
-    private Number roundDecimal(Number num){
+    private String roundDecimal(Number num){
         if (num.getClass() == Float.class || num.getClass() == Double.class){
-            return Math.round((Double) num);
+            return String.valueOf(Math.round((Double) num));
         }
-        return num;
+        return num.toString();
     }
 
 }
