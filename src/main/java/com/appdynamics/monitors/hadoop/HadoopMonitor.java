@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 //import net.sf.json.JSON;
@@ -44,24 +45,27 @@ public class HadoopMonitor extends AManagedMonitor
 //            System.err.println("2 arguments required: Host, Port");
 //            return;
 //        }
-
+//        System.setProperty("log4j.debug", "");
         HadoopMonitor hm = new HadoopMonitor();
-        hm.logger = Logger.getLogger(HadoopMonitor.class);
         ConsoleAppender app = new ConsoleAppender(new SimpleLayout());
         app.setName("DEFAULT");
         app.setWriter(new OutputStreamWriter(System.out));
-        hm.logger.addAppender(app);
+        app.setThreshold(Level.INFO);
+        org.apache.log4j.BasicConfigurator.configure(app);
+        hm.logger = Logger.getLogger(HadoopMonitor.class);
+
         hm.xmlParser = new Parser(hm.logger);
 
-        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
-//        AmbariCommunicator acom = new AmbariCommunicator(args[0],args[1],args[2],args[3],hm.logger,hm.xmlParser);
+//        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
+        AmbariCommunicator acom = new AmbariCommunicator(args[0],args[1],args[2],args[3],hm.logger,hm.xmlParser);
         Map<String, String> metrics = new HashMap<String, String>();
-        hcom.populate(metrics);
-//        acom.populate(metrics);
+//        hcom.populate(metrics);
+        acom.populate(metrics);
 
         for (String key: metrics.keySet()){
             System.out.println(key+" : "+metrics.get(key));
         }
+        logger.error(metrics.size());
     }
 
     public TaskOutput execute(Map<String, String> args, TaskExecutionContext arg1)

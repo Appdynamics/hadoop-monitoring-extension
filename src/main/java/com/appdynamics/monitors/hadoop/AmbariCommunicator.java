@@ -1,13 +1,18 @@
 package com.appdynamics.monitors.hadoop;
 
+import org.apache.http.Header;
+import org.apache.http.HttpRequest;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
@@ -98,14 +103,12 @@ public class AmbariCommunicator {
     }
 
     private Reader getResponse(String location) throws Exception {
-        CredentialsProvider cred = new BasicCredentialsProvider();
-        cred.setCredentials(
-                new AuthScope(host, Integer.parseInt(port)),
-                new UsernamePasswordCredentials(user, password));
-        CloseableHttpClient client = HttpClients.custom()
-                .setDefaultCredentialsProvider(cred).build();
+        UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(location);
-        CloseableHttpResponse response = client.execute(httpGet);
+        Header httpHeader = new BasicScheme().authenticate(cred, httpGet, new BasicHttpContext());
+        httpGet.addHeader(httpHeader);
+        CloseableHttpResponse response = httpClient.execute(httpGet);
 
         return new InputStreamReader(response.getEntity().getContent());
     }
@@ -127,7 +130,8 @@ public class AmbariCommunicator {
                     getHostMetrics((String) host.get("href"), hierarchy + "|" + clusterName + "|hosts");
                 }
             } catch (Exception e) {
-                logger.error("cluster err "+e);
+                logger.error("href: "+href);
+                e.printStackTrace();
             }
         } catch (Exception e) {
             logger.error(e);
@@ -160,13 +164,14 @@ public class AmbariCommunicator {
                 states.add("UNKNOWN");
                 metrics.put(hierarchy + "|" + serviceName + "|state", String.valueOf(states.indexOf(serviceState)));
 
-                List<Map> components = (ArrayList<Map>) json.get("services");
+                List<Map> components = (ArrayList<Map>) json.get("components");
                 for (Map component : components){
                     //TODO: get individual cluster metrics
                     getComponentMetrics((String) component.get("href"), hierarchy + "|" + serviceName + "|services");
                 }
             } catch (Exception e) {
-                logger.error("cluster err "+e);
+                logger.error("href: "+href);
+                e.printStackTrace();
             }
         } catch (Exception e) {
             logger.error(e);
@@ -186,6 +191,7 @@ public class AmbariCommunicator {
                 Map componentInfo = (Map) json.get("ServiceComponentInfo");
                 String componentName = (String) componentInfo.get("component_name");
                 String componentState = (String) componentInfo.get("state");
+//                logger.info("state: "+componentState);
 
                 List<String> states = new ArrayList<String>();
                 states.add("INIT");
@@ -205,18 +211,18 @@ public class AmbariCommunicator {
 
                 Map componentMetrics = (Map) json.get("metrics");
 
+                if (componentMetrics == null){
+                    //no metrics
+                    return;
+                }
                 //remove non metric data
                 componentMetrics.remove("boottime");
 
+//                logger.info("printing all metrics for "+href);
                 getAllMetrics(componentMetrics, hierarchy + "|" + componentName);
-
-                List<Map> components = (ArrayList<Map>) json.get("services");
-                for (Map component : components){
-                    //TODO: get individual cluster metrics
-                    getComponentMetrics((String) component.get("href"), hierarchy + "|" + componentName + "|services");
-                }
             } catch (Exception e) {
-                logger.error("cluster err "+e);
+                logger.error("href: "+href);
+                e.printStackTrace();
             }
         } catch (Exception e) {
             logger.error(e);
@@ -228,10 +234,12 @@ public class AmbariCommunicator {
         for (Map.Entry<String, Object> entry : json.entrySet()){
             String key = entry.getKey();
             Object val = entry.getValue();
-            if (val.getClass() == Map.class){
+            if (val instanceof Map){
                 getAllMetrics((Map) val, hierarchy + "|" + key);
-            } else if (val.getClass() == Number.class){
+            } else if (val instanceof Number){
                 metrics.put(hierarchy + "|" + key, roundDecimal((Number) val));
+            } else {
+//                logger.info(hierarchy + "|" + key + " is a list: " +val.getClass().getName());
             }
         }
     }
