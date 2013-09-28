@@ -65,7 +65,7 @@ public class HadoopMonitor extends AManagedMonitor
         for (String key: metrics.keySet()){
             System.out.println(key+" : "+metrics.get(key));
         }
-        logger.error(metrics.size());
+        logger.info("Metric gathering done, metric size: " + metrics.size());
     }
 
     public TaskOutput execute(Map<String, String> args, TaskExecutionContext arg1)
@@ -113,6 +113,7 @@ public class HadoopMonitor extends AManagedMonitor
         hadoopMetrics = new HashMap<String, String>();
         hadoopCommunicator.populate(hadoopMetrics);
 
+        //TODO: change metric path to "Custom Metrics|Hadoop|<cluster name>", use ambardi metrics if there's metric overlap
         try{
             for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
                 printMetric(metricPath + "Hadoop Resource Manager|" + entry.getKey(), entry.getValue(),

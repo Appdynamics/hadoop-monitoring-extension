@@ -41,6 +41,9 @@ public class AmbariCommunicator {
     private Map<String, String> metrics;
     private NumberFormat numberFormat = NumberFormat.getInstance();
 
+    int acc = 0;
+    int count = 0;
+
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
         public Map createObjectContainer() {
@@ -100,9 +103,12 @@ public class AmbariCommunicator {
             logger.error(e);
             e.printStackTrace();
         }
+        logger.info("total requests: "+ count);
+        logger.info("total response size: "+acc);
     }
 
     private Reader getResponse(String location) throws Exception {
+        logger.info("Getting Response for " + location);
         UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(location);
@@ -110,12 +116,19 @@ public class AmbariCommunicator {
         httpGet.addHeader(httpHeader);
         CloseableHttpResponse response = httpClient.execute(httpGet);
 
+        count++;
+        if (response.getEntity().getContentLength()>0){
+            acc += response.getEntity().getContentLength();
+        } else {
+            logger.info(location + " content might be chunked");
+        }
+
         return new InputStreamReader(response.getEntity().getContent());
     }
 
     private void getClusterMetrics(String href, String hierarchy){
         try {
-            Reader response = getResponse(href);
+            Reader response = getResponse(href + "?fields=services,hosts");
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -138,9 +151,10 @@ public class AmbariCommunicator {
         }
     }
 
+    //TODO: thread this
     private void getServiceMetrics(String href, String hierarchy){
         try {
-            Reader response = getResponse(href);
+            Reader response = getResponse(href + "?fields=ServiceInfo/state,components");
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -166,7 +180,6 @@ public class AmbariCommunicator {
 
                 List<Map> components = (ArrayList<Map>) json.get("components");
                 for (Map component : components){
-                    //TODO: get individual cluster metrics
                     getComponentMetrics((String) component.get("href"), hierarchy + "|" + serviceName + "|services");
                 }
             } catch (Exception e) {
@@ -178,20 +191,53 @@ public class AmbariCommunicator {
         }
     }
 
+    //TODO: thread this
     private void getHostMetrics(String href, String hierarchy){
+        try {
+            Reader response = getResponse(href + "?fields=Hosts/host_state,metrics");
 
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            try {
+                Map hostInfo = (Map) json.get("Hosts");
+                String hostName = (String) hostInfo.get("host_name");
+                String hostState = (String) hostInfo.get("host_state");
+
+                List<String> states = new ArrayList<String>();
+                states.add("INIT");
+                states.add("WAITING_FOR_HOST_STATUS_UPDATES");
+                states.add("HEALTHY");
+                states.add("HEARTBEAT_LOST");
+                states.add("UNHEALTHY");
+                metrics.put(hierarchy + "|" + hostName + "|state", String.valueOf(states.indexOf(hostState)));
+
+                Map hostMetrics = (Map) json.get("metrics");
+//                if (hostMetrics == null){
+//                    //no metrics
+//                    return;
+//                }
+                //remove non metric data
+                hostMetrics.remove("boottime");
+
+                getAllMetrics(hostMetrics, hierarchy + "|" + hostName);
+            } catch (Exception e) {
+                logger.error("href: "+href);
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
     }
 
+    //TODO: thread this
     private void getComponentMetrics(String href, String hierarchy){
         try {
-            Reader response = getResponse(href);
+            Reader response = getResponse(href + "?fields=ServiceComponentInfo/state,metrics");
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 Map componentInfo = (Map) json.get("ServiceComponentInfo");
                 String componentName = (String) componentInfo.get("component_name");
                 String componentState = (String) componentInfo.get("state");
-//                logger.info("state: "+componentState);
 
                 List<String> states = new ArrayList<String>();
                 states.add("INIT");
@@ -210,7 +256,6 @@ public class AmbariCommunicator {
                 metrics.put(hierarchy + "|" + componentName + "|state", String.valueOf(states.indexOf(componentState)));
 
                 Map componentMetrics = (Map) json.get("metrics");
-
                 if (componentMetrics == null){
                     //no metrics
                     return;
@@ -218,7 +263,6 @@ public class AmbariCommunicator {
                 //remove non metric data
                 componentMetrics.remove("boottime");
 
-//                logger.info("printing all metrics for "+href);
                 getAllMetrics(componentMetrics, hierarchy + "|" + componentName);
             } catch (Exception e) {
                 logger.error("href: "+href);
@@ -238,8 +282,6 @@ public class AmbariCommunicator {
                 getAllMetrics((Map) val, hierarchy + "|" + key);
             } else if (val instanceof Number){
                 metrics.put(hierarchy + "|" + key, roundDecimal((Number) val));
-            } else {
-//                logger.info(hierarchy + "|" + key + " is a list: " +val.getClass().getName());
             }
         }
     }
