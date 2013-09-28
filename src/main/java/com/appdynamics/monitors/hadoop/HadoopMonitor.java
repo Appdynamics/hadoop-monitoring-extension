@@ -45,7 +45,6 @@ public class HadoopMonitor extends AManagedMonitor
 //            System.err.println("2 arguments required: Host, Port");
 //            return;
 //        }
-//        System.setProperty("log4j.debug", "");
         HadoopMonitor hm = new HadoopMonitor();
         ConsoleAppender app = new ConsoleAppender(new SimpleLayout());
         app.setName("DEFAULT");
@@ -56,14 +55,19 @@ public class HadoopMonitor extends AManagedMonitor
 
         hm.xmlParser = new Parser(hm.logger);
 
-//        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
-        AmbariCommunicator acom = new AmbariCommunicator(args[0],args[1],args[2],args[3],hm.logger,hm.xmlParser);
+        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
+        AmbariCommunicator acom = new AmbariCommunicator(args[2],args[3],args[4],args[5],hm.logger,hm.xmlParser);
         Map<String, String> metrics = new HashMap<String, String>();
-//        hcom.populate(metrics);
+        hcom.populate(metrics);
         acom.populate(metrics);
 
-        for (String key: metrics.keySet()){
-            System.out.println(key+" : "+metrics.get(key));
+        for (Map.Entry<String, String> entry: metrics.entrySet()){
+            try{
+                Long.parseLong(entry.getValue());
+                System.out.println(entry.getKey()+" : "+entry.getValue());
+            } catch (Exception e){
+                logger.error("INVALID DATA: "+entry.getKey()+" : "+entry.getValue());
+            }
         }
         logger.info("Metric gathering done, metric size: " + metrics.size());
     }

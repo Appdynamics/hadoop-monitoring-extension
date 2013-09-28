@@ -75,24 +75,8 @@ public class AmbariCommunicator {
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
-                /*
-                {
-                  "href" : "http://ec2-23-22-170-13.compute-1.amazonaws.com:8080/api/v1/clusters",
-                  "items" : [
-                    {
-                      "href" : "http://ec2-23-22-170-13.compute-1.amazonaws.com:8080/api/v1/clusters/testCluster",
-                      "Clusters" : {
-                        "cluster_name" : "testCluster",
-                        "version" : "HDP-1.3.2"
-                      }
-                    }
-                  ]
-                }
-                 */
-                //there's a LOT of metrics, accessible by 'href' attr that leads to more detailed info
                 List<Map> clusters = (ArrayList<Map>) json.get("items");
                 for (Map cluster : clusters){
-                    //TODO: get individual cluster metrics
                     getClusterMetrics((String) cluster.get("href"), "");
                 }
             } catch (Exception e) {
@@ -108,7 +92,7 @@ public class AmbariCommunicator {
     }
 
     private Reader getResponse(String location) throws Exception {
-        logger.info("Getting Response for " + location);
+//        logger.info("Getting Response for " + location);
         UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(location);

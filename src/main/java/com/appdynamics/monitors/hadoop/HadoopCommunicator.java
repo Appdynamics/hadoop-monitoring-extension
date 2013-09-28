@@ -81,9 +81,18 @@ public class HadoopCommunicator {
                 json = (Map<String, Object>) json.get("schedulerInfo");
 
                 if (json.get("type").equals("capacityScheduler")){
-                    ArrayList schedulerInfoList = new ArrayList();
-                    schedulerInfoList.add(json);
-                    metrics.putAll(getQueues(schedulerInfoList, "schedulerInfo"));
+                    String queueName = (String) json.get("queueName");
+
+                    metrics.putAll(getQueues((ArrayList) ((Map) json.get("queues")).get("queue"), "schedulerInfo|" + queueName));
+
+                    json.remove("type");
+                    json.remove("queueName");
+                    json.remove("queues");
+
+                    for (Map.Entry<String, Object> entry : json.entrySet()){
+                        metrics.put("schedulerInfo|" + queueName + "|" + entry.getKey(),
+                                roundDecimal((Number) entry.getValue()));
+                    }
                 } else {    //fifoScheduler
                     if (json.get("qstate").equals("RUNNING")){
                         metrics.put("schedulerInfo|qstate", "1");
