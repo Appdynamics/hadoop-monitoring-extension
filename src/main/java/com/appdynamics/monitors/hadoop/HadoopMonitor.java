@@ -51,12 +51,12 @@ public class HadoopMonitor extends AManagedMonitor
         app.setWriter(new OutputStreamWriter(System.out));
         app.setThreshold(Level.INFO);
         org.apache.log4j.BasicConfigurator.configure(app);
-        hm.logger = Logger.getLogger(HadoopMonitor.class);
+        logger = Logger.getLogger(HadoopMonitor.class);
 
-        hm.xmlParser = new Parser(hm.logger);
+        hm.xmlParser = new Parser(logger);
 
-        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
-        AmbariCommunicator acom = new AmbariCommunicator(args[2],args[3],args[4],args[5],hm.logger,hm.xmlParser);
+        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],logger,hm.xmlParser);
+        AmbariCommunicator acom = new AmbariCommunicator(args[2],args[3],args[4],args[5],logger,hm.xmlParser);
         Map<String, String> metrics = new HashMap<String, String>();
         hcom.populate(metrics);
         acom.populate(metrics);
