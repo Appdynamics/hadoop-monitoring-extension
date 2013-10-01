@@ -7,6 +7,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,34 +44,28 @@ public class Parser {
         Element root = doc.getRootElement();
         String text;
 
-        Iterator<Element> iter = root.elementIterator();
+        Iterator<Element> hrmIter = root.element("hadoop-resource-manager").elementIterator();
 
-        while(iter.hasNext()){
-            Element element = iter.next();
+        while(hrmIter.hasNext()){
+            Element element = hrmIter.next();
 
             if (element.getName().equals("exclude-appid")){
                 if (!(text = element.getText()).equals("")){
 
                     String[] appId = text.split(",");
-                    for (String id : appId){
-                        excludedAppid.add(id);
-                    }
+                    excludedAppid.addAll(Arrays.asList(appId));
                 }
             } else if (element.getName().equals("exclude-app-name")){
                 if (!(text = element.getText()).equals("")){
 
                     String[] appName = text.split(",");
-                    for (String name : appName){
-                        excludedAppName.add(name);
-                    }
+                    excludedAppid.addAll(Arrays.asList(appName));
                 }
             } else if (element.getName().equals("exclude-nodeid")){
                 if (!(text = element.getText()).equals("")){
 
                     String[] nodeId = text.split(",");
-                    for (String id : nodeId){
-                        excludedNodeid.add(id);
-                    }
+                    excludedAppid.addAll(Arrays.asList(nodeId));
                 }
             } else {
                 logger.error("Unknown element '" + element.getName() + "' in properties file");

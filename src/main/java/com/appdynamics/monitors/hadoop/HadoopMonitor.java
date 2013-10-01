@@ -28,10 +28,7 @@ import org.dom4j.DocumentException;
 public class HadoopMonitor extends AManagedMonitor
 {
     private Parser xmlParser;
-    private Map<String, String> hadoopMetrics;
 
-    private String host;
-    private String port;
     private String metricPath = "Custom Metrics|";
     HadoopCommunicator hadoopCommunicator;
     AmbariCommunicator ambariCommunicator;
@@ -77,59 +74,81 @@ public class HadoopMonitor extends AManagedMonitor
     {
         logger.info("Executing HadoopMonitor");
 
-        if (!args.containsKey("host") || !args.containsKey("port")){
-            logger.error("monitor.xml must contain task arguments 'host' and 'port'!\n" +
-                        "Terminating Hadoop Monitor");
-            return null;
-        }
+//        if (!args.containsKey("host") || !args.containsKey("port")){
+//            logger.error("monitor.xml must contain task arguments 'host' and 'port'!\n" +
+//                        "Terminating Hadoop Monitor");
+//            return null;
+//        }
 
-        host = args.get("host");
-        port = args.get("port");
+        try {
+            String host = args.get("host");
+            String port = args.get("port");
 
-        if (args.containsKey("metric-path") && !args.get("metric-path").equals("")){
-            metricPath = args.get("metric-path");
-            if (!metricPath.endsWith("|")){
-                metricPath += "|";
+            String ambariHost = args.get("ambari-user");
+            String ambariPort = args.get("ambari-port");
+            String ambariUser = args.get("ambari-user");
+            String ambariPassword = args.get("ambari-password");
+
+
+            if (args.containsKey("metric-path") && !args.get("metric-path").equals("")){
+                metricPath = args.get("metric-path");
+                if (!metricPath.endsWith("|")){
+                    metricPath += "|";
+                }
             }
-        }
 
-        if (xmlParser == null){
-            if (!args.containsKey("properties-path")){
-                logger.error("monitor.xml must contain task argument 'properties-path' describing " +
-                        "the path to the XML properties file.\n" +
-                        "Terminating Hadoop Monitor");
-                return null;
+            if (xmlParser == null){
+                if (!args.containsKey("properties-path")){
+                    logger.error("monitor.xml must contain task argument 'properties-path' describing " +
+                            "the path to the XML properties file.\n" +
+                            "Terminating Hadoop Monitor");
+                    return null;
+                }
+
+                String xml = args.get("properties-path");
+                try {
+                    xmlParser = new Parser(logger, xml);
+                } catch (DocumentException e) {
+                    logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
+                            "Error: " + e);
+                    xmlParser = new Parser(logger);
+                }
+    //            logger.error("user.dir is: "+System.getProperty("user.dir"));
             }
 
-            String xml = args.get("properties-path");
-            try {
-                xmlParser = new Parser(logger, xml);
-            } catch (DocumentException e) {
-                logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
-                        "Error: " + e);
-                xmlParser = new Parser(logger);
+            hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
+            ambariCommunicator = new AmbariCommunicator(ambariHost, ambariPort, ambariUser, ambariPassword, logger, xmlParser);
+
+            Map<String, String> hadoopMetrics = new HashMap<String, String>();
+            hadoopCommunicator.populate(hadoopMetrics);
+
+            Map<String, String> ambariMetrics = new HashMap<String, String>();
+            ambariCommunicator.populate(ambariMetrics);
+
+            //TODO: change metric path to "Custom Metrics|<cluster name>", use ambardi metrics if there's metric overlap
+            try{
+                for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
+                    printMetric(metricPath + "ClusterName|" + entry.getKey(), entry.getValue(),
+                            MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                            MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
+                            MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
+                }
+
+                for (Map.Entry<String, String> entry : ambariMetrics.entrySet()){
+                    printMetric(metricPath + entry.getKey(), entry.getValue(),
+                            MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                            MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
+                            MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
+                }
+            } catch (Exception e){
+                logger.error("Error printing metrics: " + e);
             }
-//            logger.error("user.dir is: "+System.getProperty("user.dir"));
+
+            return new TaskOutput("Hadoop Metric Upload Complete");
+        } catch (Exception e) {
+            logger.error(e);
+            return new TaskOutput("Hadoop Metric Upload Failed");
         }
-
-        hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
-
-        hadoopMetrics = new HashMap<String, String>();
-        hadoopCommunicator.populate(hadoopMetrics);
-
-        //TODO: change metric path to "Custom Metrics|Hadoop|<cluster name>", use ambardi metrics if there's metric overlap
-        try{
-            for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
-                printMetric(metricPath + "Hadoop Resource Manager|" + entry.getKey(), entry.getValue(),
-                        MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                        MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
-                        MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
-            }
-        } catch (Exception e){
-            logger.error("Error printing metrics: " + e);
-        }
-
-        return new TaskOutput("Hadoop Metric Upload Complete");
 //        while(true){
 //            (new PrintMetricsThread()).start();
 //            try{

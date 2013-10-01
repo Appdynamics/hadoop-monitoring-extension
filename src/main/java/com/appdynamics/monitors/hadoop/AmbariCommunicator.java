@@ -93,7 +93,7 @@ public class AmbariCommunicator {
                     responses.add(readerFuture);
                 }
                 for (Future<Reader> httpResponse : responses){
-                    getClusterMetrics(httpResponse.get(), "");
+                    getClusterMetrics(httpResponse.get());
                 }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
@@ -146,7 +146,7 @@ public class AmbariCommunicator {
         }
     }
 
-    private void getClusterMetrics(Reader response, String hierarchy){
+    private void getClusterMetrics(Reader response){
         try {
 //            Reader response = getResponse(href + "?fields=services,hosts");
 
@@ -165,7 +165,7 @@ public class AmbariCommunicator {
                     responses.add(readerFuture);
                 }
                 for (Future<Reader> httpResponse : responses){
-                    getServiceMetrics(httpResponse.get(), hierarchy + "|" + clusterName + "|services");
+                    getServiceMetrics(httpResponse.get(), clusterName + "|services");
                 }
                 responses.clear();
 //                for (Map host : hosts){
@@ -178,7 +178,7 @@ public class AmbariCommunicator {
                     responses.add(readerFuture);
                 }
                 for (Future<Reader> httpResponse : responses){
-                    getHostMetrics(httpResponse.get(), hierarchy + "|" + clusterName + "|hosts");
+                    getHostMetrics(httpResponse.get(), clusterName + "|hosts");
                 }
             } catch (Exception e) {
 //                logger.error("href: "+href);
