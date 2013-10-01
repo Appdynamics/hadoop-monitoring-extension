@@ -103,6 +103,7 @@ public class AmbariCommunicator {
             logger.error(e);
             e.printStackTrace();
         }
+        executor.shutdown();
         logger.info("total requests: "+ count);
         logger.info("total response size: "+acc);
     }
