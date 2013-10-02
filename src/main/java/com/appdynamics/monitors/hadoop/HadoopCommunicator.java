@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
-import java.io.InputStreamReader;
+//import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
@@ -232,9 +232,9 @@ public class HadoopCommunicator {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String appName = (String) app.get("name");
-        if (xmlParser.getExcludedAppName().contains(appName)){
+        if (xmlParser.isExcludeAppName(appName)){
             return rtn;
-        } else if (xmlParser.getExcludedAppid().contains(app.get("id"))){
+        } else if (xmlParser.isExcludeAppid((String) app.get("id"))){
             return rtn;
         }
 
@@ -264,7 +264,7 @@ public class HadoopCommunicator {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
-        if (xmlParser.getExcludedNodeid().contains(id)){
+        if (xmlParser.isExcludeNodeid(id)){
             return rtn;
         }
 

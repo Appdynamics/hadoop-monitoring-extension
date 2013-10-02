@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
-import java.io.InputStreamReader;
+//import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.NumberFormat;
@@ -27,10 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,6 +45,7 @@ public class AmbariCommunicator {
     private Map<String, String> metrics;
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private ExecutorService executor;
+//    private CompletionService<Reader> threadPool;
 
     int acc = 0;
     int count = 0;
@@ -74,7 +72,8 @@ public class AmbariCommunicator {
         baseAddress = "http://" + host + ":" + port + "/api/v1";
 
         numberFormat.setGroupingUsed(false);
-        executor = Executors.newFixedThreadPool(100);
+        executor = Executors.newFixedThreadPool(xmlParser.getThreadLimit());
+//        threadPool = new ExecutorCompletionService<Reader>(executor);
     }
 
     public void populate(Map<String, String> metrics) {
@@ -89,14 +88,20 @@ public class AmbariCommunicator {
 //                for (Map cluster : clusters){
 //                    getClusterMetrics((String) cluster.get("href"), "");
 //                }
-                List<Future> responses = new ArrayList<Future>();
+//                List<Future> responses = new ArrayList<Future>();
+//                BlockingDeque<Future<Reader>> queue = new LinkedBlockingDeque<Future<Reader>>();
+                CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
+                int count = 0;
                 for (Map cluster : clusters){
-                    Future<Reader> readerFuture = executor.submit(
-                            new Response(cluster.get("href") + "?fields=services,hosts"));
-                    responses.add(readerFuture);
+                    threadPool.submit(new Response(cluster.get("href") + "?fields=services,hosts"));
+                    count++;
+//                    responses.add(readerFuture);
                 }
-                for (Future<Reader> httpResponse : responses){
-                    getClusterMetrics(httpResponse.get());
+//                for (Future<Reader> httpResponse : responses){
+//                    getClusterMetrics(httpResponse.get());
+//                }
+                for(;count>0;count--){
+                    getClusterMetrics(threadPool.take().get());
                 }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
@@ -171,27 +176,33 @@ public class AmbariCommunicator {
 //                for (Map service : services){
 //                    getServiceMetrics((String) service.get("href"), hierarchy + "|" + clusterName + "|services");
 //                }
-                List<Future> responses = new ArrayList<Future>();
+//                List<Future> responses = new ArrayList<Future>();
+                CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
+                int count = 0;
                 for (Map service : services){
-                    Future<Reader> readerFuture = executor.submit(
-                            new Response(service.get("href") + "?fields=ServiceInfo/state,components"));
-                    responses.add(readerFuture);
+                    threadPool.submit(new Response(service.get("href") + "?fields=ServiceInfo/state,components"));
+                    count++;
                 }
-                for (Future<Reader> httpResponse : responses){
-                    getServiceMetrics(httpResponse.get(), clusterName + "|services");
+                for(;count>0;count--){
+                    getServiceMetrics(threadPool.take().get(), clusterName + "|services");
                 }
-                responses.clear();
+//                for (Future<Reader> httpResponse : responses){
+//                    getServiceMetrics(httpResponse.get(), clusterName + "|services");
+//                }
+
 //                for (Map host : hosts){
 //                    //DO NOT get the entire json obj from hosts
 //                    getHostMetrics((String) host.get("href"), hierarchy + "|" + clusterName + "|hosts");
 //                }
                 for (Map host : hosts){
-                    Future<Reader> readerFuture = executor.submit(
-                            new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
-                    responses.add(readerFuture);
+                    threadPool.submit(new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
+                    count++;
                 }
-                for (Future<Reader> httpResponse : responses){
-                    getHostMetrics(httpResponse.get(), clusterName + "|hosts");
+//                for (Future<Reader> httpResponse : responses){
+//                    getHostMetrics(httpResponse.get(), clusterName + "|hosts");
+//                }
+                for(;count>0;count--){
+                    getHostMetrics(threadPool.take().get(), clusterName + "|hosts");
                 }
             } catch (Exception e) {
 //                logger.error("href: "+href);
@@ -231,15 +242,19 @@ public class AmbariCommunicator {
                 metrics.put(hierarchy + "|" + serviceName + "|state", String.valueOf(states.indexOf(serviceState)));
 
                 List<Map> components = (ArrayList<Map>) json.get("components");
-                List<Future> responses = new ArrayList<Future>();
+//                List<Future> responses = new ArrayList<Future>();
+                CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
+                int count = 0;
                 for (Map component : components){
-                    Future<Reader> readerFuture = executor.submit(
-                            new Response((String) component.get("href") + "?fields=ServiceComponentInfo/state,metrics"));
-                    responses.add(readerFuture);
+                    threadPool.submit(new Response(component.get("href") + "?fields=ServiceComponentInfo/state,metrics"));
+                    count++;
                 }
-                for (Future<Reader> httpResponse : responses){
-                    getComponentMetrics(httpResponse.get(), hierarchy + "|" + serviceName);
+                for(;count>0;count--){
+                    getComponentMetrics(threadPool.take().get(), hierarchy + "|" + serviceName);
                 }
+//                for (Future<Reader> httpResponse : responses){
+//                    getComponentMetrics(httpResponse.get(), hierarchy + "|" + serviceName);
+//                }
 //                for (Map component : components){
 //                    getComponentMetrics((String) component.get("href"), hierarchy + "|" + serviceName + "|services");
 //                }

@@ -9,8 +9,6 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-//import net.sf.json.JSON;
-
 import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
@@ -29,7 +27,7 @@ public class HadoopMonitor extends AManagedMonitor
 {
     private Parser xmlParser;
 
-    private String metricPath = "Custom Metrics|";
+    private String metricPath = "Custom Metrics|Hadoop|";
     HadoopCommunicator hadoopCommunicator;
     AmbariCommunicator ambariCommunicator;
 
@@ -116,16 +114,18 @@ public class HadoopMonitor extends AManagedMonitor
     //            logger.error("user.dir is: "+System.getProperty("user.dir"));
             }
 
-            hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
-            ambariCommunicator = new AmbariCommunicator(ambariHost, ambariPort, ambariUser, ambariPassword, logger, xmlParser);
-
             Map<String, String> hadoopMetrics = new HashMap<String, String>();
-            hadoopCommunicator.populate(hadoopMetrics);
-
             Map<String, String> ambariMetrics = new HashMap<String, String>();
-            ambariCommunicator.populate(ambariMetrics);
 
-            //TODO: change metric path to "Custom Metrics|<cluster name>", use ambardi metrics if there's metric overlap
+            if (args.get("resource-manager-monitor").equals("true")){
+                hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
+                hadoopCommunicator.populate(hadoopMetrics);
+            }
+            if (args.get("ambari-monitor").equals("true")){
+                ambariCommunicator = new AmbariCommunicator(ambariHost, ambariPort, ambariUser, ambariPassword, logger, xmlParser);
+                ambariCommunicator.populate(ambariMetrics);
+            }
+
             try{
                 for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
                     printMetric(metricPath + "ClusterName|" + entry.getKey(), entry.getValue(),

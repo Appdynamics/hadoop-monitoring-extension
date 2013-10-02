@@ -23,28 +23,43 @@
     </hadoop-resource-manager>
     <ambari>
         <!--
-            hostname,hostname
-            include override exclude
-            empty means all hosts
+            maximum number of threads
         -->
-        <include-host></include-host>
+        <thread-limit>100</thread-limit>
+
+        <include-cluster>*</include-cluster>
+
         <!--
             hostname,hostname
+            *
+        -->
+        <include-host>*</include-host>
+
+        <!--
+            hostname,hostname
+            *
+            exclude overrides include
         -->
         <exclude-host></exclude-host>
+
         <!--
             servicename.servicename
+            *
         -->
         <exclude-service></exclude-service>
+
         <!--
             service/component,service/component
+            *
         -->
         <exclude-service-component></exclude-service-component>
+
         <!--
             cpu,memory
             *
         -->
         <include-host-metrics></include-host-metrics>
+
         <!--
             cpu,memory
             *
