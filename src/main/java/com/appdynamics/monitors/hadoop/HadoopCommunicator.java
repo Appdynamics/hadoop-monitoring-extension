@@ -1,15 +1,18 @@
 package com.appdynamics.monitors.hadoop;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import com.singularity.ee.util.httpclient.*;
+import com.singularity.ee.util.log4j.Log4JLogger;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.*;
 
 public class HadoopCommunicator {
@@ -44,11 +47,16 @@ public class HadoopCommunicator {
     }
 
     private Reader getResponse(String location) throws Exception {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(baseAddress + location);
-        CloseableHttpResponse response = client.execute(httpGet);
+//        CloseableHttpClient client = HttpClients.createDefault();
+//        HttpGet httpGet = new HttpGet(baseAddress + location);
+//        CloseableHttpResponse response = client.execute(httpGet);
+//
+//        return new InputStreamReader(response.getEntity().getContent());
 
-        return new InputStreamReader(response.getEntity().getContent());
+        IHttpClientWrapper httpClient = HttpClientWrapper.getInstance();
+        HttpExecutionRequest request = new HttpExecutionRequest(baseAddress + location,"", HttpOperation.GET);
+        HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
+        return new StringReader(response.getResponseBody());
     }
 
     private void getClusterMetrics(Map<String, String> metrics) {

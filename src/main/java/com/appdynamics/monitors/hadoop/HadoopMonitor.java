@@ -84,7 +84,7 @@ public class HadoopMonitor extends AManagedMonitor
             String host = args.get("host");
             String port = args.get("port");
 
-            String ambariHost = args.get("ambari-user");
+            String ambariHost = args.get("ambari-host");
             String ambariPort = args.get("ambari-port");
             String ambariUser = args.get("ambari-user");
             String ambariPassword = args.get("ambari-password");

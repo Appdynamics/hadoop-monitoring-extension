@@ -1,24 +1,27 @@
 package com.appdynamics.monitors.hadoop;
 
-import org.apache.http.Header;
-import org.apache.http.HttpRequest;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.BasicHttpContext;
+import com.singularity.ee.util.httpclient.*;
+import com.singularity.ee.util.log4j.Log4JLogger;
+//import org.apache.http.Header;
+//import org.apache.http.HttpRequest;
+//import org.apache.http.auth.AuthScope;
+//import org.apache.http.auth.UsernamePasswordCredentials;
+//import org.apache.http.client.CredentialsProvider;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpGet;
+//import org.apache.http.impl.auth.BasicScheme;
+//import org.apache.http.impl.client.BasicCredentialsProvider;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.message.BasicHeader;
+//import org.apache.http.protocol.BasicHttpContext;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,21 +131,31 @@ public class AmbariCommunicator {
 //    }
 
     private class Response implements Callable<Reader>{
-        private CloseableHttpClient httpClient;
-        private HttpGet httpGet;
+//        private CloseableHttpClient httpClient;
+//        private HttpGet httpGet;
+        private IHttpClientWrapper httpClient;
+        private HttpExecutionRequest request;
 
         public Response(String location) throws Exception{
-            UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
-            httpClient = HttpClients.createDefault();
-            httpGet = new HttpGet(location);
-            Header httpHeader = new BasicScheme().authenticate(cred, httpGet, new BasicHttpContext());
-            httpGet.addHeader(httpHeader);
+//            UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
+//            httpClient = HttpClients.createDefault();
+//            httpGet = new HttpGet(location);
+//            Header httpHeader = new BasicScheme().authenticate(cred, httpGet, new BasicHttpContext());
+//            httpGet.addHeader(httpHeader);
+
+            httpClient = HttpClientWrapper.getInstance();
+            request = new HttpExecutionRequest(location,"", HttpOperation.GET);
+            httpClient.authenticateHost(host, Integer.parseInt(port), "", user, password, true);
+
         }
 
         @Override
         public Reader call() throws Exception {
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-            return new InputStreamReader(response.getEntity().getContent());
+            HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
+//            return new InputStreamReader(response.getResponseBodyAsStream());
+            return new StringReader(response.getResponseBody());
+//            CloseableHttpResponse response = httpClient.execute(httpGet);
+//            return new InputStreamReader(response.getEntity().getContent());
         }
     }
 
@@ -225,7 +238,7 @@ public class AmbariCommunicator {
                     responses.add(readerFuture);
                 }
                 for (Future<Reader> httpResponse : responses){
-                    getComponentMetrics(httpResponse.get(), hierarchy + "|" + serviceName + "|components");
+                    getComponentMetrics(httpResponse.get(), hierarchy + "|" + serviceName);
                 }
 //                for (Map component : components){
 //                    getComponentMetrics((String) component.get("href"), hierarchy + "|" + serviceName + "|services");

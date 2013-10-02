@@ -32,7 +32,7 @@
                         <argument name="properties-path" is-required="true" default-value="/mnt/appdynamics/machineagent/monitors/HadoopMonitor/properties.xml"/>
                 </task-arguments>
                 <java-task>
-                        <classpath>HadoopMonitor.jar;lib/httpcomponents/commons-codec-1.6.jar;lib/httpcomponents/commons-logging-1.1.3.jar;lib/httpcomponents/fluent-hc-4.3.jar;lib/httpcomponents/httpclient-4.3.jar;lib/httpcomponents/httpclient-cache-4.3.jar;lib/httpcomponents/httpcore-4.3.jar;lib/httpcomponents/httpmime-4.3.jar;lib/json-simple/json-simple-1.1.1.jar;lib/dom4j/dom4j-1.6.1.jar</classpath>
+                        <classpath>HadoopMonitor.jar;lib/json-simple/json-simple-1.1.1.jar;lib/dom4j/dom4j-1.6.1.jar</classpath>
                         <impl-class>com.appdynamics.monitors.hadoop.HadoopMonitor</impl-class>
                 </java-task>
         </monitor-run-task>
