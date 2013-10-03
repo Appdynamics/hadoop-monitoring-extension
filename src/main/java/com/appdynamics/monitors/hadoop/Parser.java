@@ -32,6 +32,7 @@ public class Parser {
     private List<String> includeAmbariComponentMetrics;
 
 
+    //TODO: change to 1 as prod default
     private int threadLimit = 100;
 
     Logger logger;

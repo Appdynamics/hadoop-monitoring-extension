@@ -45,7 +45,6 @@ public class AmbariCommunicator {
     private Map<String, String> metrics;
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private ExecutorService executor;
-//    private CompletionService<Reader> threadPool;
 
     int acc = 0;
     int count = 0;
@@ -73,33 +72,23 @@ public class AmbariCommunicator {
 
         numberFormat.setGroupingUsed(false);
         executor = Executors.newFixedThreadPool(xmlParser.getThreadLimit());
-//        threadPool = new ExecutorCompletionService<Reader>(executor);
     }
 
     public void populate(Map<String, String> metrics) {
         this.metrics = metrics;
         try {
             Reader response = (new Response("http://" + host + ":" + port + "/api/v1/clusters")).call();
-//            Reader response = getResponse("http://" + host + ":" + port + "/api/v1/clusters");
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 List<Map> clusters = (ArrayList<Map>) json.get("items");
-//                for (Map cluster : clusters){
-//                    getClusterMetrics((String) cluster.get("href"), "");
-//                }
-//                List<Future> responses = new ArrayList<Future>();
-//                BlockingDeque<Future<Reader>> queue = new LinkedBlockingDeque<Future<Reader>>();
+
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
                 for (Map cluster : clusters){
                     threadPool.submit(new Response(cluster.get("href") + "?fields=services,hosts"));
                     count++;
-//                    responses.add(readerFuture);
                 }
-//                for (Future<Reader> httpResponse : responses){
-//                    getClusterMetrics(httpResponse.get());
-//                }
                 for(;count>0;count--){
                     getClusterMetrics(threadPool.take().get());
                 }
@@ -116,67 +105,31 @@ public class AmbariCommunicator {
         logger.info("total response size: "+acc);
     }
 
-//    private Reader getResponse(String location) throws Exception {
-////        logger.info("Getting Response for " + location);
-//        UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
-//        CloseableHttpClient httpClient = HttpClients.createDefault();
-//        HttpGet httpGet = new HttpGet(location);
-//        Header httpHeader = new BasicScheme().authenticate(cred, httpGet, new BasicHttpContext());
-//        httpGet.addHeader(httpHeader);
-//        CloseableHttpResponse response = httpClient.execute(httpGet);
-//
-//        count++;
-//        if (response.getEntity().getContentLength()>0){
-//            acc += response.getEntity().getContentLength();
-//        } else {
-//            logger.info(location + " content might be chunked");
-//        }
-//
-//        return new InputStreamReader(response.getEntity().getContent());
-//    }
-
     private class Response implements Callable<Reader>{
-//        private CloseableHttpClient httpClient;
-//        private HttpGet httpGet;
         private IHttpClientWrapper httpClient;
         private HttpExecutionRequest request;
 
         public Response(String location) throws Exception{
-//            UsernamePasswordCredentials cred = new UsernamePasswordCredentials(user, password);
-//            httpClient = HttpClients.createDefault();
-//            httpGet = new HttpGet(location);
-//            Header httpHeader = new BasicScheme().authenticate(cred, httpGet, new BasicHttpContext());
-//            httpGet.addHeader(httpHeader);
-
             httpClient = HttpClientWrapper.getInstance();
             request = new HttpExecutionRequest(location,"", HttpOperation.GET);
             httpClient.authenticateHost(host, Integer.parseInt(port), "", user, password, true);
-
         }
 
         @Override
         public Reader call() throws Exception {
             HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
-//            return new InputStreamReader(response.getResponseBodyAsStream());
             return new StringReader(response.getResponseBody());
-//            CloseableHttpResponse response = httpClient.execute(httpGet);
-//            return new InputStreamReader(response.getEntity().getContent());
         }
     }
 
     private void getClusterMetrics(Reader response){
         try {
-//            Reader response = getResponse(href + "?fields=services,hosts");
-
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 String clusterName = (String) ((Map) json.get("Clusters")).get("cluster_name");
                 List<Map> services = (ArrayList<Map>) json.get("services");
                 List<Map> hosts = (ArrayList<Map>) json.get("hosts");
-//                for (Map service : services){
-//                    getServiceMetrics((String) service.get("href"), hierarchy + "|" + clusterName + "|services");
-//                }
-//                List<Future> responses = new ArrayList<Future>();
+
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
                 for (Map service : services){
@@ -186,21 +139,11 @@ public class AmbariCommunicator {
                 for(;count>0;count--){
                     getServiceMetrics(threadPool.take().get(), clusterName + "|services");
                 }
-//                for (Future<Reader> httpResponse : responses){
-//                    getServiceMetrics(httpResponse.get(), clusterName + "|services");
-//                }
 
-//                for (Map host : hosts){
-//                    //DO NOT get the entire json obj from hosts
-//                    getHostMetrics((String) host.get("href"), hierarchy + "|" + clusterName + "|hosts");
-//                }
                 for (Map host : hosts){
                     threadPool.submit(new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
                     count++;
                 }
-//                for (Future<Reader> httpResponse : responses){
-//                    getHostMetrics(httpResponse.get(), clusterName + "|hosts");
-//                }
                 for(;count>0;count--){
                     getHostMetrics(threadPool.take().get(), clusterName + "|hosts");
                 }
@@ -214,11 +157,8 @@ public class AmbariCommunicator {
         }
     }
 
-    //TODO: thread this
     private void getServiceMetrics(Reader response, String hierarchy){
         try {
-//            Reader response = getResponse(href + "?fields=ServiceInfo/state,components");
-
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 Map serviceInfo = (Map) json.get("ServiceInfo");
@@ -242,7 +182,7 @@ public class AmbariCommunicator {
                 metrics.put(hierarchy + "|" + serviceName + "|state", String.valueOf(states.indexOf(serviceState)));
 
                 List<Map> components = (ArrayList<Map>) json.get("components");
-//                List<Future> responses = new ArrayList<Future>();
+
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
                 for (Map component : components){
@@ -252,12 +192,6 @@ public class AmbariCommunicator {
                 for(;count>0;count--){
                     getComponentMetrics(threadPool.take().get(), hierarchy + "|" + serviceName);
                 }
-//                for (Future<Reader> httpResponse : responses){
-//                    getComponentMetrics(httpResponse.get(), hierarchy + "|" + serviceName);
-//                }
-//                for (Map component : components){
-//                    getComponentMetrics((String) component.get("href"), hierarchy + "|" + serviceName + "|services");
-//                }
             } catch (Exception e) {
 //                logger.error("href: "+href);
                 e.printStackTrace();
@@ -268,11 +202,8 @@ public class AmbariCommunicator {
         }
     }
 
-    //TODO: thread this
     private void getHostMetrics(Reader response, String hierarchy){
         try {
-//            Reader response = getResponse(href + "?fields=Hosts/host_state,metrics");
-
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 Map hostInfo = (Map) json.get("Hosts");
@@ -306,11 +237,8 @@ public class AmbariCommunicator {
         }
     }
 
-    //TODO: thread this
     private void getComponentMetrics(Reader response, String hierarchy){
         try {
-//            Reader response = getResponse(href + "?fields=ServiceComponentInfo/state,metrics");
-
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 Map componentInfo = (Map) json.get("ServiceComponentInfo");
