@@ -227,14 +227,13 @@ public class HadoopCommunicator {
         }
     }
 
-    //TODO: add state info as ints
     private Map<String, String> getApp(Map<String,Object> app, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String appName = (String) app.get("name");
-        if (xmlParser.isExcludeAppName(appName)){
+        if (xmlParser.isIncludeAppName(appName)){
             return rtn;
-        } else if (xmlParser.isExcludeAppid((String) app.get("id"))){
+        } else if (xmlParser.isIncludeAppid((String) app.get("id"))){
             return rtn;
         }
 
@@ -264,7 +263,7 @@ public class HadoopCommunicator {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
-        if (xmlParser.isExcludeNodeid(id)){
+        if (xmlParser.isIncludeNodeid(id)){
             return rtn;
         }
 

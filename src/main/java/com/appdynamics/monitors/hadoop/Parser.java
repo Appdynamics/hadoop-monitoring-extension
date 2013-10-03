@@ -128,7 +128,7 @@ public class Parser {
             } else if (element.getName().equals("exclude-service")){
                 if (!(text = element.getText()).equals("")){
                     String[] appId = text.split(",");
-                    excludeAmbariHost.addAll(Arrays.asList(appId));
+                    excludeAmbariService.addAll(Arrays.asList(appId));
                 }
             } else if (element.getName().equals("exclude-service-component")){
                 if (!(text = element.getText()).equals("")){
@@ -153,44 +153,53 @@ public class Parser {
         return threadLimit;
     }
 
-    public boolean isExcludeAppid(String appid){
-        return excludeAppid.contains(appid);
+    public boolean isIncludeAppid(String appid){
+        return !excludeAppid.contains(appid);
     }
 
-    public boolean isExcludeAppName(String appname){
-        return excludeAppName.contains(appname);
+    public boolean isIncludeAppName(String appname){
+        return !excludeAppName.contains(appname);
     }
 
-    public boolean isExcludeNodeid(String nodeid){
-        return excludeNodeid.contains(nodeid);
+    public boolean isIncludeNodeid(String nodeid){
+        return !excludeNodeid.contains(nodeid);
     }
 
     public boolean isIncludeCluster(String cluster){
         return (includeAmbariCluster.contains("*") || includeAmbariCluster.contains(cluster));
     }
 
-    public boolean isExcludeHost(String host){
+    public boolean isIncludeHost(String host){
         if (!excludeAmbariHost.contains("*") && !excludeAmbariHost.contains(host)){
             if (includeAmbariHost.contains("*") || includeAmbariHost.contains(host)){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public boolean isExcludeService(String service){
-        return (excludeAmbariService.contains("*") || excludeAmbariService.contains(service));
+    public boolean isIncludeService(String service){
+        return !(excludeAmbariService.contains("*") || excludeAmbariService.contains(service));
     }
 
-    public boolean isExcludeServiceComponent(String componentPath){
-        return (excludeAmbariServiceComponent.contains("*") || excludeAmbariServiceComponent.contains(componentPath));
+    public boolean isIncludeServiceComponent(String service, String component){
+        return !(excludeAmbariServiceComponent.contains("*")
+                || excludeAmbariServiceComponent.contains(service + "/" + component));
     }
 
     public boolean isIncludeHostMetrics(String host){
         return (includeAmbariHostMetrics.contains("*") || includeAmbariHostMetrics.contains(host));
     }
 
+    public List<String> getIncludeAmbariHostMetrics(){
+        return includeAmbariHostMetrics;
+    }
+
     public boolean isIncludeComponentMetrics(String component){
         return (includeAmbariComponentMetrics.contains("*") || includeAmbariComponentMetrics.contains(component));
+    }
+
+    public List<String> getIncludeAmbariComponentMetrics(){
+        return includeAmbariComponentMetrics;
     }
 }

@@ -23,10 +23,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -86,15 +83,17 @@ public class AmbariCommunicator {
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
                 for (Map cluster : clusters){
-                    threadPool.submit(new Response(cluster.get("href") + "?fields=services,hosts"));
-                    count++;
+                    if (xmlParser.isIncludeCluster((String) ((Map) cluster.get("Clusters")).get("cluster_name"))){
+                        threadPool.submit(new Response(cluster.get("href") + "?fields=services,hosts"));
+                        count++;
+                    }
                 }
                 for(;count>0;count--){
                     getClusterMetrics(threadPool.take().get());
                 }
             } catch (Exception e) {
                 logger.error("Error: clusterMetrics empty"+json);
-                logger.error("cluster err "+e);
+                logger.error("cluster err " + e);
             }
         } catch (Exception e) {
             logger.error(e);
@@ -133,16 +132,20 @@ public class AmbariCommunicator {
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
                 for (Map service : services){
-                    threadPool.submit(new Response(service.get("href") + "?fields=ServiceInfo/state,components"));
-                    count++;
+                    if (xmlParser.isIncludeService((String) ((Map) service.get("ServiceInfo")).get("service_name"))){
+                        threadPool.submit(new Response(service.get("href") + "?fields=ServiceInfo/state,components"));
+                        count++;
+                    }
                 }
                 for(;count>0;count--){
                     getServiceMetrics(threadPool.take().get(), clusterName + "|services");
                 }
 
                 for (Map host : hosts){
-                    threadPool.submit(new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
-                    count++;
+                    if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("Host_name"))){
+                        threadPool.submit(new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
+                        count++;
+                    }
                 }
                 for(;count>0;count--){
                     getHostMetrics(threadPool.take().get(), clusterName + "|hosts");
@@ -186,8 +189,11 @@ public class AmbariCommunicator {
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
                 for (Map component : components){
-                    threadPool.submit(new Response(component.get("href") + "?fields=ServiceComponentInfo/state,metrics"));
-                    count++;
+                    if (xmlParser.isIncludeServiceComponent(serviceName,
+                            (String) ((Map) component.get("ServiceComponentInfo")).get("component_name"))){
+                        threadPool.submit(new Response(component.get("href") + "?fields=ServiceComponentInfo/state,metrics"));
+                        count++;
+                    }
                 }
                 for(;count>0;count--){
                     getComponentMetrics(threadPool.take().get(), hierarchy + "|" + serviceName);
@@ -219,12 +225,16 @@ public class AmbariCommunicator {
                 metrics.put(hierarchy + "|" + hostName + "|state", String.valueOf(states.indexOf(hostState)));
 
                 Map hostMetrics = (Map) json.get("metrics");
-//                if (hostMetrics == null){
-//                    //no metrics
-//                    return;
-//                }
+
                 //remove non metric data
                 hostMetrics.remove("boottime");
+
+                Iterator<Map.Entry> iter = hostMetrics.entrySet().iterator();
+                while(iter.hasNext()){
+                    if (!xmlParser.isIncludeHostMetrics((String) iter.next().getKey())){
+                        iter.remove();
+                    }
+                }
 
                 getAllMetrics(hostMetrics, hierarchy + "|" + hostName);
             } catch (Exception e) {
@@ -268,6 +278,13 @@ public class AmbariCommunicator {
                 }
                 //remove non metric data
                 componentMetrics.remove("boottime");
+
+                Iterator<Map.Entry> iter = componentMetrics.entrySet().iterator();
+                while(iter.hasNext()){
+                    if (!xmlParser.isIncludeComponentMetrics((String) iter.next().getKey())){
+                        iter.remove();
+                    }
+                }
 
                 getAllMetrics(componentMetrics, hierarchy + "|" + componentName);
             } catch (Exception e) {
