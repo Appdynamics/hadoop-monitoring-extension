@@ -111,10 +111,8 @@ public class Parser {
                 }
             } else if (element.getName().equals("include-host")){
                 if (!(text = element.getText()).equals("")){
-                    if (!text.equals("*")){
-                        String[] appId = text.split(",");
-                        includeAmbariHost.addAll(Arrays.asList(appId));
-                    }
+                    String[] appId = text.split(",");
+                    includeAmbariHost.addAll(Arrays.asList(appId));
                 }
             } else if (element.getName().equals("exclude-host")){
                 if (!(text = element.getText()).equals("")){

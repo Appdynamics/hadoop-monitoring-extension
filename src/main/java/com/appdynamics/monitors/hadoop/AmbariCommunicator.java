@@ -119,7 +119,7 @@ public class AmbariCommunicator {
                 }
 
                 for (Map host : hosts){
-                    if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("Host_name"))){
+                    if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("host_name"))){
                         threadPool.submit(new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
                         count++;
                     }

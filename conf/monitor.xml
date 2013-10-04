@@ -12,12 +12,12 @@
                 <type>java</type>
                 <execution-timeout-in-secs>60</execution-timeout-in-secs>
                 <task-arguments>
-                        <argument name="resource-manager-monitor" is-required="true" default-value="true" />
+                        <argument name="resource-manager-monitor" is-required="true" default-value="false" />
                         <argument name="host" is-required="true" default-value="localhost" />
                         <argument name="port" is-required="true" default-value="8088" />
                         
-                        <argument name="ambari-monitor" is-required="true" default-value="false" />
-                        <argument name="ambari-host" is-required="true" default-value="ec2-23-22-170-13.compute-1.amazonaws.com" />
+                        <argument name="ambari-monitor" is-required="true" default-value="true" />
+                        <argument name="ambari-host" is-required="true" default-value="ec2-54-224-38-193.compute-1.amazonaws.com" />
                         <argument name="ambari-port" is-required="true" default-value="8080" />
                         <argument name="ambari-user" is-required="true" default-value="admin" />
                         <argument name="ambari-password" is-required="true" default-value="admin" />

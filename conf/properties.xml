@@ -62,12 +62,12 @@
             cpu,memory
             *
         -->
-        <include-host-metrics></include-host-metrics>
+        <include-host-metrics>*</include-host-metrics>
 
         <!--
             cpu,memory
             *
         -->
-        <include-component-metrics></include-component-metrics>
+        <include-component-metrics>*</include-component-metrics>
     </ambari>
 </hadoop-monitor>
