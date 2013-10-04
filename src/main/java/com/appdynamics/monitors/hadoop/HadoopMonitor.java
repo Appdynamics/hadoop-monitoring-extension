@@ -1,20 +1,19 @@
 package com.appdynamics.monitors.hadoop;
 
-import java.io.OutputStreamWriter;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.singularity.ee.agent.systemagent.api.MetricWriter;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
+import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
 import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 import org.dom4j.DocumentException;
+
+import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -88,7 +87,7 @@ public class HadoopMonitor extends AManagedMonitor
             String ambariPassword = args.get("ambari-password");
 
 
-            if (args.containsKey("metric-path") && !args.get("metric-path").equals("")){
+            if (!args.get("metric-path").equals("")){
                 metricPath = args.get("metric-path");
                 if (!metricPath.endsWith("|")){
                     metricPath += "|";
@@ -96,12 +95,12 @@ public class HadoopMonitor extends AManagedMonitor
             }
 
             if (xmlParser == null){
-                if (!args.containsKey("properties-path")){
-                    logger.error("monitor.xml must contain task argument 'properties-path' describing " +
-                            "the path to the XML properties file.\n" +
-                            "Terminating Hadoop Monitor");
-                    return null;
-                }
+//                if (!args.containsKey("properties-path")){
+//                    logger.error("monitor.xml must contain task argument 'properties-path' describing " +
+//                            "the path to the XML properties file.\n" +
+//                            "Terminating Hadoop Monitor");
+//                    return null;
+//                }
 
                 String xml = args.get("properties-path");
                 try {
@@ -128,6 +127,7 @@ public class HadoopMonitor extends AManagedMonitor
 
             try{
                 for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
+                    //TODO: find appropriate name for hrm cluster
                     printMetric(metricPath + "ClusterName|" + entry.getKey(), entry.getValue(),
                             MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                             MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
@@ -149,30 +149,6 @@ public class HadoopMonitor extends AManagedMonitor
             logger.error(e);
             return new TaskOutput("Hadoop Metric Upload Failed");
         }
-//        while(true){
-//            (new PrintMetricsThread()).start();
-//            try{
-//                Thread.sleep(60000);
-//            } catch (InterruptedException e){
-//                logger.error("Hadoop Resourcemanager Monitor interrupted. Quitting monitor.");
-//            }
-//        }
-
-//        try
-//        {
-//            host = args.get("host");
-//            port = args.get("port");
-//
-//            populate();
-//
-//            return new TaskOutput("Hadoop Metric Upload Complete");
-//
-//        }
-//        catch (Exception e)
-//        {
-//            logger.error(e.toString());
-//            return new TaskOutput("Error: " + e);
-//        }
     }
 
 

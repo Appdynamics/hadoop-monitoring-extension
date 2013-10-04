@@ -46,7 +46,6 @@ public class Parser {
 
         includeAmbariCluster = new ArrayList<String>();
         includeAmbariHost = new ArrayList<String>();
-        includeAmbariHost.add("*");
         excludeAmbariHost = new ArrayList<String>();
         excludeAmbariService = new ArrayList<String>();
         excludeAmbariServiceComponent = new ArrayList<String>();
@@ -113,12 +112,9 @@ public class Parser {
             } else if (element.getName().equals("include-host")){
                 if (!(text = element.getText()).equals("")){
                     if (!text.equals("*")){
-                        includeAmbariHost.clear();
                         String[] appId = text.split(",");
                         includeAmbariHost.addAll(Arrays.asList(appId));
                     }
-                } else {
-                    includeAmbariHost.clear();
                 }
             } else if (element.getName().equals("exclude-host")){
                 if (!(text = element.getText()).equals("")){
@@ -191,15 +187,7 @@ public class Parser {
         return (includeAmbariHostMetrics.contains("*") || includeAmbariHostMetrics.contains(host));
     }
 
-    public List<String> getIncludeAmbariHostMetrics(){
-        return includeAmbariHostMetrics;
-    }
-
     public boolean isIncludeComponentMetrics(String component){
         return (includeAmbariComponentMetrics.contains("*") || includeAmbariComponentMetrics.contains(component));
-    }
-
-    public List<String> getIncludeAmbariComponentMetrics(){
-        return includeAmbariComponentMetrics;
     }
 }

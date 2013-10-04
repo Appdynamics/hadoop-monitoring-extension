@@ -2,18 +2,16 @@ package com.appdynamics.monitors.hadoop;
 
 import com.singularity.ee.util.httpclient.*;
 import com.singularity.ee.util.log4j.Log4JLogger;
-//import org.apache.http.client.methods.CloseableHttpResponse;
-//import org.apache.http.client.methods.HttpGet;
-//import org.apache.http.impl.client.CloseableHttpClient;
-//import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
-//import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HadoopCommunicator {
     private String baseAddress;
@@ -43,16 +41,10 @@ public class HadoopCommunicator {
         getClusterMetrics(metrics);
         getClusterScheduler(metrics);
         getClusterApps(metrics);
-        getclusterNodes(metrics);
+        getClusterNodes(metrics);
     }
 
     private Reader getResponse(String location) throws Exception {
-//        CloseableHttpClient client = HttpClients.createDefault();
-//        HttpGet httpGet = new HttpGet(baseAddress + location);
-//        CloseableHttpResponse response = client.execute(httpGet);
-//
-//        return new InputStreamReader(response.getEntity().getContent());
-
         IHttpClientWrapper httpClient = HttpClientWrapper.getInstance();
         HttpExecutionRequest request = new HttpExecutionRequest(baseAddress + location,"", HttpOperation.GET);
         HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
@@ -71,11 +63,10 @@ public class HadoopCommunicator {
                     metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue().toString());
                 }
             } catch (Exception e) {
-                logger.error("Error: clusterMetrics empty"+json);
-                logger.error("cluster err "+e);
+                logger.error("Failed to parse ClusterMetrics: "+e);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Failed to get response for ClusterMetrics: "+e);
         }
     }
 
@@ -116,24 +107,21 @@ public class HadoopCommunicator {
                     }
                 }
             } catch (Exception e) {
-                logger.error("Error: clusterMetrics empty"+json);
-                logger.error("cluster err "+e);
-                e.printStackTrace();
+                logger.error("Failed to parse ClusterScheduler: " + e);
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error("Failed to get response for ClusterScheduler: " + e);
         }
     }
 
-    private Map<String, String> getQueues(ArrayList queue, String hierarchy){
+    private Map<String, String> getQueues(List queue, String hierarchy){
         Map<String, String> queueMap = new HashMap<String, String>();
 
-        for (Map<String, Object> item : (ArrayList<Map>) queue){
+        for (Map<String, Object> item : (ArrayList<Map<String, Object>>) queue){
             String queueName = (String) item.get("queueName");
 
             if (item.get("queues") != null){
-                ArrayList queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
+                List queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
                 Map<String, String> childQueue = getQueues(queueList, hierarchy + "|" + queueName);
                 queueMap.putAll(childQueue);
             }
@@ -169,10 +157,10 @@ public class HadoopCommunicator {
         return rtn;
     }
 
-    private Map<String, String> getUsers(ArrayList users, String hierarchy){
+    private Map<String, String> getUsers(List users, String hierarchy){
         Map<String, String> rtn = new HashMap<String, String>();
 
-        for (Map<String, Object> user : (ArrayList<Map>)users){
+        for (Map<String, Object> user : (ArrayList<Map<String, Object>>) users){
             String username = (String) user.get("username");
 
             rtn.putAll(getResourcesUsed((Map<String, Object>) user.get("resourcesUsed"), hierarchy + "|" + username));
@@ -194,36 +182,36 @@ public class HadoopCommunicator {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 json = (Map<String, Object>) json.get("apps");
-                ArrayList<Map> appList = (ArrayList<Map>) json.get("app");
+                List<Map> appList = (ArrayList<Map>) json.get("app");
 
                 for (Map<String, Object> app : appList){
                     metrics.putAll(getApp(app, "Apps"));
                 }
             } catch (Exception e) {
-                logger.error("cluster err "+e);
+                logger.error("Failed to parse ClusterApps: "+e);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Failed to get response for ClusterApps: "+e);
         }
     }
 
-    private void getclusterNodes(Map<String, String> metrics) {
+    private void getClusterNodes(Map<String, String> metrics) {
         try {
             Reader response = getResponse("/ws/v1/cluster/nodes");
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
                 json = (Map<String, Object>) json.get("nodes");
-                ArrayList<Map> nodeList = (ArrayList<Map>) json.get("node");
+                List<Map> nodeList = (ArrayList<Map>) json.get("node");
 
                 for (Map<String, Object> node : nodeList){
                     metrics.putAll(getNode(node, "Nodes"));
                 }
             } catch (Exception e) {
-                logger.error("node err "+e);
+                logger.error("Failed to parse ClusterNodes: "+e);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Failed to get response for ClusterNodes: "+e);
         }
     }
 
@@ -237,7 +225,7 @@ public class HadoopCommunicator {
             return rtn;
         }
 
-        ArrayList<String> states = new ArrayList<String>();
+        List<String> states = new ArrayList<String>();
         states.add("NEW");
         states.add("SUBMITTED");
         states.add("ACCEPTED");
@@ -247,7 +235,7 @@ public class HadoopCommunicator {
         states.add("KILLED");
         rtn.put(hierarchy + "|" + appName + "|state", String.valueOf(states.indexOf(app.get("state"))));
 
-        ArrayList<String> finalStatus = new ArrayList<String>();
+        List<String> finalStatus = new ArrayList<String>();
         finalStatus.add("UNDEFINED");
         finalStatus.add("SUCCEEDED");
         finalStatus.add("FAILED");
@@ -274,7 +262,7 @@ public class HadoopCommunicator {
             rtn.put(hierarchy+"|"+id+"|healthStatus", "0");
         }
 
-        ArrayList<String> states = new ArrayList<String>();
+        List<String> states = new ArrayList<String>();
         states.add("NEW");
         states.add("RUNNING");
         states.add("UNHEALTHY");
@@ -288,14 +276,6 @@ public class HadoopCommunicator {
         rtn.put(hierarchy+"|"+id+"|numContainers", node.get("numContainers").toString());
         return rtn;
     }
-
-    //TODO: fix up type casting format so they're consistent
-    //add pid appid for include metrics? or rather app_attempts since apps and nodes would have those?
-    //exclude on pid, appid
-    //exclude on specific metric path?(clustermetric|xxx)
-    //
-    //exclude by: appid, app name, node id
-    //TODO: patch up with proper exception handling
 
     private String roundDecimal(Number num){
         if (num.getClass() == Float.class || num.getClass() == Double.class){

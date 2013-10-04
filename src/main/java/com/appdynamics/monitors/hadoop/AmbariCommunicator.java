@@ -2,24 +2,10 @@ package com.appdynamics.monitors.hadoop;
 
 import com.singularity.ee.util.httpclient.*;
 import com.singularity.ee.util.log4j.Log4JLogger;
-//import org.apache.http.Header;
-//import org.apache.http.HttpRequest;
-//import org.apache.http.auth.AuthScope;
-//import org.apache.http.auth.UsernamePasswordCredentials;
-//import org.apache.http.client.CredentialsProvider;
-//import org.apache.http.client.methods.CloseableHttpResponse;
-//import org.apache.http.client.methods.HttpGet;
-//import org.apache.http.impl.auth.BasicScheme;
-//import org.apache.http.impl.client.BasicCredentialsProvider;
-//import org.apache.http.impl.client.CloseableHttpClient;
-//import org.apache.http.impl.client.HttpClients;
-//import org.apache.http.message.BasicHeader;
-//import org.apache.http.protocol.BasicHttpContext;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
-//import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.NumberFormat;
@@ -34,17 +20,13 @@ import java.util.concurrent.*;
  * To change this template use File | Settings | File Templates.
  */
 public class AmbariCommunicator {
-    private String baseAddress, host, port;
+    private String host, port, user, password;
     private Logger logger;
-    private String user, password;
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
     private Map<String, String> metrics;
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private ExecutorService executor;
-
-    int acc = 0;
-    int count = 0;
 
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
@@ -65,7 +47,6 @@ public class AmbariCommunicator {
         this.password = password;
         this.logger = logger;
         this.xmlParser = xmlParser;
-        baseAddress = "http://" + host + ":" + port + "/api/v1";
 
         numberFormat.setGroupingUsed(false);
         executor = Executors.newFixedThreadPool(xmlParser.getThreadLimit());
@@ -92,16 +73,12 @@ public class AmbariCommunicator {
                     getClusterMetrics(threadPool.take().get());
                 }
             } catch (Exception e) {
-                logger.error("Error: clusterMetrics empty"+json);
-                logger.error("cluster err " + e);
+                logger.error("Failed to parse cluster names: " + e);
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error("Failed to get response for cluster names: " + e);
         }
         executor.shutdown();
-        logger.info("total requests: "+ count);
-        logger.info("total response size: "+acc);
     }
 
     private class Response implements Callable<Reader>{
@@ -151,12 +128,10 @@ public class AmbariCommunicator {
                     getHostMetrics(threadPool.take().get(), clusterName + "|hosts");
                 }
             } catch (Exception e) {
-//                logger.error("href: "+href);
-                e.printStackTrace();
+                logger.error("Failed to parse cluster metrics: " + e);
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error("Failed to get response for cluster metrics: " + e);
         }
     }
 
@@ -199,12 +174,10 @@ public class AmbariCommunicator {
                     getComponentMetrics(threadPool.take().get(), hierarchy + "|" + serviceName);
                 }
             } catch (Exception e) {
-//                logger.error("href: "+href);
-                e.printStackTrace();
+                logger.error("Failed to parse service metrics: " + e);
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error("Failed to get response for service metrics: " + e);
         }
     }
 
@@ -238,12 +211,10 @@ public class AmbariCommunicator {
 
                 getAllMetrics(hostMetrics, hierarchy + "|" + hostName);
             } catch (Exception e) {
-//                logger.error("href: "+href);
-                e.printStackTrace();
+                logger.error("Failed to parse host metrics: " + e);
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error("Failed to get response for host metrics: " + e);
         }
     }
 
@@ -288,12 +259,10 @@ public class AmbariCommunicator {
 
                 getAllMetrics(componentMetrics, hierarchy + "|" + componentName);
             } catch (Exception e) {
-//                logger.error("href: "+href);
-                e.printStackTrace();
+                logger.error("Failed to parse component metrics: " + e);
             }
         } catch (Exception e) {
-            logger.error(e);
-            e.printStackTrace();
+            logger.error("Failed to get response for component metrics: " + e);
         }
     }
 

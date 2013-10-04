@@ -27,6 +27,10 @@
         -->
         <thread-limit>100</thread-limit>
 
+        <!--
+            cluster1,cluster2
+            *
+        -->
         <include-cluster>*</include-cluster>
 
         <!--
