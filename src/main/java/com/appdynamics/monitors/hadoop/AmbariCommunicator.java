@@ -267,6 +267,8 @@ public class AmbariCommunicator {
     }
 
     //ignores all non numeric attributes and all lists
+    //load % expressed as reals!
+    //what other metrics are like this?
     private void getAllMetrics(Map<String, Object> json, String hierarchy) {
         for (Map.Entry<String, Object> entry : json.entrySet()){
             String key = entry.getKey();
@@ -274,13 +276,17 @@ public class AmbariCommunicator {
             if (val instanceof Map){
                 getAllMetrics((Map) val, hierarchy + "|" + key);
             } else if (val instanceof Number){
-                metrics.put(hierarchy + "|" + key, roundDecimal((Number) val));
+                if (key.startsWith("load_")){
+                    metrics.put(hierarchy + "|" + key, roundDecimal(((Double) val)*100));
+                } else {
+                    metrics.put(hierarchy + "|" + key, roundDecimal((Number) val));
+                }
             }
         }
     }
 
     private String roundDecimal(Number num){
-        if (num.getClass() == Float.class || num.getClass() == Double.class){
+        if (num instanceof Float || num instanceof Double){
             return numberFormat.format(Math.round((Double) num));
         }
         return num.toString();
