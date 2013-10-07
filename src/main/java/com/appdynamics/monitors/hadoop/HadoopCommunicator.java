@@ -19,6 +19,11 @@ public class HadoopCommunicator {
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
 
+    private static final String CLUSTER_METRIC_PATH = "/ws/v1/cluster/metrics";
+    private static final String CLUSTER_SCHEDULER_PATH = "/ws/v1/cluster/scheduler";
+    private static final String CLUSTER_APPS_PATH = "/ws/v1/cluster/apps";
+    private static final String CLUSTER_NODES_PATH = "/ws/v1/cluster/nodes";
+
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
         public Map createObjectContainer() {
@@ -53,7 +58,7 @@ public class HadoopCommunicator {
 
     private void getClusterMetrics(Map<String, String> metrics) {
         try {
-            Reader response = getResponse("/ws/v1/cluster/metrics");
+            Reader response = getResponse(CLUSTER_METRIC_PATH);
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -72,7 +77,7 @@ public class HadoopCommunicator {
 
     private void getClusterScheduler(Map<String, String> metrics) {
         try {
-            Reader response = getResponse("/ws/v1/cluster/scheduler");
+            Reader response = getResponse(CLUSTER_SCHEDULER_PATH);
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -177,7 +182,7 @@ public class HadoopCommunicator {
 
     private void getClusterApps(Map<String, String> metrics) {
         try {
-            Reader response = getResponse("/ws/v1/cluster/apps");
+            Reader response = getResponse(CLUSTER_APPS_PATH);
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -197,7 +202,7 @@ public class HadoopCommunicator {
 
     private void getClusterNodes(Map<String, String> metrics) {
         try {
-            Reader response = getResponse("/ws/v1/cluster/nodes");
+            Reader response = getResponse(CLUSTER_NODES_PATH);
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -255,7 +260,6 @@ public class HadoopCommunicator {
             return rtn;
         }
 
-        //should this be standardized?
         if (node.get("healthStatus").equals("Healthy")){
             rtn.put(hierarchy+"|"+id+"|healthStatus", "1");
         } else {

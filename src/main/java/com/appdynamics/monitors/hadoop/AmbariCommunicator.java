@@ -12,13 +12,6 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: stephen.dong
- * Date: 9/24/13
- * Time: 4:35 PM
- * To change this template use File | Settings | File Templates.
- */
 public class AmbariCommunicator {
     private String host, port, user, password;
     private Logger logger;
@@ -27,6 +20,11 @@ public class AmbariCommunicator {
     private Map<String, String> metrics;
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private ExecutorService executor;
+
+    private static final String CLUSTER_FIELDS = "?fields=services,hosts";
+    private static final String SERVICE_FIELDS = "?fields=ServiceInfo/state,components";
+    private static final String HOST_FIELDS = "?fields=Hosts/host_state,metrics";
+    private static final String COMPONENT_FIELDS = "?fields=ServiceComponentInfo/state,metrics";
 
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
@@ -65,7 +63,7 @@ public class AmbariCommunicator {
                 int count = 0;
                 for (Map cluster : clusters){
                     if (xmlParser.isIncludeCluster((String) ((Map) cluster.get("Clusters")).get("cluster_name"))){
-                        threadPool.submit(new Response(cluster.get("href") + "?fields=services,hosts"));
+                        threadPool.submit(new Response(cluster.get("href") + CLUSTER_FIELDS));
                         count++;
                     }
                 }
@@ -110,7 +108,7 @@ public class AmbariCommunicator {
                 int count = 0;
                 for (Map service : services){
                     if (xmlParser.isIncludeService((String) ((Map) service.get("ServiceInfo")).get("service_name"))){
-                        threadPool.submit(new Response(service.get("href") + "?fields=ServiceInfo/state,components"));
+                        threadPool.submit(new Response(service.get("href") + SERVICE_FIELDS));
                         count++;
                     }
                 }
@@ -120,7 +118,7 @@ public class AmbariCommunicator {
 
                 for (Map host : hosts){
                     if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("host_name"))){
-                        threadPool.submit(new Response(host.get("href") + "?fields=Hosts/host_state,metrics"));
+                        threadPool.submit(new Response(host.get("href") + HOST_FIELDS));
                         count++;
                     }
                 }
@@ -166,7 +164,7 @@ public class AmbariCommunicator {
                 for (Map component : components){
                     if (xmlParser.isIncludeServiceComponent(serviceName,
                             (String) ((Map) component.get("ServiceComponentInfo")).get("component_name"))){
-                        threadPool.submit(new Response(component.get("href") + "?fields=ServiceComponentInfo/state,metrics"));
+                        threadPool.submit(new Response(component.get("href") + COMPONENT_FIELDS));
                         count++;
                     }
                 }
@@ -267,8 +265,6 @@ public class AmbariCommunicator {
     }
 
     //ignores all non numeric attributes and all lists
-    //load % expressed as reals!
-    //what other metrics are like this?
     private void getAllMetrics(Map<String, Object> json, String hierarchy) {
         for (Map.Entry<String, Object> entry : json.entrySet()){
             String key = entry.getKey();
@@ -276,7 +272,7 @@ public class AmbariCommunicator {
             if (val instanceof Map){
                 getAllMetrics((Map) val, hierarchy + "|" + key);
             } else if (val instanceof Number){
-                if (key.startsWith("load_")){
+                if (key.startsWith("load_")){   //convert all load factors to integers
                     metrics.put(hierarchy + "|" + key, roundDecimal(((Double) val)*100));
                 } else {
                     metrics.put(hierarchy + "|" + key, roundDecimal((Number) val));

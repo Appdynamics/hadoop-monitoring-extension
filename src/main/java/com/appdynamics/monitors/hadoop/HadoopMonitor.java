@@ -15,13 +15,6 @@ import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: stephen.dong
- * Date: 9/12/13
- * Time: 1:53 PM
- * To change this template use File | Settings | File Templates.
- */
 public class HadoopMonitor extends AManagedMonitor
 {
     private Parser xmlParser;
@@ -34,11 +27,6 @@ public class HadoopMonitor extends AManagedMonitor
 
     //for testing
     public static void main(String[] args){
-
-//        if (args.length != 2){
-//            System.err.println("2 arguments required: Host, Port");
-//            return;
-//        }
         HadoopMonitor hm = new HadoopMonitor();
         ConsoleAppender app = new ConsoleAppender(new SimpleLayout());
         app.setName("DEFAULT");
@@ -71,12 +59,6 @@ public class HadoopMonitor extends AManagedMonitor
     {
         logger.info("Executing HadoopMonitor");
 
-//        if (!args.containsKey("host") || !args.containsKey("port")){
-//            logger.error("monitor.xml must contain task arguments 'host' and 'port'!\n" +
-//                        "Terminating Hadoop Monitor");
-//            return null;
-//        }
-
         try {
             String host = args.get("host");
             String port = args.get("port");
@@ -95,13 +77,6 @@ public class HadoopMonitor extends AManagedMonitor
             }
 
             if (xmlParser == null){
-//                if (!args.containsKey("properties-path")){
-//                    logger.error("monitor.xml must contain task argument 'properties-path' describing " +
-//                            "the path to the XML properties file.\n" +
-//                            "Terminating Hadoop Monitor");
-//                    return null;
-//                }
-
                 String xml = args.get("properties-path");
                 try {
                     xmlParser = new Parser(logger, xml);
@@ -110,7 +85,6 @@ public class HadoopMonitor extends AManagedMonitor
                             "Error: " + e);
                     xmlParser = new Parser(logger);
                 }
-    //            logger.error("user.dir is: "+System.getProperty("user.dir"));
             }
 
             Map<String, String> hadoopMetrics = new HashMap<String, String>();
@@ -127,8 +101,7 @@ public class HadoopMonitor extends AManagedMonitor
 
             try{
                 for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
-                    //TODO: find appropriate name for hrm cluster
-                    printMetric(metricPath + "ClusterName|" + entry.getKey(), entry.getValue(),
+                    printMetric(metricPath + "Resource Manager|" + entry.getKey(), entry.getValue(),
                             MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                             MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
                             MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);

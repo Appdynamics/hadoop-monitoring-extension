@@ -11,13 +11,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: stephen.dong
- * Date: 9/23/13
- * Time: 10:51 AM
- * To change this template use File | Settings | File Templates.
- */
 public class Parser {
     private List<String> excludeAppid;
     private List<String> excludeAppName;
@@ -32,8 +25,7 @@ public class Parser {
     private List<String> includeAmbariComponentMetrics;
 
 
-    //TODO: change to 1 as prod default
-    private int threadLimit = 100;
+    private int threadLimit = 1;
 
     Logger logger;
 
