@@ -6,8 +6,10 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.*;
@@ -71,10 +73,10 @@ public class AmbariCommunicator {
                     getClusterMetrics(threadPool.take().get());
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse cluster names: " + e);
+                logger.error("Failed to parse cluster names: " + stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for cluster names: " + e);
+            logger.error("Failed to get response for cluster names: " + stackTraceToString(e));
         }
         executor.shutdown();
     }
@@ -126,10 +128,10 @@ public class AmbariCommunicator {
                     getHostMetrics(threadPool.take().get(), clusterName + "|hosts");
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse cluster metrics: " + e);
+                logger.error("Failed to parse cluster metrics: " + stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for cluster metrics: " + e);
+            logger.error("Failed to get response for cluster metrics: " + stackTraceToString(e));
         }
     }
 
@@ -172,10 +174,10 @@ public class AmbariCommunicator {
                     getComponentMetrics(threadPool.take().get(), hierarchy + "|" + serviceName);
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse service metrics: " + e);
+                logger.error("Failed to parse service metrics: " + stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for service metrics: " + e);
+            logger.error("Failed to get response for service metrics: " + stackTraceToString(e));
         }
     }
 
@@ -209,10 +211,10 @@ public class AmbariCommunicator {
 
                 getAllMetrics(hostMetrics, hierarchy + "|" + hostName);
             } catch (Exception e) {
-                logger.error("Failed to parse host metrics: " + e);
+                logger.error("Failed to parse host metrics: " + stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for host metrics: " + e);
+            logger.error("Failed to get response for host metrics: " + stackTraceToString(e));
         }
     }
 
@@ -257,10 +259,10 @@ public class AmbariCommunicator {
 
                 getAllMetrics(componentMetrics, hierarchy + "|" + componentName);
             } catch (Exception e) {
-                logger.error("Failed to parse component metrics: " + e);
+                logger.error("Failed to parse component metrics: " + stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for component metrics: " + e);
+            logger.error("Failed to get response for component metrics: " + stackTraceToString(e));
         }
     }
 
@@ -286,5 +288,12 @@ public class AmbariCommunicator {
             return numberFormat.format(Math.round((Double) num));
         }
         return num.toString();
+    }
+
+    private String stackTraceToString(Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
     }
 }

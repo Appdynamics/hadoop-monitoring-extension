@@ -12,6 +12,8 @@ import org.apache.log4j.SimpleLayout;
 import org.dom4j.DocumentException;
 
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +84,7 @@ public class HadoopMonitor extends AManagedMonitor
                     xmlParser = new Parser(logger, xml);
                 } catch (DocumentException e) {
                     logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
-                            "Error: " + e);
+                            "Error: " + stackTraceToString(e));
                     xmlParser = new Parser(logger);
                 }
             }
@@ -114,18 +116,18 @@ public class HadoopMonitor extends AManagedMonitor
                             MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
                 }
             } catch (Exception e){
-                logger.error("Error printing metrics: " + e);
+                logger.error("Error printing metrics: " + stackTraceToString(e));
             }
 
             return new TaskOutput("Hadoop Metric Upload Complete");
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(stackTraceToString(e));
             return new TaskOutput("Hadoop Metric Upload Failed");
         }
     }
 
 
-    public void printMetric(String metricName, Object metricValue, String aggregation, String timeRollup, String cluster)
+    private void printMetric(String metricName, Object metricValue, String aggregation, String timeRollup, String cluster)
     {
         MetricWriter metricWriter = getMetricWriter(metricName,
                 aggregation,
@@ -134,5 +136,12 @@ public class HadoopMonitor extends AManagedMonitor
         );
 
         metricWriter.printMetric(String.valueOf(metricValue));
+    }
+
+    private String stackTraceToString(Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
     }
 }

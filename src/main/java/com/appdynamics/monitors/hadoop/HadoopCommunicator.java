@@ -6,8 +6,10 @@ import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,10 +70,10 @@ public class HadoopCommunicator {
                     metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue().toString());
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterMetrics: "+e);
+                logger.error("Failed to parse ClusterMetrics: "+stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterMetrics: "+e);
+            logger.error("Failed to get response for ClusterMetrics: "+stackTraceToString(e));
         }
     }
 
@@ -112,10 +114,10 @@ public class HadoopCommunicator {
                     }
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterScheduler: " + e);
+                logger.error("Failed to parse ClusterScheduler: " + stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterScheduler: " + e);
+            logger.error("Failed to get response for ClusterScheduler: " + stackTraceToString(e));
         }
     }
 
@@ -193,10 +195,10 @@ public class HadoopCommunicator {
                     metrics.putAll(getApp(app, "Apps"));
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterApps: "+e);
+                logger.error("Failed to parse ClusterApps: "+stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterApps: "+e);
+            logger.error("Failed to get response for ClusterApps: "+stackTraceToString(e));
         }
     }
 
@@ -213,10 +215,10 @@ public class HadoopCommunicator {
                     metrics.putAll(getNode(node, "Nodes"));
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterNodes: "+e);
+                logger.error("Failed to parse ClusterNodes: "+stackTraceToString(e));
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterNodes: "+e);
+            logger.error("Failed to get response for ClusterNodes: "+stackTraceToString(e));
         }
     }
 
@@ -288,4 +290,10 @@ public class HadoopCommunicator {
         return num.toString();
     }
 
+    private String stackTraceToString(Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
+    }
 }
