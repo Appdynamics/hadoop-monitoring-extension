@@ -1,4 +1,5 @@
 *.class
 /dist
+/out
 .idea/
 *.iml

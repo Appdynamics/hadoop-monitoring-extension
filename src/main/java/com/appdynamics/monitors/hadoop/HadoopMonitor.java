@@ -1,57 +1,59 @@
 package com.appdynamics.monitors.hadoop;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.singularity.ee.agent.systemagent.api.MetricWriter;
-import org.apache.log4j.Logger;
-
-//import net.sf.json.JSON;
-
 import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
+import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
 import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 import org.dom4j.DocumentException;
 
-/**
- * Created with IntelliJ IDEA.
- * User: stephen.dong
- * Date: 9/12/13
- * Time: 1:53 PM
- * To change this template use File | Settings | File Templates.
- */
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 public class HadoopMonitor extends AManagedMonitor
 {
     private Parser xmlParser;
-    private Map<String, String> hadoopMetrics;
 
-    private String host;
-    private String port;
-    private String metricPath = "Custom Metrics|Hadoop Resource Manager|";
+    private String metricPath = "Custom Metrics|Hadoop|";
     HadoopCommunicator hadoopCommunicator;
+    AmbariCommunicator ambariCommunicator;
 
     private static Logger logger = Logger.getLogger(HadoopMonitor.class);
 
     //for testing
     public static void main(String[] args){
-
-        if (args.length != 2){
-            System.err.println("2 arguments required: Host, Port");
-            return;
-        }
-
         HadoopMonitor hm = new HadoopMonitor();
-        hm.logger = Logger.getLogger(HadoopMonitor.class);
-        hm.xmlParser = new Parser(hm.logger);
+        ConsoleAppender app = new ConsoleAppender(new SimpleLayout());
+        app.setName("DEFAULT");
+        app.setWriter(new OutputStreamWriter(System.out));
+        app.setThreshold(Level.INFO);
+        org.apache.log4j.BasicConfigurator.configure(app);
+        logger = Logger.getLogger(HadoopMonitor.class);
 
-        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],hm.logger,hm.xmlParser);
+        hm.xmlParser = new Parser(logger);
+
+        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],logger,hm.xmlParser);
+        AmbariCommunicator acom = new AmbariCommunicator(args[2],args[3],args[4],args[5],logger,hm.xmlParser);
         Map<String, String> metrics = new HashMap<String, String>();
         hcom.populate(metrics);
+        acom.populate(metrics);
 
-        for (String key: metrics.keySet()){
-            System.out.println(key+" : "+metrics.get(key));
+        for (Map.Entry<String, String> entry: metrics.entrySet()){
+            try{
+                Long.parseLong(entry.getValue());
+                System.out.println(entry.getKey()+" : "+entry.getValue());
+            } catch (Exception e){
+                logger.error("INVALID DATA: "+entry.getKey()+" : "+entry.getValue());
+            }
         }
+        logger.info("Metric gathering done, metric size: " + metrics.size());
     }
 
     public TaskOutput execute(Map<String, String> args, TaskExecutionContext arg1)
@@ -59,86 +61,73 @@ public class HadoopMonitor extends AManagedMonitor
     {
         logger.info("Executing HadoopMonitor");
 
-        if (!args.containsKey("host") || !args.containsKey("port")){
-            logger.error("monitor.xml must contain task arguments 'host' and 'port'!\n" +
-                        "Terminating Hadoop Monitor");
-            return null;
-        }
+        try {
+            String host = args.get("host");
+            String port = args.get("port");
 
-        host = args.get("host");
-        port = args.get("port");
+            String ambariHost = args.get("ambari-host");
+            String ambariPort = args.get("ambari-port");
+            String ambariUser = args.get("ambari-user");
+            String ambariPassword = args.get("ambari-password");
 
-        if (args.containsKey("Metric-Path") && !args.get("Metric-Path").equals("")){
-            metricPath = args.get("Metric-Path");
-            if (!metricPath.endsWith("|")){
-                metricPath += "|";
-            }
-        }
 
-        if (xmlParser == null){
-            if (!args.containsKey("properties-path")){
-                logger.error("monitor.xml must contain task argument 'properties-path' describing " +
-                        "the path to the XML properties file.\n" +
-                        "Terminating Hadoop Monitor");
-                return null;
+            if (!args.get("metric-path").equals("")){
+                metricPath = args.get("metric-path");
+                if (!metricPath.endsWith("|")){
+                    metricPath += "|";
+                }
             }
 
-            String xml = args.get("properties-path");
-            try {
-                xmlParser = new Parser(logger, xml);
-            } catch (DocumentException e) {
-                logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
-                        "Error: " + e);
-                xmlParser = new Parser(logger);
+            if (xmlParser == null){
+                String xml = args.get("properties-path");
+                try {
+                    xmlParser = new Parser(logger, xml);
+                } catch (DocumentException e) {
+                    logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
+                            "Error: " + stackTraceToString(e));
+                    xmlParser = new Parser(logger);
+                }
             }
-//            logger.error("user.dir is: "+System.getProperty("user.dir"));
-        }
 
-        hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
+            Map<String, String> hadoopMetrics = new HashMap<String, String>();
+            Map<String, String> ambariMetrics = new HashMap<String, String>();
 
-        hadoopMetrics = new HashMap<String, String>();
-        hadoopCommunicator.populate(hadoopMetrics);
-
-        try{
-            for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
-                printMetric(metricPath + entry.getKey(), entry.getValue(),
-                        MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                        MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
-                        MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
+            if (args.get("resource-manager-monitor").equals("true")){
+                hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
+                hadoopCommunicator.populate(hadoopMetrics);
             }
-        } catch (Exception e){
-            logger.error("Error printing metrics: " + e);
+            if (args.get("ambari-monitor").equals("true")){
+                ambariCommunicator = new AmbariCommunicator(ambariHost, ambariPort, ambariUser, ambariPassword, logger, xmlParser);
+                ambariCommunicator.populate(ambariMetrics);
+            }
+
+            try{
+                for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
+                    printMetric(metricPath + "Resource Manager|" + entry.getKey(), entry.getValue(),
+                            MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                            MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
+                            MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
+                }
+
+                for (Map.Entry<String, String> entry : ambariMetrics.entrySet()){
+                    printMetric(metricPath + entry.getKey(), entry.getValue(),
+                            MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
+                            MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
+                            MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
+                }
+            } catch (Exception e){
+                logger.error("Error printing metrics: " + stackTraceToString(e));
+            }
+
+            return new TaskOutput("Hadoop Metric Upload Complete");
+        } catch (Exception e) {
+            logger.error(stackTraceToString(e));
+            return new TaskOutput("Hadoop Metric Upload Failed");
         }
-
-        return new TaskOutput("Hadoop Metric Upload Complete");
-//        while(true){
-//            (new PrintMetricsThread()).start();
-//            try{
-//                Thread.sleep(60000);
-//            } catch (InterruptedException e){
-//                logger.error("Hadoop Resourcemanager Monitor interrupted. Quitting monitor.");
-//            }
-//        }
-
-//        try
-//        {
-//            host = args.get("host");
-//            port = args.get("port");
-//
-//            populate();
-//
-//            return new TaskOutput("Hadoop Metric Upload Complete");
-//
-//        }
-//        catch (Exception e)
-//        {
-//            logger.error(e.toString());
-//            return new TaskOutput("Error: " + e);
-//        }
     }
 
 
-    public void printMetric(String metricName, Object metricValue, String aggregation, String timeRollup, String cluster)
+    private void printMetric(String metricName, Object metricValue, String aggregation, String timeRollup, String cluster)
     {
         MetricWriter metricWriter = getMetricWriter(metricName,
                 aggregation,
@@ -148,5 +137,11 @@ public class HadoopMonitor extends AManagedMonitor
 
         metricWriter.printMetric(String.valueOf(metricValue));
     }
-    //TODO: add metric filtering
+
+    private String stackTraceToString(Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
+    }
 }

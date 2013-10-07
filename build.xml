@@ -22,9 +22,6 @@
         <copy todir="${build.dir}/HadoopMonitor/lib/">
     	   	<fileset dir="${lib.dir}" includes="dom4j/*"/>
     	</copy>
-    	<copy todir="${build.dir}/HadoopMonitor/lib/">
-    	    <fileset dir="${lib.dir}" includes="httpcomponents/*"/>
-    	</copy>
         <delete dir="${build.dir}/classes"/>
     </target>
     <target name="package" depends="build">

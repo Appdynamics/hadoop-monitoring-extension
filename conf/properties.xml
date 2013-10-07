@@ -1,22 +1,73 @@
 <hadoop-monitor>
-	<!-- fill this tag with comma-separated app IDs you want to
-		 be filtered out of the reported metrics. (OPTIONAL)
-		 Example: <exclude-appid>application_1379438907614_0006,application_1379438907614_0004</exclude-appid>
-		 DO NOT include spaces or quotes in this tag! 
-	-->
-	<exclude-appid></exclude-appid>
+    <hadoop-resource-manager>
+        <!-- fill this tag with comma-separated app IDs you want to
+             be filtered out of the reported metrics. (OPTIONAL)
+             Example: <exclude-appid>application_1379438907614_0006,application_1379438907614_0004</exclude-appid>
+             DO NOT include spaces or quotes in this tag! 
+        -->
+        <exclude-appid></exclude-appid>
 
-	<!-- fill this tag with comma-separated application names you want to
-		 be filtered out of the reported metrics. (OPTIONAL)
-		 Example: <exclude-app-name>TeraSort,TeraGen</exclude-app-name>
-		 DO NOT include spaces or quotes in this tag! 
-	-->
-	<exclude-app-name></exclude-app-name>
+        <!-- fill this tag with comma-separated application names you want to
+             be filtered out of the reported metrics. (OPTIONAL)
+             Example: <exclude-app-name>TeraSort,TeraGen</exclude-app-name>
+             DO NOT include spaces or quotes in this tag! 
+        -->
+        <exclude-app-name></exclude-app-name>
 
-	<!-- fill this tag with comma-separated node IDs you want to
-		 be filtered out of the reported metrics. (OPTIONAL)
-		 Example: <exclude-nodeid>h2:1235,h1:1234</exclude-nodeid>
-		 DO NOT include spaces or quotes in this tag! 
-	-->
-	<exclude-nodeid></exclude-nodeid>
+        <!-- fill this tag with comma-separated node IDs you want to
+             be filtered out of the reported metrics. (OPTIONAL)
+             Example: <exclude-nodeid>h2:1235,h1:1234</exclude-nodeid>
+             DO NOT include spaces or quotes in this tag! 
+        -->
+        <exclude-nodeid></exclude-nodeid>
+    </hadoop-resource-manager>
+    <ambari>
+        <!--
+            maximum number of threads
+        -->
+        <thread-limit>100</thread-limit>
+
+        <!--
+            cluster1,cluster2
+            *
+        -->
+        <include-cluster>*</include-cluster>
+
+        <!--
+            hostname,hostname
+            *
+        -->
+        <include-host>*</include-host>
+
+        <!--
+            hostname,hostname
+            *
+            exclude overrides include
+        -->
+        <exclude-host></exclude-host>
+
+        <!--
+            servicename.servicename
+            *
+        -->
+        <exclude-service></exclude-service>
+
+        <!--
+            service/component,service/component
+            *
+        -->
+        <exclude-service-component></exclude-service-component>
+
+        <!--
+            cpu,memory
+            *
+        -->
+        <include-host-metrics>*</include-host-metrics>
+
+        <!--
+            cpu,memory
+            *
+        -->
+        <include-component-metrics>*</include-component-metrics>
+    </ambari>
 </hadoop-monitor>
