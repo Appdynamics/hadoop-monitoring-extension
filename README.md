@@ -23,44 +23,52 @@ Metrics include:
 Installation
 -
 1. Run 'ant package' from the hadoop-monitoring-extension directory
-2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into <machineagent install dir>/monitors/
+2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/
 3. Unzip the deployed file
-4. Open <machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters
+4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters
 5. (Optional) Configure properties.xml also under "HadoopMonitor" directory for metric filtering
 6. Restart the machineagent
 7. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop
 
 Metrics
 -
-HRM: http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
-Ambari:
-Host
-  CPU       CPU usages
-  Disk      
-  JVM       Log message count, memory usage, thread count
-  Load      
-  Memory    Memory usage
-  Network   Bytes in/out, packets in/out
-  Process   Process count
-  RPC       RPC process time, queue time, sent and received bytes
-  State     Host state
+### HRM: 
+http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
+
+### Ambari:
+#### Host
+
+| Metric Name | Description
+|-------------|----------------
+| CPU         | CPU usages
+| Disk        | 
+| JVM         | Log message count, memory usage, thread count
+| Load        | 
+| Memory      | Memory usage
+| Network     | Bytes in/out, packets in/out
+| Process     | Process count
+| RPC         | RPC process time, queue time, sent and received bytes
+| State       | Host state
   
-Host States
+#### Host States
 https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/host-resources.md#states
 
-Service States
+#### Service States
 https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/service-resources.md#states
 
-Service component
-  CPU       CPU usages
-  Disk      
-  JVM       Log message count, memory usage, thread count
-  Load      
-  Memory    Memory usage
-  Network   Bytes in/out, packets in/out
-  Process   Process count
-  RPC       RPC process time, queue time, sent and received bytes
-  State     Component state
+#### Service component
 
-Service Component States
+| Metric Name | Description
+|-------------|----------------
+| CPU         | CPU usages
+| Disk        | 
+| JVM         | Log message count, memory usage, thread count
+| Load        | 
+| Memory      | Memory usage
+| Network     | Bytes in/out, packets in/out
+| Process     | Process count
+| RPC         | RPC process time, queue time, sent and received bytes
+| State       | Component state
+
+#### Service Component States
 https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/service-resources.md#states
