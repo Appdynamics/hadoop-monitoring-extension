@@ -58,7 +58,7 @@ public class HadoopCommunicator {
     }
 
     /**
-     * Populate <code>metrics</code> with cluster metrics, scheduler info, app metrics, and node metrics.
+     * Populates <code>metrics</code> with cluster metrics, scheduler info, app metrics, and node metrics.
      *
      * @param metrics
      */
@@ -85,7 +85,7 @@ public class HadoopCommunicator {
     }
 
     /**
-     * Populate <code>metrics</code> with all cluster metrics.
+     * Populates <code>metrics</code> with all cluster metrics.
      *
      * @param metrics
      */
@@ -109,7 +109,7 @@ public class HadoopCommunicator {
     }
 
     /**
-     * Populate <code>metrics</code> with all scheduler metrics. Scheduler can be either Capacity
+     * Populates <code>metrics</code> with all scheduler metrics. Scheduler can be either Capacity
      * Scheduler or Fifo Scheduler.
      *
      * @param metrics
@@ -244,7 +244,7 @@ public class HadoopCommunicator {
     }
 
     /**
-     * Populate <code>metrics</code> with metrics from all apps.
+     * Populates <code>metrics</code> with metrics from all apps.
      *
      * @param metrics
      */

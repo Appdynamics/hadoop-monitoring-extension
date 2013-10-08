@@ -64,7 +64,7 @@ public class AmbariCommunicator {
     }
 
     /**
-     * Populate <code>metrics</code> Map with all numeric Ambari clusters metrics.
+     * Populates <code>metrics</code> Map with all numeric Ambari clusters metrics.
      * @see #getClusterMetrics(java.io.Reader)
      *
      * @param metrics
@@ -103,7 +103,7 @@ public class AmbariCommunicator {
         private HttpExecutionRequest request;
 
         /**
-         * Create a preemptive basic authentication GET request to <code>location</code>
+         * Creates a preemptive basic authentication GET request to <code>location</code>
          *
          * @param location
          * @throws Exception
@@ -127,7 +127,7 @@ public class AmbariCommunicator {
     }
 
     /**
-     * Parse a JSON Reader object as cluster metrics and collect service and host metrics.
+     * Parses a JSON Reader object as cluster metrics and collect service and host metrics.
      * @see #getServiceMetrics(java.io.Reader, String)
      * @see #getHostMetrics(java.io.Reader, String)
      *
@@ -171,8 +171,8 @@ public class AmbariCommunicator {
     }
 
     /**
-     * Parse a JSON Reader object as service metrics and collect service state plus service
-     * component metrics. Prefix metric name with <code>hierarchy</code>.
+     * Parses a JSON Reader object as service metrics and collect service state plus service
+     * component metrics. Prefixes metric name with <code>hierarchy</code>.
      * @see #getComponentMetrics(java.io.Reader, String)
      *
      * @param response
@@ -225,8 +225,8 @@ public class AmbariCommunicator {
     }
 
     /**
-     * Parse a JSON Reader object as host metrics and collect host state plus host metrics.
-     * Prefix metric name with <code>hierarchy</code>.
+     * Parses a JSON Reader object as host metrics and collect host state plus host metrics.
+     * Prefixes metric name with <code>hierarchy</code>.
      * @see #getAllMetrics(java.util.Map, String)
      *
      * @param response
@@ -270,8 +270,8 @@ public class AmbariCommunicator {
     }
 
     /**
-     * Parse a JSON Reader object as component metrics and collect component state plus all
-     * numeric metrics. Prefix metric name with <code>hierarchy</code>.
+     * Parses a JSON Reader object as component metrics and collect component state plus all
+     * numeric metrics. Prefixes metric name with <code>hierarchy</code>.
      * @see #getAllMetrics(java.util.Map, String)
      *
      * @param response

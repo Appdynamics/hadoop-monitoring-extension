@@ -63,7 +63,7 @@ public class Parser {
     }
 
     /**
-     * Parse XML file at <code>xml</code> and collect filtering rules.
+     * Parses XML file at <code>xml</code> and collect filtering rules.
      *
      * @param xml
      * @throws DocumentException
