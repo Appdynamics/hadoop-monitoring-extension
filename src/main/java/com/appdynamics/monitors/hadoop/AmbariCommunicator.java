@@ -40,6 +40,17 @@ public class AmbariCommunicator {
         }
     };
 
+    /**
+     * Constructs a new AmbariCommunicator. Metrics can be collected by calling {@link #populate(java.util.Map)}
+     * Only metrics that match the conditions in <code>xmlParser</code> are collected.
+     *
+     * @param host
+     * @param port
+     * @param user
+     * @param password
+     * @param logger
+     * @param xmlParser XML parser for metric filtering
+     */
     public AmbariCommunicator(String host, String port, String user, String password, Logger logger, Parser xmlParser){
         this.host = host;
         this.port = port;
@@ -52,6 +63,12 @@ public class AmbariCommunicator {
         executor = Executors.newFixedThreadPool(xmlParser.getThreadLimit());
     }
 
+    /**
+     * Populate <code>metrics</code> Map with all numeric Ambari clusters metrics.
+     * @see #getClusterMetrics(java.io.Reader)
+     *
+     * @param metrics
+     */
     public void populate(Map<String, String> metrics) {
         this.metrics = metrics;
         try {
@@ -85,12 +102,23 @@ public class AmbariCommunicator {
         private IHttpClientWrapper httpClient;
         private HttpExecutionRequest request;
 
+        /**
+         * Create a preemptive basic authentication GET request to <code>location</code>
+         *
+         * @param location
+         * @throws Exception
+         */
         public Response(String location) throws Exception{
             httpClient = HttpClientWrapper.getInstance();
             request = new HttpExecutionRequest(location,"", HttpOperation.GET);
             httpClient.authenticateHost(host, Integer.parseInt(port), "", user, password, true);
         }
 
+        /**
+         *
+         * @return StringReader representation of http response body
+         * @throws Exception
+         */
         @Override
         public Reader call() throws Exception {
             HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
@@ -98,6 +126,13 @@ public class AmbariCommunicator {
         }
     }
 
+    /**
+     * Parse a JSON Reader object as cluster metrics and collect service and host metrics.
+     * @see #getServiceMetrics(java.io.Reader, String)
+     * @see #getHostMetrics(java.io.Reader, String)
+     *
+     * @param response
+     */
     private void getClusterMetrics(Reader response){
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
@@ -135,6 +170,14 @@ public class AmbariCommunicator {
         }
     }
 
+    /**
+     * Parse a JSON Reader object as service metrics and collect service state plus service
+     * component metrics. Prefix metric name with <code>hierarchy</code>.
+     * @see #getComponentMetrics(java.io.Reader, String)
+     *
+     * @param response
+     * @param hierarchy
+     */
     private void getServiceMetrics(Reader response, String hierarchy){
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
@@ -181,6 +224,14 @@ public class AmbariCommunicator {
         }
     }
 
+    /**
+     * Parse a JSON Reader object as host metrics and collect host state plus host metrics.
+     * Prefix metric name with <code>hierarchy</code>.
+     * @see #getAllMetrics(java.util.Map, String)
+     *
+     * @param response
+     * @param hierarchy
+     */
     private void getHostMetrics(Reader response, String hierarchy){
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
@@ -218,6 +269,14 @@ public class AmbariCommunicator {
         }
     }
 
+    /**
+     * Parse a JSON Reader object as component metrics and collect component state plus all
+     * numeric metrics. Prefix metric name with <code>hierarchy</code>.
+     * @see #getAllMetrics(java.util.Map, String)
+     *
+     * @param response
+     * @param hierarchy
+     */
     private void getComponentMetrics(Reader response, String hierarchy){
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
@@ -266,7 +325,13 @@ public class AmbariCommunicator {
         }
     }
 
-    //ignores all non numeric attributes and all lists
+    /**
+     * Recursively parse JSON Map and collect only numeric metrics. Prefix metric name
+     * with <code>hierarchy</code>.
+     *
+     * @param json
+     * @param hierarchy
+     */
     private void getAllMetrics(Map<String, Object> json, String hierarchy) {
         for (Map.Entry<String, Object> entry : json.entrySet()){
             String key = entry.getKey();
@@ -283,6 +348,11 @@ public class AmbariCommunicator {
         }
     }
 
+    /**
+     *
+     * @param num
+     * @return String representation of rounded <code>num</code> in integer format
+     */
     private String roundDecimal(Number num){
         if (num instanceof Float || num instanceof Double){
             return numberFormat.format(Math.round((Double) num));
@@ -290,6 +360,11 @@ public class AmbariCommunicator {
         return num.toString();
     }
 
+    /**
+     *
+     * @param e
+     * @return String representation of output from <code>printStackTrace()</code>
+     */
     private String stackTraceToString(Exception e){
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);

@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ public class HadoopCommunicator {
     private Logger logger;
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
+    private NumberFormat numberFormat = NumberFormat.getInstance();
+
 
     private static final String CLUSTER_METRIC_PATH = "/ws/v1/cluster/metrics";
     private static final String CLUSTER_SCHEDULER_PATH = "/ws/v1/cluster/scheduler";
@@ -38,12 +41,27 @@ public class HadoopCommunicator {
         }
     };
 
+    /**
+     * Constructs a new HadoopCommunicator. Metrics can be collected by calling {@link #populate(java.util.Map)}
+     * Only metrics that match the conditions in <code>xmlParser</code> are collected.
+     *
+     * @param host
+     * @param port
+     * @param logger
+     * @param xmlParser
+     */
     public HadoopCommunicator(String host, String port, Logger logger, Parser xmlParser) {
         this.logger = logger;
         this.xmlParser = xmlParser;
         baseAddress = "http://" + host + ":" + port;
+        numberFormat.setGroupingUsed(false);
     }
 
+    /**
+     * Populate <code>metrics</code> with cluster metrics, scheduler info, app metrics, and node metrics.
+     *
+     * @param metrics
+     */
     public void populate(Map<String, String> metrics) {
         getClusterMetrics(metrics);
         getClusterScheduler(metrics);
@@ -51,6 +69,14 @@ public class HadoopCommunicator {
         getClusterNodes(metrics);
     }
 
+    /**
+     * Sends a http GET request to <code>location</code> and return the Reader representation of the
+     * response body.
+     *
+     * @param location
+     * @return Reader representation of the response body
+     * @throws Exception
+     */
     private Reader getResponse(String location) throws Exception {
         IHttpClientWrapper httpClient = HttpClientWrapper.getInstance();
         HttpExecutionRequest request = new HttpExecutionRequest(baseAddress + location,"", HttpOperation.GET);
@@ -58,6 +84,11 @@ public class HadoopCommunicator {
         return new StringReader(response.getResponseBody());
     }
 
+    /**
+     * Populate <code>metrics</code> with all cluster metrics.
+     *
+     * @param metrics
+     */
     private void getClusterMetrics(Map<String, String> metrics) {
         try {
             Reader response = getResponse(CLUSTER_METRIC_PATH);
@@ -77,6 +108,12 @@ public class HadoopCommunicator {
         }
     }
 
+    /**
+     * Populate <code>metrics</code> with all scheduler metrics. Scheduler can be either Capacity
+     * Scheduler or Fifo Scheduler.
+     *
+     * @param metrics
+     */
     private void getClusterScheduler(Map<String, String> metrics) {
         try {
             Reader response = getResponse(CLUSTER_SCHEDULER_PATH);
@@ -121,6 +158,14 @@ public class HadoopCommunicator {
         }
     }
 
+    /**
+     * Returns a metric Map with all metrics in <code>queue</code>. Metric names
+     * are prefixed with <code>hierarchy</code>
+     *
+     * @param queue
+     * @param hierarchy
+     * @return Map of queue metrics
+     */
     private Map<String, String> getQueues(List queue, String hierarchy){
         Map<String, String> queueMap = new HashMap<String, String>();
 
@@ -155,6 +200,14 @@ public class HadoopCommunicator {
         return queueMap;
     }
 
+    /**
+     * Returns a metric Map with all metrics in <code>resources</code>. Metric names
+     * are prefixed with <code>hierarchy</code>
+     *
+     * @param resources
+     * @param hierarchy
+     * @return Map of resourcesUsed metrics
+     */
     private Map<String, String> getResourcesUsed(Map<String, Object> resources, String hierarchy){
         Map<String, String> rtn = new HashMap<String, String>();
 
@@ -164,6 +217,14 @@ public class HadoopCommunicator {
         return rtn;
     }
 
+    /**
+     * Returns a metric Map with all metrics in <code>users</code>. Metric names
+     * are prefixed with <code>hierarchy</code>
+     *
+     * @param users
+     * @param hierarchy
+     * @return Map of user metrics
+     */
     private Map<String, String> getUsers(List users, String hierarchy){
         Map<String, String> rtn = new HashMap<String, String>();
 
@@ -182,6 +243,11 @@ public class HadoopCommunicator {
         return rtn;
     }
 
+    /**
+     * Populate <code>metrics</code> with metrics from all apps.
+     *
+     * @param metrics
+     */
     private void getClusterApps(Map<String, String> metrics) {
         try {
             Reader response = getResponse(CLUSTER_APPS_PATH);
@@ -202,6 +268,11 @@ public class HadoopCommunicator {
         }
     }
 
+    /**
+     * Populate <code>metrics</code> with metrics from all nodes.
+     *
+     * @param metrics
+     */
     private void getClusterNodes(Map<String, String> metrics) {
         try {
             Reader response = getResponse(CLUSTER_NODES_PATH);
@@ -222,13 +293,21 @@ public class HadoopCommunicator {
         }
     }
 
+    /**
+     * Returns a metric Map with all app metrics in <code>app</code>. Metric names
+     * are prefixed with <code>hierarchy</code>
+     *
+     * @param app
+     * @param hierarchy
+     * @return Map of app metrics
+     */
     private Map<String, String> getApp(Map<String,Object> app, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String appName = (String) app.get("name");
-        if (xmlParser.isIncludeAppName(appName)){
+        if (!xmlParser.isIncludeAppName(appName)){
             return rtn;
-        } else if (xmlParser.isIncludeAppid((String) app.get("id"))){
+        } else if (!xmlParser.isIncludeAppid((String) app.get("id"))){
             return rtn;
         }
 
@@ -254,11 +333,19 @@ public class HadoopCommunicator {
         return rtn;
     }
 
+    /**
+     * Returns a metric Map with all node metrics in <code>node</code>. Metric names
+     * are prefixed with <code>hierarchy</code>
+     *
+     * @param node
+     * @param hierarchy
+     * @return Map of node metrics
+     */
     private Map<String, String> getNode(Map<String,Object> node, String hierarchy) {
         Map<String, String> rtn = new HashMap<String, String>();
 
         String id = (String) node.get("id");
-        if (xmlParser.isIncludeNodeid(id)){
+        if (!xmlParser.isIncludeNodeid(id)){
             return rtn;
         }
 
@@ -283,13 +370,23 @@ public class HadoopCommunicator {
         return rtn;
     }
 
+    /**
+     *
+     * @param num
+     * @return String representation of rounded <code>num</code> in integer format
+     */
     private String roundDecimal(Number num){
-        if (num.getClass() == Float.class || num.getClass() == Double.class){
-            return String.valueOf(Math.round((Double) num));
+        if (num instanceof Float || num instanceof Double){
+            return numberFormat.format(Math.round((Double) num));
         }
         return num.toString();
     }
 
+    /**
+     *
+     * @param e
+     * @return String representation of output from <code>printStackTrace()</code>
+     */
     private String stackTraceToString(Exception e){
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);

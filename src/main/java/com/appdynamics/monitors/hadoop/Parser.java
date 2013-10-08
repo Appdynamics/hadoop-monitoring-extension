@@ -29,6 +29,11 @@ public class Parser {
 
     Logger logger;
 
+    /**
+     * Constructs an empty Parser that can be populated by calling {@link #parseXML(String)}
+     *
+     * @param logger
+     */
     public Parser(Logger logger){
         this.logger = logger;
 
@@ -45,11 +50,24 @@ public class Parser {
         includeAmbariComponentMetrics = new ArrayList<String>();
     }
 
+    /**
+     * Constructs a new Parser that's populated by filtering rules from <code>xml</code>
+     *
+     * @param logger
+     * @param xml
+     * @throws DocumentException
+     */
     public Parser(Logger logger, String xml) throws DocumentException{
         this(logger);
         parseXML(xml);
     }
 
+    /**
+     * Parse XML file at <code>xml</code> and collect filtering rules.
+     *
+     * @param xml
+     * @throws DocumentException
+     */
     public void parseXML(String xml) throws DocumentException{
         SAXReader reader = new SAXReader();
         Document doc = reader.read(xml);
