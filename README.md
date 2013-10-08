@@ -4,24 +4,23 @@ hadoop-monitoring-extension
 Apache Hadoop Monitoring Extention
 
 Use Case
--
+-----------
 The Hadoop monitoring extension captures metrics from Hadoop Resource Manager and/or Apache Ambari and displays them in Appdynamics Metric Browser.
 
 Metrics include:
 - Hadoop Resource Manager
   - App status and progress; submitted, pending, running, completed, killed, and failed app count
-  - Memory size, available memory
+  - Memory size, memory usage
   - Allocated containers, container count in different states
   - Node status, count of nodes in different states
   - Scheduler capacity, app and container count
 - Ambari
-  - Individual host metrics: CPU, disk, memory, JVM, load, network, process, and RPC
-  - Service component metrics: CPU, disk, memory, JVM, load, network, process, RPC, and component specific metrics
-
+  - Individual host metrics including CPU, disk, memory, JVM, load, network, process, and RPC metrics
+  - Service component metrics including CPU, disk, memory, JVM, load, network, process, RPC, and component specific metrics
 
 
 Installation
--
+-------------
 1. Run 'ant package' from the hadoop-monitoring-extension directory
 2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/
 3. Unzip the deployed file
@@ -31,7 +30,7 @@ Installation
 7. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop
 
 Metrics
--
+------------
 ### HRM: 
 http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
 
@@ -55,8 +54,9 @@ http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManag
   
 #### Host States
 https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/host-resources.md#states
+
 | State | Value | Description
-|-------|-------|-----
+|-------|-------|--------------
 | INIT  | 0     | New host state.
 | WAITING_FOR_HOST_STATUS_UPDATES | 1 | Registration request is received from the Host but the host has not responded to its status update check.
 | HEALTHY | 2 | The server is receiving heartbeats regularly from the host and the state of the host is healthy.
