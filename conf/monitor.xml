@@ -23,8 +23,8 @@
                         <!-- ENABLE/DISABLE AMBARI METRICS
                             To enable or diable Ambari metrics, set default-value="true" or "false"
                         -->
-                        <argument name="ambari-monitor" is-required="true" default-value="true" />
-                        <argument name="ambari-host" is-required="true" default-value="ec2-54-224-38-193.compute-1.amazonaws.com" />
+                        <argument name="ambari-monitor" is-required="true" default-value="false" />
+                        <argument name="ambari-host" is-required="true" default-value="hostname" />
                         <argument name="ambari-port" is-required="true" default-value="8080" />
                         <argument name="ambari-user" is-required="true" default-value="admin" />
                         <argument name="ambari-password" is-required="true" default-value="admin" />
@@ -42,7 +42,7 @@
                             Set the properties path to the absolute path of properties.xml.
                             Metric filtering rules can be configured in properties.xml
                         -->
-                        <argument name="properties-path" is-required="false" default-value="/mnt/appdynamics/machineagent/monitors/HadoopMonitor/properties.xml"/>
+                        <argument name="properties-path" is-required="true" default-value="properties.xml"/>
                 </task-arguments>
                 <java-task>
                         <classpath>HadoopMonitor.jar;lib/json-simple/json-simple-1.1.1.jar;lib/dom4j/dom4j-1.6.1.jar</classpath>
