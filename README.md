@@ -117,3 +117,7 @@ https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/host-compo
 |UPGRADING| 10|In the process of upgrading the component.
 |MAINTENANCE| 11|The component has been marked for maintenance.
 |UNKNOWN| 12|The component state can not be determined.
+
+Custom Dashboard
+------------------
+![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/Capture2.PNG?login=qldong&token=203896f77032a6cfe8fecf670df8e4c5)
