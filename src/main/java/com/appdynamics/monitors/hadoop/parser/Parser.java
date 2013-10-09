@@ -1,4 +1,4 @@
-package com.appdynamics.monitors.hadoop;
+package com.appdynamics.monitors.hadoop.parser;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
