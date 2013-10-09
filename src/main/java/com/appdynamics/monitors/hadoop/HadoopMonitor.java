@@ -1,5 +1,8 @@
 package com.appdynamics.monitors.hadoop;
 
+import com.appdynamics.monitors.hadoop.communicator.AmbariCommunicator;
+import com.appdynamics.monitors.hadoop.communicator.HadoopCommunicator;
+import com.appdynamics.monitors.hadoop.parser.Parser;
 import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
 import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;

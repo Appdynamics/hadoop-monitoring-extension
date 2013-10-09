@@ -1,6 +1,6 @@
 package com.appdynamics.monitors.hadoop.communicator;
 
-import com.appdynamics.monitors.hadoop.Parser;
+import com.appdynamics.monitors.hadoop.parser.Parser;
 import com.singularity.ee.util.httpclient.*;
 import com.singularity.ee.util.log4j.Log4JLogger;
 import org.apache.log4j.Logger;
