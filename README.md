@@ -121,3 +121,20 @@ https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/host-compo
 Custom Dashboard
 ------------------
 ![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/Capture2.PNG?login=qldong&token=203896f77032a6cfe8fecf670df8e4c5)
+
+Contributing
+------------
+
+Always feel free to fork and contribute any changes directly via <a href="https://github.com/Appdynamics/hadoop-monitoring-extension">GitHub</a>.
+
+
+Community
+---------
+
+Find out more in the <a href="http://appsphere.appdynamics.com/t5/eXchange/Hadoop-Monitoring-Extension/idi-p/3583">AppSphere</a>.
+
+Support
+-------
+
+For any questions or feature request, please contact <a href="mailto:ace-request@appdynamics.com">AppDynamics Center of Excellence</a>.
+
