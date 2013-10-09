@@ -38,9 +38,9 @@
                         -->
                         <argument name="metric-path" is-required="false" default-value=""/>
                         
-                        <!-- CONFIGURE PROPERTIES PATH (OPTIONAL):
-                            You can set the properties path to the absolute path of properties.xml to enable metric filtering.
-                            Filtering rules can be configured in properties.xml
+                        <!-- CONFIGURE PROPERTIES PATH (REQUIRED):
+                            Set the properties path to the absolute path of properties.xml.
+                            Metric filtering rules can be configured in properties.xml
                         -->
                         <argument name="properties-path" is-required="false" default-value="/mnt/appdynamics/machineagent/monitors/HadoopMonitor/properties.xml"/>
                 </task-arguments>
