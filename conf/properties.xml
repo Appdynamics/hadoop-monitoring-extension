@@ -21,52 +21,84 @@
         -->
         <exclude-nodeid></exclude-nodeid>
     </hadoop-resource-manager>
+    
     <ambari>
         <!--
-            maximum number of threads
+            maximum number of threads that can be used by the extension
         -->
-        <thread-limit>100</thread-limit>
+        <thread-limit>20</thread-limit>
 
-        <!--
-            cluster1,cluster2
-            *
+        <!-- fill this tag with comma-separated cluster names (case sensitive) you
+            want to gather metrics for. Use "*" to include all clusters.
+            Example:
+                <include-cluster>cluster1,cluster2</include-cluster>
+                or
+                <include-cluster>*</include-cluster>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <include-cluster>*</include-cluster>
 
-        <!--
-            hostname,hostname
-            *
+        <!-- fill this tag with comma-separated host names (case sensitive) you
+            want to gather metrics for. Use "*" to include all hosts.
+            Example:
+                <include-host>hdpmaster1.hdp.hadoop,hdpslave2.hdp.hadoop,hdpslave3.hdp.hadoop</include-host>
+                or
+                <include-host>*</include-host>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <include-host>*</include-host>
 
-        <!--
-            hostname,hostname
-            *
-            exclude overrides include
+        <!-- fill this tag with comma-separated host names (case sensitive) you
+            want to exclude from metric gathering. Use "*" to exclude all hosts.
+            Example:
+                <exclude-host>hdpmaster1.hdp.hadoop,hdpslave2.hdp.hadoop</exclude-host>
+                or
+                <exclude-host>*</exclude-host>
+            <exclude-host> overrides filtering in <include-host>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <exclude-host></exclude-host>
 
-        <!--
-            servicename.servicename
-            *
+        <!-- fill this tag with comma-separated service names you
+            want to exclude from metric gathering. Use "*" to exclude all services.
+            Example:
+                <exclude-service>NAGIOS,ZOOKEEPER,OOZIE</exclude-service>
+                or
+                <exclude-service>*</exclude-service>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <exclude-service></exclude-service>
 
-        <!--
-            service/component,service/component
-            *
+        <!-- fill this tag with comma-separated service component names you
+            want to exclude from metric gathering. Component is specified by "<service name>/<component name>".
+            Use "*" to exclude all components.
+            Example:
+                <exclude-service>HDFS/DATANODE,HBASE/HBASE_MASTER</exclude-service>
+                or
+                <exclude-service>*</exclude-service>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <exclude-service-component></exclude-service-component>
 
-        <!--
-            cpu,memory
-            *
+        <!-- fill this tag with comma-separated host metric names you
+            want to gather metrics for. Use "*" to include all metrics.
+            Example:
+                <include-host>cpu,memory,disk,rpc</include-host>
+                or
+                <include-host>*</include-host>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <include-host-metrics>*</include-host-metrics>
 
-        <!--
-            cpu,memory
-            *
+        <!-- fill this tag with comma-separated component metric names you
+            want to gather metrics for. Use "*" to include all metrics.
+            Component specific metrics such as "dfs" from HDFS and "mapred"
+            from MapReduce must be added to gather their metrics.
+            Example:
+                <include-host>cpu,memory,network,dfs</include-host>
+                or
+                <include-host>*</include-host>
+             DO NOT include spaces or quotes in this tag! 
         -->
         <include-component-metrics>*</include-component-metrics>
     </ambari>

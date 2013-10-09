@@ -79,12 +79,15 @@ public class HadoopMonitor extends AManagedMonitor
             }
 
             if (xmlParser == null){
-                String xml = args.get("properties-path");
-                try {
-                    xmlParser = new Parser(logger, xml);
-                } catch (DocumentException e) {
-                    logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n"+
-                            "Error: " + stackTraceToString(e));
+                if (!args.get("properties-path").equals("")){
+                    try {
+                        xmlParser = new Parser(logger, args.get("properties-path"));
+                    } catch (DocumentException e) {
+                        logger.error("Cannot read properties file. Monitor is running without metric filtering\n" +
+                                "Error: " + stackTraceToString(e));
+                        xmlParser = new Parser(logger);
+                    }
+                } else {
                     xmlParser = new Parser(logger);
                 }
             }
