@@ -90,13 +90,13 @@ public class Parser {
                 if (!(text = element.getText()).equals("")){
 
                     String[] appName = text.split(",");
-                    excludeAppid.addAll(Arrays.asList(appName));
+                    excludeAppName.addAll(Arrays.asList(appName));
                 }
             } else if (element.getName().equals("exclude-nodeid")){
                 if (!(text = element.getText()).equals("")){
 
                     String[] nodeId = text.split(",");
-                    excludeAppid.addAll(Arrays.asList(nodeId));
+                    excludeNodeid.addAll(Arrays.asList(nodeId));
                 }
             } else {
                 logger.error("Unknown element '" + element.getName() + "' in properties file");
