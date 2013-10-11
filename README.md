@@ -120,7 +120,7 @@ https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/host-compo
 
 Custom Dashboard
 ------------------
-![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/Capture2.PNG?login=qldong&token=203896f77032a6cfe8fecf670df8e4c5)
+![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/HadoopDashboard.png)
 
 Contributing
 ------------
