@@ -24,7 +24,7 @@
                             To enable or diable Ambari metrics, set default-value="true" or "false"
                         -->
                         <argument name="ambari-monitor" is-required="true" default-value="false" />
-                        <argument name="ambari-host" is-required="true" default-value="hostname" />
+                        <argument name="ambari-host" is-required="true" default-value="localhost" />
                         <argument name="ambari-port" is-required="true" default-value="8080" />
                         <argument name="ambari-user" is-required="true" default-value="admin" />
                         <argument name="ambari-password" is-required="true" default-value="admin" />

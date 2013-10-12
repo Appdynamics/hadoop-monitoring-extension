@@ -19,9 +19,6 @@ Metrics include:
 
 Installation
 -------------
-Before you begin:
-If you are using the Hadoop Resource Manager metrics, make sure the machine agent is installed on the same machine as the resource manager
-
 1. Run 'ant package' from the hadoop-monitoring-extension directory
 2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/
 3. Unzip the deployed file

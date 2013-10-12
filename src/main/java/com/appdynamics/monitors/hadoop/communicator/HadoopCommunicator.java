@@ -12,10 +12,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HadoopCommunicator {
     private String baseAddress;
@@ -29,6 +26,7 @@ public class HadoopCommunicator {
     private static final String CLUSTER_SCHEDULER_PATH = "/ws/v1/cluster/scheduler";
     private static final String CLUSTER_APPS_PATH = "/ws/v1/cluster/apps";
     private static final String CLUSTER_NODES_PATH = "/ws/v1/cluster/nodes";
+    private static final long AGGR_APP_PERIOD = 1800000;    //30 min in ms
 
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
@@ -66,7 +64,7 @@ public class HadoopCommunicator {
     public void populate(Map<String, String> metrics) {
         getClusterMetrics(metrics);
         getClusterScheduler(metrics);
-        getClusterApps(metrics);
+        getAggrApps(metrics);
         getClusterNodes(metrics);
     }
 
@@ -244,33 +242,76 @@ public class HadoopCommunicator {
         return rtn;
     }
 
+    private enum AppState {
+        NEW, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED
+    }
+
     /**
-     * Populates <code>metrics</code> with metrics from all apps.
+     * Populates <code>metrics</code> with aggregated app metrics from non-finished apps
+     * and apps finished in the last <code>AGGR_APP_PERIOD</code> milliseconds.
+     * Metrics include average app progress and app count of all states (NEW, SUBMITTED,
+     * ACCEPTED, RUNNING, FINISHED, FAILED, KILLED).
      *
      * @param metrics
      */
-    private void getClusterApps(Map<String, String> metrics) {
+    private void getAggrApps(Map<String, String> metrics){
         try {
-            Reader response = getResponse(CLUSTER_APPS_PATH);
+            Date time = new Date();
+            long currentTime = time.getTime();
 
-            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
-            try {
-                json = (Map<String, Object>) json.get("apps");
-                List<Map> appList = (ArrayList<Map>) json.get("app");
+            List<String> appIds = new ArrayList<String>();
 
-                for (Map<String, Object> app : appList){
-                    metrics.putAll(getApp(app, "Apps"));
+            int[] appStateCount = new int[AppState.values().length];
+            double avgProgress = 0;
+
+            List<Reader> responses = new ArrayList<Reader>();
+            responses.add(getResponse(CLUSTER_APPS_PATH + "?finishedTimeBegin=" + (currentTime - AGGR_APP_PERIOD)));
+            responses.add(getResponse(CLUSTER_APPS_PATH + "?finalStatus=UNDEFINED"));
+
+            for (Reader response : responses){
+                Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+                try {
+                    json = (Map<String, Object>) json.get("apps");
+                    if (json == null) {
+                        //break for empty app query
+                        break;
+                    }
+                    List<Map> appList = (ArrayList<Map>) json.get("app");
+
+                    for (Map<String, Object> app : appList){
+                        String appId = (String) app.get("id");
+                        if (!appIds.contains(appId)){
+                            String appState = (String) app.get("state");
+
+                            appStateCount[AppState.valueOf(appState).ordinal()]++;
+                            avgProgress += (Double) app.get("progress");
+
+                            appIds.add(appId);
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("Failed to parse aggregated apps: "+stackTraceToString(e));
                 }
-            } catch (Exception e) {
-                logger.error("Failed to parse ClusterApps: "+stackTraceToString(e));
             }
+
+            avgProgress = avgProgress / appIds.size();
+
+            metrics.put("Apps|Average Progress", roundDecimal(avgProgress));
+            metrics.put("Apps|New Apps", String.valueOf(appStateCount[AppState.NEW.ordinal()]));
+            metrics.put("Apps|Submitted Apps", String.valueOf(appStateCount[AppState.SUBMITTED.ordinal()]));
+            metrics.put("Apps|Accepted Apps", String.valueOf(appStateCount[AppState.ACCEPTED.ordinal()]));
+            metrics.put("Apps|Running Apps", String.valueOf(appStateCount[AppState.RUNNING.ordinal()]));
+            metrics.put("Apps|Finished Apps", String.valueOf(appStateCount[AppState.FINISHED.ordinal()]));
+            metrics.put("Apps|Failed Apps", String.valueOf(appStateCount[AppState.FAILED.ordinal()]));
+            metrics.put("Apps|Killed Apps", String.valueOf(appStateCount[AppState.KILLED.ordinal()]));
+
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterApps: "+stackTraceToString(e));
+            logger.error("Failed to get response for aggregated apps: "+stackTraceToString(e));
         }
     }
 
     /**
-     * Populate <code>metrics</code> with metrics from all nodes.
+     * Populates <code>metrics</code> with metrics from all nodes.
      *
      * @param metrics
      */
@@ -292,46 +333,6 @@ public class HadoopCommunicator {
         } catch (Exception e) {
             logger.error("Failed to get response for ClusterNodes: "+stackTraceToString(e));
         }
-    }
-
-    /**
-     * Returns a metric Map with all app metrics in <code>app</code>. Metric names
-     * are prefixed with <code>hierarchy</code>
-     *
-     * @param app
-     * @param hierarchy
-     * @return Map of app metrics
-     */
-    private Map<String, String> getApp(Map<String,Object> app, String hierarchy) {
-        Map<String, String> rtn = new HashMap<String, String>();
-
-        String appName = (String) app.get("name");
-        if (!xmlParser.isIncludeAppName(appName)){
-            return rtn;
-        } else if (!xmlParser.isIncludeAppid((String) app.get("id"))){
-            return rtn;
-        }
-
-        List<String> states = new ArrayList<String>();
-        states.add("NEW");
-        states.add("SUBMITTED");
-        states.add("ACCEPTED");
-        states.add("RUNNING");
-        states.add("FINISHED");
-        states.add("FAILED");
-        states.add("KILLED");
-        rtn.put(hierarchy + "|" + appName + "|state", String.valueOf(states.indexOf(app.get("state"))));
-
-        List<String> finalStatus = new ArrayList<String>();
-        finalStatus.add("UNDEFINED");
-        finalStatus.add("SUCCEEDED");
-        finalStatus.add("FAILED");
-        finalStatus.add("KILLED");
-        rtn.put(hierarchy + "|" + appName + "|finalStatus", String.valueOf(finalStatus.indexOf(app.get("finalStatus"))));
-
-        Long progress = Math.round((Double) app.get("progress"));
-        rtn.put(hierarchy+"|"+appName+"|progress", progress.toString());
-        return rtn;
     }
 
     /**

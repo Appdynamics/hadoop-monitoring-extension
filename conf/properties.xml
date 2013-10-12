@@ -1,18 +1,10 @@
 <hadoop-monitor>
     <hadoop-resource-manager>
-        <!-- fill this tag with comma-separated app IDs you want to
-             be filtered out of the reported metrics. (OPTIONAL)
-             Example: <exclude-appid>application_1379438907614_0006,application_1379438907614_0004</exclude-appid>
-             DO NOT include spaces or quotes in this tag! 
+        <!-- application metrics within last X number of minutes to aggregate
+            use default value if empty
+            default value: 15
         -->
-        <exclude-appid></exclude-appid>
-
-        <!-- fill this tag with comma-separated application names you want to
-             be filtered out of the reported metrics. (OPTIONAL)
-             Example: <exclude-app-name>TeraSort,TeraGen</exclude-app-name>
-             DO NOT include spaces or quotes in this tag! 
-        -->
-        <exclude-app-name></exclude-app-name>
+        <aggregate-app-period>15</aggregate-app-period>
 
         <!-- fill this tag with comma-separated node IDs you want to
              be filtered out of the reported metrics. (OPTIONAL)
@@ -23,8 +15,9 @@
     </hadoop-resource-manager>
     
     <ambari>
-        <!--
-            maximum number of threads that can be used by the extension
+        <!-- maximum number of threads that can be used by the extension
+            use default value if empty
+            default value: 1
         -->
         <thread-limit>20</thread-limit>
 
@@ -45,6 +38,8 @@
                 or
                 <include-host>*</include-host>
              DO NOT include spaces or quotes in this tag! 
+
+             WARNING: do not include all hosts if you have a large cluster
         -->
         <include-host>*</include-host>
 
@@ -81,7 +76,8 @@
         <exclude-service-component></exclude-service-component>
 
         <!-- fill this tag with comma-separated host metric names you
-            want to gather metrics for. Use "*" to include all metrics.
+            want to gather metrics for. The filter will filter metrics for ALL hosts.
+            Use "*" to include all metrics.
             Example:
                 <include-host>cpu,memory,disk,rpc</include-host>
                 or

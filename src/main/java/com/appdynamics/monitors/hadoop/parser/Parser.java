@@ -12,8 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Parser {
-    private List<String> excludeAppid;
-    private List<String> excludeAppName;
+    private int aggrAppPeriod;
     private List<String> excludeNodeid;
 
     private List<String> includeAmbariCluster;
@@ -37,8 +36,6 @@ public class Parser {
     public Parser(Logger logger){
         this.logger = logger;
 
-        excludeAppid = new ArrayList<String>();
-        excludeAppName = new ArrayList<String>();
         excludeNodeid = new ArrayList<String>();
 
         includeAmbariCluster = new ArrayList<String>();
@@ -79,18 +76,15 @@ public class Parser {
 
         while(hrmIter.hasNext()){
             Element element = hrmIter.next();
-
-            if (element.getName().equals("exclude-appid")){
+            if (element.getName().equals("aggregate-app-period")){
                 if (!(text = element.getText()).equals("")){
-
-                    String[] appId = text.split(",");
-                    excludeAppid.addAll(Arrays.asList(appId));
-                }
-            } else if (element.getName().equals("exclude-app-name")){
-                if (!(text = element.getText()).equals("")){
-
-                    String[] appName = text.split(",");
-                    excludeAppName.addAll(Arrays.asList(appName));
+                    try {
+                        aggrAppPeriod = Integer.parseInt(text);
+                    } catch (NumberFormatException e){
+                        logger.error("Error parsing aggregate-app-period: " + e + "\n" +
+                                "Using default value instead: 15");
+                        aggrAppPeriod = 15;
+                    }
                 }
             } else if (element.getName().equals("exclude-nodeid")){
                 if (!(text = element.getText()).equals("")){
@@ -111,7 +105,9 @@ public class Parser {
                     try {
                         threadLimit = Integer.parseInt(text);
                     } catch (NumberFormatException e){
-                        logger.error("Error parsing thread-limit " + e);
+                        logger.error("Error parsing thread-limit " + e + "\n" +
+                                "Using default value instead: 1");
+                        threadLimit = 1;
                     }
                 }
             } else if (element.getName().equals("include-cluster")){
@@ -155,14 +151,6 @@ public class Parser {
 
     public int getThreadLimit(){
         return threadLimit;
-    }
-
-    public boolean isIncludeAppid(String appid){
-        return !excludeAppid.contains(appid);
-    }
-
-    public boolean isIncludeAppName(String appname){
-        return !excludeAppName.contains(appname);
     }
 
     public boolean isIncludeNodeid(String nodeid){
