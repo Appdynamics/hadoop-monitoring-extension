@@ -7,26 +7,23 @@ The Hadoop monitoring extension captures metrics from Hadoop Resource Manager an
 
 Metrics include:
 - Hadoop Resource Manager
-  - App status and progress: submitted, pending, running, completed, killed, and failed app count
-  - Memory size, memory usage
-  - Allocated containers, container count in different states
-  - Node status, count of nodes in different states
+  - App status and progress
+  - Memory usage
+  - Conotainer usage and status
+  - Node count and status
   - Scheduler capacity, app and container count
 - Ambari
   - Individual host metrics including CPU, disk, memory, JVM, load, network, process, and RPC metrics
-  - Service component metrics including CPU, disk, memory, JVM, load, network, process, RPC, and component-specific metrics
+  - Service metrics for HDFS, MapReduce, HBase, Hive, WebHCat, Oozie, Ganglia, Nagios, and ZooKeeper
 
 
 Installation
 -------------
-Before you begin:
-If you are using the Hadoop Resource Manager metrics, make sure the machine agent is installed on the same machine as the Resource Manager.
-
 1. Run 'ant package' from the hadoop-monitoring-extension directory.
 2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/.
 3. Unzip the deployed file.
 4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters.
-5. (Optional) For metric filtering, configure  \<machineagent install dir>/monitors/HadoopMonitor/properties.xml.
+5. (Optional, recommended) For metric filtering, configure  \<machineagent install dir>/monitors/HadoopMonitor/properties.xml.
 6. Restart the machine agent.
 7. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop.
 
