@@ -7,29 +7,32 @@ The Hadoop monitoring extension captures metrics from Hadoop Resource Manager an
 
 Metrics include:
 - Hadoop Resource Manager
-  - App status and progress; submitted, pending, running, completed, killed, and failed app count
+  - App status and progress: submitted, pending, running, completed, killed, and failed app count
   - Memory size, memory usage
   - Allocated containers, container count in different states
   - Node status, count of nodes in different states
   - Scheduler capacity, app and container count
 - Ambari
   - Individual host metrics including CPU, disk, memory, JVM, load, network, process, and RPC metrics
-  - Service component metrics including CPU, disk, memory, JVM, load, network, process, RPC, and component specific metrics
+  - Service component metrics including CPU, disk, memory, JVM, load, network, process, RPC, and component-specific metrics
 
 
 Installation
 -------------
-1. Run 'ant package' from the hadoop-monitoring-extension directory
-2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/
-3. Unzip the deployed file
-4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters
-5. (Optional) Configure properties.xml also under "HadoopMonitor" directory for metric filtering
-6. Restart the machineagent
-7. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop
+Before you begin:
+If you are using the Hadoop Resource Manager metrics, make sure the machine agent is installed on the same machine as the Resource Manager.
+
+1. Run 'ant package' from the hadoop-monitoring-extension directory.
+2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/.
+3. Unzip the deployed file.
+4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters.
+5. (Optional) For metric filtering, configure  \<machineagent install dir>/monitors/HadoopMonitor/properties.xml.
+6. Restart the machine agent.
+7. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop.
 
 Metrics
 ------------
-### HRM: 
+### Hadoop Resource Manager: 
 http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
 
 ### Ambari:
@@ -117,4 +120,21 @@ https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/host-compo
 
 Custom Dashboard
 ------------------
-![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/Capture2.PNG?login=qldong&token=203896f77032a6cfe8fecf670df8e4c5)
+![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/HadoopDashboard.png)
+
+Contributing
+------------
+
+Always feel free to fork and contribute any changes directly via <a href="https://github.com/Appdynamics/hadoop-monitoring-extension">GitHub</a>.
+
+
+Community
+---------
+
+Find out more in the <a href="http://appsphere.appdynamics.com/t5/eXchange/Hadoop-Monitoring-Extension/idi-p/3583">AppSphere</a>.
+
+Support
+-------
+
+For any questions or feature request, please contact <a href="mailto:ace-request@appdynamics.com">AppDynamics Center of Excellence</a>.
+
