@@ -31,6 +31,9 @@ Metrics
 ------------
 ### Hadoop Resource Manager: 
 http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
+#### Apps
+Metrics under Apps are aggregated metrics from all running and recently finished apps. The period which metrics are gathered can be set at <aggregate-app-period> in properties.xml.
+
 
 ### Ambari:
 #### Host
