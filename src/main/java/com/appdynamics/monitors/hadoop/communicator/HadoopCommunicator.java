@@ -20,13 +20,13 @@ public class HadoopCommunicator {
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
     private NumberFormat numberFormat = NumberFormat.getInstance();
+    private long aggrAppPeriod;
 
 
     private static final String CLUSTER_METRIC_PATH = "/ws/v1/cluster/metrics";
     private static final String CLUSTER_SCHEDULER_PATH = "/ws/v1/cluster/scheduler";
     private static final String CLUSTER_APPS_PATH = "/ws/v1/cluster/apps";
     private static final String CLUSTER_NODES_PATH = "/ws/v1/cluster/nodes";
-    private static final long AGGR_APP_PERIOD = 1800000;    //30 min in ms
 
     private ContainerFactory simpleContainer = new ContainerFactory() {
         @Override
@@ -54,6 +54,7 @@ public class HadoopCommunicator {
         this.xmlParser = xmlParser;
         baseAddress = "http://" + host + ":" + port;
         numberFormat.setGroupingUsed(false);
+        aggrAppPeriod = xmlParser.getAggrAppPeriod();
     }
 
     /**
@@ -248,7 +249,7 @@ public class HadoopCommunicator {
 
     /**
      * Populates <code>metrics</code> with aggregated app metrics from non-finished apps
-     * and apps finished in the last <code>AGGR_APP_PERIOD</code> milliseconds.
+     * and apps finished in the last <code>aggrAppPeriod</code> milliseconds.
      * Metrics include average app progress and app count of all states (NEW, SUBMITTED,
      * ACCEPTED, RUNNING, FINISHED, FAILED, KILLED).
      *
@@ -265,7 +266,7 @@ public class HadoopCommunicator {
             double avgProgress = 0;
 
             List<Reader> responses = new ArrayList<Reader>();
-            responses.add(getResponse(CLUSTER_APPS_PATH + "?finishedTimeBegin=" + (currentTime - AGGR_APP_PERIOD)));
+            responses.add(getResponse(CLUSTER_APPS_PATH + "?finishedTimeBegin=" + (currentTime - aggrAppPeriod)));
             responses.add(getResponse(CLUSTER_APPS_PATH + "?finalStatus=UNDEFINED"));
 
             for (Reader response : responses){

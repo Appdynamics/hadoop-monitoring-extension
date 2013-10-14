@@ -149,6 +149,10 @@ public class Parser {
         }
     }
 
+    public int getAggrAppPeriod(){
+        return aggrAppPeriod;
+    }
+
     public int getThreadLimit(){
         return threadLimit;
     }
