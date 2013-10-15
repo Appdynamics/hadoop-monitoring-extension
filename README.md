@@ -1,5 +1,5 @@
-Hadoop Monitoring Extension
-===========================
+AppDynamics Apache Hadoop Monitoring Extension
+==============================================
 
 Use Case
 -----------
