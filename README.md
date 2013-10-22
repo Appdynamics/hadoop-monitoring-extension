@@ -9,7 +9,7 @@ Metrics include:
 - Hadoop Resource Manager
   - App status and progress
   - Memory usage
-  - Conotainer usage and status
+  - Container usage and status
   - Node count and status
   - Scheduler capacity, app and container count
 - Ambari
@@ -50,7 +50,7 @@ Metrics under Apps are aggregated metrics from all running and recently finished
 | RPC         | RPC process time, queue time, sent and received bytes
 | RPCdetailed   | Additional RPC metrics
 | UGI         | User Group Information
-| part_max_used | Percent disk ussage
+| part_max_used | Percent disk usage
 | State       | Host state
   
 #### Host States
