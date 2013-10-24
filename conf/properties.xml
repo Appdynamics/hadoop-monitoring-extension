@@ -88,8 +88,8 @@
 
         <!-- fill this tag with comma-separated component metric names you
             want to gather metrics for. Use "*" to include all metrics.
-            Component specific metrics such as "dfs" from HDFS and "mapred"
-            from MapReduce must be added to gather their metrics.
+            Component specific metrics such as "dfs" from HDFS, "mapred"
+            from MapReduce, and "hbase" from HBase must be added to gather their metrics.
             Example:
                 <include-host>cpu,memory,network,dfs</include-host>
                 or

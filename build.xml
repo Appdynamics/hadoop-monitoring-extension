@@ -8,7 +8,7 @@
     </path>
     <target name="build">
         <mkdir dir="${build.dir}/classes"/>
-        <javac target="1.5" source="1.5" destdir="${build.dir}/classes" srcdir="src/main/java" classpathref="cp" debug="on"/>
+        <javac destdir="${build.dir}/classes" source="1.5" target="1.5" srcdir="src/main/java" classpathref="cp" debug="on"/>
         <mkdir dir="${build.dir}/HadoopMonitor"/>
         <jar destfile="${build.dir}/HadoopMonitor/${project.name}.jar">
             <fileset dir="${build.dir}/classes"/>

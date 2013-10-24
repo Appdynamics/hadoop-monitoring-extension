@@ -1,5 +1,5 @@
-Hadoop Monitoring Extension
-===========================
+AppDynamics Apache Hadoop Monitoring Extension
+==============================================
 
 Use Case
 -----------
@@ -9,7 +9,7 @@ Metrics include:
 - Hadoop Resource Manager
   - App status and progress
   - Memory usage
-  - Conotainer usage and status
+  - Container usage and status
   - Node count and status
   - Scheduler capacity, app and container count
 - Ambari
@@ -32,7 +32,7 @@ Metrics
 ### Hadoop Resource Manager: 
 http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
 #### Apps
-Metrics under Apps are aggregated metrics from all running and recently finished apps. The period which metrics are gathered can be set at <aggregate-app-period> in properties.xml.
+Metrics under Apps are aggregated metrics from all running and recently finished apps. To specify the period for which metrics are gathered, set <aggregate-app-period> in properties.xml.
 
 
 ### Ambari:
@@ -50,7 +50,7 @@ Metrics under Apps are aggregated metrics from all running and recently finished
 | RPC         | RPC process time, queue time, sent and received bytes
 | RPCdetailed   | Additional RPC metrics
 | UGI         | User Group Information
-| part_max_used | Percent disk ussage
+| part_max_used | Percent disk usage
 | State       | Host state
   
 #### Host States
