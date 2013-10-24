@@ -1,6 +1,7 @@
 AppDynamics Apache Hadoop Monitoring Extension
 ==============================================
 
+
 Use Case
 -----------
 The Hadoop monitoring extension captures metrics from Hadoop Resource Manager and/or Apache Ambari and displays them in Appdynamics Metric Browser.
