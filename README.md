@@ -20,7 +20,7 @@ Metrics include:
 
 Installation
 -------------
-1. Run 'ant package' from the hadoop-monitoring-extension directory.
+1. Run 'gradlew zip' from the hadoop-monitoring-extension directory.
 2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/.
 3. Unzip the deployed file.
 4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters.
