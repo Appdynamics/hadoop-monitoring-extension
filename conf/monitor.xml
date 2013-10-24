@@ -42,7 +42,7 @@
                             Set the properties path to the absolute path of properties.xml.
                             Metric filtering rules can be configured in properties.xml
                         -->
-                        <argument name="properties-path" is-required="true" default-value="properties.xml"/>
+                        <argument name="properties-path" is-required="true" default-value="monitors/HadoopMonitor/properties.xml"/>
                 </task-arguments>
                 <java-task>
                         <classpath>HadoopMonitor.jar;lib/json-simple/json-simple-1.1.1.jar;lib/dom4j/dom4j-1.6.1.jar</classpath>

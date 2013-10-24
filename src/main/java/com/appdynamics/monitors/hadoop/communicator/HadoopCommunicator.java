@@ -81,7 +81,13 @@ public class HadoopCommunicator {
         IHttpClientWrapper httpClient = HttpClientWrapper.getInstance();
         HttpExecutionRequest request = new HttpExecutionRequest(baseAddress + location,"", HttpOperation.GET);
         HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
-        return new StringReader(response.getResponseBody());
+        if (response.isExceptionHappened()){
+            throw new Exception(response.getExceptionMessage());
+        } else if (response.isStatusNotOk()){
+            throw new Exception("HTTP request failed, status code: "+response.getStatusCode());
+        } else {
+            return new StringReader(response.getResponseBody());
+        }
     }
 
     /**
