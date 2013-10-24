@@ -6,6 +6,7 @@
 
 apply plugin: 'java' // Apply the java plugin to add support for Java
 apply plugin: 'idea' // Apply the Idea Plugin for Idea Integration
+apply from: file('./base.gradle')
 
 repositories {
     mavenCentral()
@@ -15,14 +16,23 @@ repositories {
 }
 
 dependencies {
-    compile ("log4j:log4j:1.2.15") {
+    compileOnly ("log4j:log4j:1.2.15") {
         transitive = false
     }
-
     compile "com.googlecode.json-simple:json-simple:1.1.1"
     compile "dom4j:dom4j:1.6.1"
-    compile "commons-httpclient:commons-httpclient:3.1"
-    compile "com.appdynamics:machineagent:3.7.11"
+    compileOnly "commons-httpclient:commons-httpclient:3.1"
+    compileOnly "com.appdynamics:machineagent:3.7.11"
 }
 
 
+task zip(type: Zip) {
+    from jar.outputs.files
+    from('conf') {
+        include '*.xml'
+    }
+    from (configurations.runtime) {
+     into ("lib")
+    }
+
+}
