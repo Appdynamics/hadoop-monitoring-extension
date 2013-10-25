@@ -3,7 +3,7 @@ AppDynamics Apache Hadoop Monitoring Extension
 
 Use Case
 -----------
-The Hadoop monitoring extension captures metrics from Hadoop Resource Manager and/or Apache Ambari and displays them in Appdynamics Metric Browser.
+The Hadoop monitoring extension captures metrics from Hadoop Resource Manager and/or Apache Ambari and displays them in AppDynamics Metric Browser.
 
 Metrics include:
 - Hadoop Resource Manager
@@ -19,6 +19,15 @@ Metrics include:
 
 Installation
 -------------
+#### Prerequisites
+- Hadoop distribution that features Hadoop YARN. Distributions based on Hadoop 2.x should include YARN
+	- Examples: hadoop-2.x, hadoop-0.23.x, CDH4 from Cloudera, HDP 2 from Hortonworks, and Pivotal HD from Pivotal
+- Resource Manager hostname and port  
+OR
+- Any release of Apache Amabri
+- Ambari server hostname, port, username, and password  
+
+#### Steps
 1. Run 'ant package' from the hadoop-monitoring-extension directory.
 2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/.
 3. Unzip the deployed file.
@@ -32,7 +41,7 @@ Metrics
 ### Hadoop Resource Manager: 
 http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
 #### Apps
-Metrics under Apps are aggregated metrics from all running and recently finished apps. To specify the period for which metrics are gathered, set <aggregate-app-period> in properties.xml.
+Metrics under Apps are aggregated metrics from all running and recently finished apps. To specify the period for which metrics are gathered, set \<aggregate-app-period> in properties.xml.
 
 
 ### Ambari:
