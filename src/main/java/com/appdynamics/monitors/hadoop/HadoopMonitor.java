@@ -8,13 +8,9 @@ import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
 import com.singularity.ee.agent.systemagent.api.TaskOutput;
 import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.SimpleLayout;
 import org.dom4j.DocumentException;
 
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -22,42 +18,13 @@ import java.util.Map;
 
 public class HadoopMonitor extends AManagedMonitor
 {
-    private Parser xmlParser;
+    Parser xmlParser;
 
     private String metricPath = "Custom Metrics|Hadoop|";
     HadoopCommunicator hadoopCommunicator;
     AmbariCommunicator ambariCommunicator;
 
     private static Logger logger = Logger.getLogger(HadoopMonitor.class);
-
-    //for testing
-    public static void main(String[] args){
-        HadoopMonitor hm = new HadoopMonitor();
-        ConsoleAppender app = new ConsoleAppender(new SimpleLayout());
-        app.setName("DEFAULT");
-        app.setWriter(new OutputStreamWriter(System.out));
-        app.setThreshold(Level.INFO);
-        org.apache.log4j.BasicConfigurator.configure(app);
-        logger = Logger.getLogger(HadoopMonitor.class);
-
-        hm.xmlParser = new Parser(logger);
-
-        HadoopCommunicator hcom = new HadoopCommunicator(args[0],args[1],logger,hm.xmlParser);
-        AmbariCommunicator acom = new AmbariCommunicator(args[2],args[3],args[4],args[5],logger,hm.xmlParser);
-        Map<String, String> metrics = new HashMap<String, String>();
-        hcom.populate(metrics);
-        acom.populate(metrics);
-
-        for (Map.Entry<String, String> entry: metrics.entrySet()){
-            try{
-                Long.parseLong(entry.getValue());
-                System.out.println(entry.getKey()+" : "+entry.getValue());
-            } catch (Exception e){
-                logger.error("INVALID DATA: "+entry.getKey()+" : "+entry.getValue());
-            }
-        }
-        logger.info("Metric gathering done, metric size: " + metrics.size());
-    }
 
     public TaskOutput execute(Map<String, String> args, TaskExecutionContext arg1)
             throws TaskExecutionException
@@ -92,8 +59,8 @@ public class HadoopMonitor extends AManagedMonitor
                 }
             }
 
-            Map<String, String> hadoopMetrics = new HashMap<String, String>();
-            Map<String, String> ambariMetrics = new HashMap<String, String>();
+            Map<String, Object> hadoopMetrics = new HashMap<String, Object>();
+            Map<String, Object> ambariMetrics = new HashMap<String, Object>();
 
             if (args.get("resource-manager-monitor").equals("true")){
                 hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
@@ -105,14 +72,14 @@ public class HadoopMonitor extends AManagedMonitor
             }
 
             try{
-                for (Map.Entry<String, String> entry : hadoopMetrics.entrySet()){
+                for (Map.Entry<String, Object> entry : hadoopMetrics.entrySet()){
                     printMetric(metricPath + "Resource Manager|" + entry.getKey(), entry.getValue(),
                             MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                             MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
                             MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
                 }
 
-                for (Map.Entry<String, String> entry : ambariMetrics.entrySet()){
+                for (Map.Entry<String, Object> entry : ambariMetrics.entrySet()){
                     printMetric(metricPath + entry.getKey(), entry.getValue(),
                             MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
                             MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
@@ -137,8 +104,13 @@ public class HadoopMonitor extends AManagedMonitor
                 timeRollup,
                 cluster
         );
-
-        metricWriter.printMetric(String.valueOf(metricValue));
+        if (metricValue instanceof Double){
+            metricWriter.printMetric(String.valueOf(Math.round((Double)metricValue)));
+        } else if (metricValue instanceof Float) {
+            metricWriter.printMetric(String.valueOf(Math.round((Float)metricValue)));
+        } else {
+            metricWriter.printMetric(String.valueOf(metricValue));
+        }
     }
 
     private String stackTraceToString(Exception e){

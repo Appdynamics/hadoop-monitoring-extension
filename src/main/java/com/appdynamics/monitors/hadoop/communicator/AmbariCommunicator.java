@@ -20,7 +20,7 @@ public class AmbariCommunicator {
     private Logger logger;
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
-    private Map<String, String> metrics;
+    private Map<String, Object> metrics;
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private ExecutorService executor;
 
@@ -70,7 +70,7 @@ public class AmbariCommunicator {
      *
      * @param metrics
      */
-    public void populate(Map<String, String> metrics) {
+    public void populate(Map<String, Object> metrics) {
         this.metrics = metrics;
         try {
             Reader response = (new Response("http://" + host + ":" + port + "/api/v1/clusters")).call();
@@ -123,7 +123,13 @@ public class AmbariCommunicator {
         @Override
         public Reader call() throws Exception {
             HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
-            return new StringReader(response.getResponseBody());
+            if (response.isExceptionHappened()){
+                throw new Exception(response.getExceptionMessage());
+            } else if (response.isStatusNotOk()){
+                throw new Exception("HTTP request failed, status code: "+response.getStatusCode());
+            } else {
+                return new StringReader(response.getResponseBody());
+            }
         }
     }
 
@@ -201,7 +207,7 @@ public class AmbariCommunicator {
                 states.add("UPGRADING");
                 states.add("MAINTENANCE");
                 states.add("UNKNOWN");
-                metrics.put(hierarchy + "|" + serviceName + "|state", String.valueOf(states.indexOf(serviceState)));
+                metrics.put(hierarchy + "|" + serviceName + "|state", states.indexOf(serviceState));
 
                 List<Map> components = (ArrayList<Map>) json.get("components");
 
@@ -247,7 +253,7 @@ public class AmbariCommunicator {
                 states.add("HEALTHY");
                 states.add("HEARTBEAT_LOST");
                 states.add("UNHEALTHY");
-                metrics.put(hierarchy + "|" + hostName + "|state", String.valueOf(states.indexOf(hostState)));
+                metrics.put(hierarchy + "|" + hostName + "|state", states.indexOf(hostState));
 
                 Map hostMetrics = (Map) json.get("metrics");
 
@@ -300,7 +306,7 @@ public class AmbariCommunicator {
                 states.add("UPGRADING");
                 states.add("MAINTENANCE");
                 states.add("UNKNOWN");
-                metrics.put(hierarchy + "|" + componentName + "|state", String.valueOf(states.indexOf(componentState)));
+                metrics.put(hierarchy + "|" + componentName + "|state", states.indexOf(componentState));
 
                 Map componentMetrics = (Map) json.get("metrics");
                 if (componentMetrics == null){
@@ -341,24 +347,12 @@ public class AmbariCommunicator {
                 getAllMetrics((Map) val, hierarchy + "|" + key);
             } else if (val instanceof Number){
                 if (key.startsWith("load_")){   //convert all load factors to integers
-                    metrics.put(hierarchy + "|" + key, roundDecimal(((Double) val)*100));
+                    metrics.put(hierarchy + "|" + key, (Double) val*100);
                 } else {
-                    metrics.put(hierarchy + "|" + key, roundDecimal((Number) val));
+                    metrics.put(hierarchy + "|" + key, val);
                 }
             }
         }
-    }
-
-    /**
-     *
-     * @param num
-     * @return String representation of rounded <code>num</code> in integer format
-     */
-    private String roundDecimal(Number num){
-        if (num instanceof Float || num instanceof Double){
-            return numberFormat.format(Math.round((Double) num));
-        }
-        return num.toString();
     }
 
     /**

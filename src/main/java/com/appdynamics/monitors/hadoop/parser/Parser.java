@@ -6,25 +6,26 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 public class Parser {
     private int aggrAppPeriod;
-    private List<String> excludeNodeid;
+    private Set<String> excludeNodeid;
 
-    private List<String> includeAmbariCluster;
-    private List<String> includeAmbariHost;
-    private List<String> excludeAmbariHost;
-    private List<String> excludeAmbariService;
-    private List<String> excludeAmbariServiceComponent;
-    private List<String> includeAmbariHostMetrics;
-    private List<String> includeAmbariComponentMetrics;
+    private int threadLimit;
+    private Set<String> includeAmbariCluster;
+    private Set<String> includeAmbariHost;
+    private Set<String> excludeAmbariHost;
+    private Set<String> excludeAmbariService;
+    private Set<String> excludeAmbariServiceComponent;
+    private Set<String> includeAmbariHostMetrics;
+    private Set<String> includeAmbariComponentMetrics;
 
-
-    private int threadLimit = 1;
+    private static final int DEFAULT_THREAD_LIMIT = 1;
+    private static final int DEFAULT_AGGR_APP_PERIOD = 15;
 
     Logger logger;
 
@@ -36,15 +37,17 @@ public class Parser {
     public Parser(Logger logger){
         this.logger = logger;
 
-        excludeNodeid = new ArrayList<String>();
+        aggrAppPeriod = DEFAULT_AGGR_APP_PERIOD;
+        excludeNodeid = new HashSet<String>();
 
-        includeAmbariCluster = new ArrayList<String>();
-        includeAmbariHost = new ArrayList<String>();
-        excludeAmbariHost = new ArrayList<String>();
-        excludeAmbariService = new ArrayList<String>();
-        excludeAmbariServiceComponent = new ArrayList<String>();
-        includeAmbariHostMetrics = new ArrayList<String>();
-        includeAmbariComponentMetrics = new ArrayList<String>();
+        threadLimit = DEFAULT_THREAD_LIMIT;
+        includeAmbariCluster = new HashSet<String>();
+        includeAmbariHost = new HashSet<String>();
+        excludeAmbariHost = new HashSet<String>();
+        excludeAmbariService = new HashSet<String>();
+        excludeAmbariServiceComponent = new HashSet<String>();
+        includeAmbariHostMetrics = new HashSet<String>();
+        includeAmbariComponentMetrics = new HashSet<String>();
     }
 
     /**
@@ -82,13 +85,12 @@ public class Parser {
                         aggrAppPeriod = Integer.parseInt(text);
                     } catch (NumberFormatException e){
                         logger.error("Error parsing aggregate-app-period: " + e + "\n" +
-                                "Using default value instead: 15");
-                        aggrAppPeriod = 15;
+                                "Using default value instead: " + DEFAULT_THREAD_LIMIT);
+                        aggrAppPeriod = DEFAULT_AGGR_APP_PERIOD;
                     }
                 }
             } else if (element.getName().equals("exclude-nodeid")){
                 if (!(text = element.getText()).equals("")){
-
                     String[] nodeId = text.split(",");
                     excludeNodeid.addAll(Arrays.asList(nodeId));
                 }
@@ -106,8 +108,8 @@ public class Parser {
                         threadLimit = Integer.parseInt(text);
                     } catch (NumberFormatException e){
                         logger.error("Error parsing thread-limit " + e + "\n" +
-                                "Using default value instead: 1");
-                        threadLimit = 1;
+                                "Using default value instead: " + DEFAULT_THREAD_LIMIT);
+                        threadLimit = DEFAULT_THREAD_LIMIT;
                     }
                 }
             } else if (element.getName().equals("include-cluster")){
@@ -127,22 +129,22 @@ public class Parser {
                 }
             } else if (element.getName().equals("exclude-service")){
                 if (!(text = element.getText()).equals("")){
-                    String[] appId = text.split(",");
+                    String[] appId = text.toLowerCase().split(",");
                     excludeAmbariService.addAll(Arrays.asList(appId));
                 }
             } else if (element.getName().equals("exclude-service-component")){
                 if (!(text = element.getText()).equals("")){
-                    String[] appId = text.split(",");
+                    String[] appId = text.toLowerCase().split(",");
                     excludeAmbariServiceComponent.addAll(Arrays.asList(appId));
                 }
             } else if (element.getName().equals("include-host-metrics")){
                 if (!(text = element.getText()).equals("")){
-                    String[] appId = text.split(",");
+                    String[] appId = text.toLowerCase().split(",");
                     includeAmbariHostMetrics.addAll(Arrays.asList(appId));
                 }
             } else if (element.getName().equals("include-component-metrics")){
                 if (!(text = element.getText()).equals("")){
-                    String[] appId = text.split(",");
+                    String[] appId = text.toLowerCase().split(",");
                     includeAmbariComponentMetrics.addAll(Arrays.asList(appId));
                 }
             }
@@ -158,7 +160,7 @@ public class Parser {
     }
 
     public boolean isIncludeNodeid(String nodeid){
-        return !excludeNodeid.contains(nodeid);
+        return !(excludeNodeid.contains("*") || excludeNodeid.contains(nodeid));
     }
 
     public boolean isIncludeCluster(String cluster){
@@ -175,19 +177,22 @@ public class Parser {
     }
 
     public boolean isIncludeService(String service){
-        return !(excludeAmbariService.contains("*") || excludeAmbariService.contains(service));
+        return !(excludeAmbariService.contains("*")
+                || excludeAmbariService.contains(service.toLowerCase()));
     }
 
     public boolean isIncludeServiceComponent(String service, String component){
         return !(excludeAmbariServiceComponent.contains("*")
-                || excludeAmbariServiceComponent.contains(service + "/" + component));
+                || excludeAmbariServiceComponent.contains(service.toLowerCase() + "/" + component.toLowerCase()));
     }
 
     public boolean isIncludeHostMetrics(String host){
-        return (includeAmbariHostMetrics.contains("*") || includeAmbariHostMetrics.contains(host));
+        return (includeAmbariHostMetrics.contains("*")
+                || includeAmbariHostMetrics.contains(host.toLowerCase()));
     }
 
     public boolean isIncludeComponentMetrics(String component){
-        return (includeAmbariComponentMetrics.contains("*") || includeAmbariComponentMetrics.contains(component));
+        return (includeAmbariComponentMetrics.contains("*")
+                || includeAmbariComponentMetrics.contains(component.toLowerCase()));
     }
 }

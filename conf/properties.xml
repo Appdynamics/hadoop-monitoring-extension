@@ -7,8 +7,9 @@
         <aggregate-app-period>15</aggregate-app-period>
 
         <!-- fill this tag with comma-separated node IDs you want to
-             be filtered out of the reported metrics. (OPTIONAL)
-             Example: <exclude-nodeid>h2:1235,h1:1234</exclude-nodeid>
+             be filtered out of the reported metrics. Use "*" to exclude all nodes.
+             Example: 
+                <exclude-nodeid>h2:1235,h1:1234</exclude-nodeid>
              DO NOT include spaces or quotes in this tag! 
         -->
         <exclude-nodeid></exclude-nodeid>
@@ -54,7 +55,7 @@
         -->
         <exclude-host></exclude-host>
 
-        <!-- fill this tag with comma-separated service names you
+        <!-- fill this tag with comma-separated service names (case insensitive) you
             want to exclude from metric gathering. Use "*" to exclude all services.
             Example:
                 <exclude-service>NAGIOS,ZOOKEEPER,OOZIE</exclude-service>
@@ -64,7 +65,7 @@
         -->
         <exclude-service></exclude-service>
 
-        <!-- fill this tag with comma-separated service component names you
+        <!-- fill this tag with comma-separated service component names (case insensitive) you
             want to exclude from metric gathering. Component is specified by "<service name>/<component name>".
             Use "*" to exclude all components.
             Example:
@@ -75,7 +76,7 @@
         -->
         <exclude-service-component></exclude-service-component>
 
-        <!-- fill this tag with comma-separated host metric names you
+        <!-- fill this tag with comma-separated host metric names (case insensitive) you
             want to gather metrics for. The filter will filter metrics for ALL hosts.
             Use "*" to include all metrics.
             Example:
@@ -86,7 +87,7 @@
         -->
         <include-host-metrics>*</include-host-metrics>
 
-        <!-- fill this tag with comma-separated component metric names you
+        <!-- fill this tag with comma-separated component metric names (case insensitive) you
             want to gather metrics for. Use "*" to include all metrics.
             Component specific metrics such as "dfs" from HDFS, "mapred"
             from MapReduce, and "hbase" from HBase must be added to gather their metrics.

@@ -20,6 +20,7 @@ public class HadoopCommunicator {
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
     private NumberFormat numberFormat = NumberFormat.getInstance();
+    private Map<String, Object> metrics;
     private long aggrAppPeriod;
 
 
@@ -62,11 +63,12 @@ public class HadoopCommunicator {
      *
      * @param metrics
      */
-    public void populate(Map<String, String> metrics) {
-        getClusterMetrics(metrics);
-        getClusterScheduler(metrics);
-        getAggrApps(metrics);
-        getClusterNodes(metrics);
+    public void populate(Map<String, Object> metrics) {
+        this.metrics = metrics;
+        getClusterMetrics();
+        getClusterScheduler();
+        getAggrApps();
+        getClusterNodes();
     }
 
     /**
@@ -93,9 +95,8 @@ public class HadoopCommunicator {
     /**
      * Populates <code>metrics</code> with all cluster metrics.
      *
-     * @param metrics
      */
-    private void getClusterMetrics(Map<String, String> metrics) {
+    private void getClusterMetrics() {
         try {
             Reader response = getResponse(CLUSTER_METRIC_PATH);
 
@@ -104,7 +105,7 @@ public class HadoopCommunicator {
                 json = (Map<String, Object>) json.get("clusterMetrics");
 
                 for (Map.Entry<String, Object> entry : json.entrySet()){
-                    metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue().toString());
+                    metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue());
                 }
             } catch (Exception e) {
                 logger.error("Failed to parse ClusterMetrics: "+stackTraceToString(e));
@@ -118,9 +119,8 @@ public class HadoopCommunicator {
      * Populates <code>metrics</code> with all scheduler metrics. Scheduler can be either Capacity
      * Scheduler or Fifo Scheduler.
      *
-     * @param metrics
      */
-    private void getClusterScheduler(Map<String, String> metrics) {
+    private void getClusterScheduler() {
         try {
             Reader response = getResponse(CLUSTER_SCHEDULER_PATH);
 
@@ -139,8 +139,7 @@ public class HadoopCommunicator {
                     json.remove("queues");
 
                     for (Map.Entry<String, Object> entry : json.entrySet()){
-                        metrics.put("schedulerInfo|" + queueName + "|" + entry.getKey(),
-                                roundDecimal((Number) entry.getValue()));
+                        metrics.put("schedulerInfo|" + queueName + "|" + entry.getKey(), entry.getValue());
                     }
                 } else {    //fifoScheduler
                     if (json.get("qstate").equals("RUNNING")){
@@ -153,7 +152,7 @@ public class HadoopCommunicator {
                     json.remove("qstate");
 
                     for (Map.Entry<String, Object> entry : json.entrySet()){
-                        metrics.put("schedulerInfo|" + entry.getKey(), roundDecimal((Number) entry.getValue()));
+                        metrics.put("schedulerInfo|" + entry.getKey(), entry.getValue());
                     }
                 }
             } catch (Exception e) {
@@ -172,15 +171,15 @@ public class HadoopCommunicator {
      * @param hierarchy
      * @return Map of queue metrics
      */
-    private Map<String, String> getQueues(List queue, String hierarchy){
-        Map<String, String> queueMap = new HashMap<String, String>();
+    private Map<String, Object> getQueues(List queue, String hierarchy){
+        Map<String, Object> queueMap = new HashMap<String, Object>();
 
         for (Map<String, Object> item : (ArrayList<Map<String, Object>>) queue){
             String queueName = (String) item.get("queueName");
 
             if (item.get("queues") != null){
                 List queueList = (ArrayList) ((Map) item.get("queues")).get("queue");
-                Map<String, String> childQueue = getQueues(queueList, hierarchy + "|" + queueName);
+                Map<String, Object> childQueue = getQueues(queueList, hierarchy + "|" + queueName);
                 queueMap.putAll(childQueue);
             }
 
@@ -199,8 +198,7 @@ public class HadoopCommunicator {
             item.remove("users");
 
             for (Map.Entry<String, Object> entry : item.entrySet()){
-                queueMap.put(hierarchy + "|" + queueName + "|" + entry.getKey(),
-                        roundDecimal((Number) entry.getValue()));
+                queueMap.put(hierarchy + "|" + queueName + "|" + entry.getKey(), entry.getValue());
             }
         }
         return queueMap;
@@ -214,11 +212,11 @@ public class HadoopCommunicator {
      * @param hierarchy
      * @return Map of resourcesUsed metrics
      */
-    private Map<String, String> getResourcesUsed(Map<String, Object> resources, String hierarchy){
-        Map<String, String> rtn = new HashMap<String, String>();
+    private Map<String, Object> getResourcesUsed(Map<String, Object> resources, String hierarchy){
+        Map<String, Object> rtn = new HashMap<String, Object>();
 
         for (Map.Entry<String, Object> entry : resources.entrySet()){
-            rtn.put(hierarchy + "|resourcesUsed|" + entry.getKey(), entry.getValue().toString());
+            rtn.put(hierarchy + "|resourcesUsed|" + entry.getKey(), entry.getValue());
         }
         return rtn;
     }
@@ -231,8 +229,8 @@ public class HadoopCommunicator {
      * @param hierarchy
      * @return Map of user metrics
      */
-    private Map<String, String> getUsers(List users, String hierarchy){
-        Map<String, String> rtn = new HashMap<String, String>();
+    private Map<String, Object> getUsers(List users, String hierarchy){
+        Map<String, Object> rtn = new HashMap<String, Object>();
 
         for (Map<String, Object> user : (ArrayList<Map<String, Object>>) users){
             String username = (String) user.get("username");
@@ -243,7 +241,7 @@ public class HadoopCommunicator {
             user.remove("username");
 
             for (Map.Entry<String, Object> entry : user.entrySet()){
-                rtn.put(hierarchy + "|users|" + username + "|" + entry.getKey(), entry.getValue().toString());
+                rtn.put(hierarchy + "|users|" + username + "|" + entry.getKey(), entry.getValue());
             }
         }
         return rtn;
@@ -259,9 +257,8 @@ public class HadoopCommunicator {
      * Metrics include average app progress and app count of all states (NEW, SUBMITTED,
      * ACCEPTED, RUNNING, FINISHED, FAILED, KILLED).
      *
-     * @param metrics
      */
-    private void getAggrApps(Map<String, String> metrics){
+    private void getAggrApps(){
         try {
             Date time = new Date();
             long currentTime = time.getTime();
@@ -280,8 +277,8 @@ public class HadoopCommunicator {
                 try {
                     json = (Map<String, Object>) json.get("apps");
                     if (json == null) {
-                        //break for empty app query
-                        break;
+                        //skip for empty app query
+                        continue;
                     }
                     List<Map> appList = (ArrayList<Map>) json.get("app");
 
@@ -303,14 +300,14 @@ public class HadoopCommunicator {
 
             avgProgress = avgProgress / appIds.size();
 
-            metrics.put("Apps|Average Progress", roundDecimal(avgProgress));
-            metrics.put("Apps|New Apps", String.valueOf(appStateCount[AppState.NEW.ordinal()]));
-            metrics.put("Apps|Submitted Apps", String.valueOf(appStateCount[AppState.SUBMITTED.ordinal()]));
-            metrics.put("Apps|Accepted Apps", String.valueOf(appStateCount[AppState.ACCEPTED.ordinal()]));
-            metrics.put("Apps|Running Apps", String.valueOf(appStateCount[AppState.RUNNING.ordinal()]));
-            metrics.put("Apps|Finished Apps", String.valueOf(appStateCount[AppState.FINISHED.ordinal()]));
-            metrics.put("Apps|Failed Apps", String.valueOf(appStateCount[AppState.FAILED.ordinal()]));
-            metrics.put("Apps|Killed Apps", String.valueOf(appStateCount[AppState.KILLED.ordinal()]));
+            metrics.put("Apps|Average Progress", avgProgress);
+            metrics.put("Apps|New Apps", appStateCount[AppState.NEW.ordinal()]);
+            metrics.put("Apps|Submitted Apps", appStateCount[AppState.SUBMITTED.ordinal()]);
+            metrics.put("Apps|Accepted Apps", appStateCount[AppState.ACCEPTED.ordinal()]);
+            metrics.put("Apps|Running Apps", appStateCount[AppState.RUNNING.ordinal()]);
+            metrics.put("Apps|Finished Apps", appStateCount[AppState.FINISHED.ordinal()]);
+            metrics.put("Apps|Failed Apps", appStateCount[AppState.FAILED.ordinal()]);
+            metrics.put("Apps|Killed Apps", appStateCount[AppState.KILLED.ordinal()]);
 
         } catch (Exception e) {
             logger.error("Failed to get response for aggregated apps: "+stackTraceToString(e));
@@ -320,9 +317,8 @@ public class HadoopCommunicator {
     /**
      * Populates <code>metrics</code> with metrics from all nodes.
      *
-     * @param metrics
      */
-    private void getClusterNodes(Map<String, String> metrics) {
+    private void getClusterNodes() {
         try {
             Reader response = getResponse(CLUSTER_NODES_PATH);
 
@@ -350,8 +346,8 @@ public class HadoopCommunicator {
      * @param hierarchy
      * @return Map of node metrics
      */
-    private Map<String, String> getNode(Map<String,Object> node, String hierarchy) {
-        Map<String, String> rtn = new HashMap<String, String>();
+    private Map<String, Object> getNode(Map<String,Object> node, String hierarchy) {
+        Map<String, Object> rtn = new HashMap<String, Object>();
 
         String id = (String) node.get("id");
         if (!xmlParser.isIncludeNodeid(id)){
@@ -371,24 +367,12 @@ public class HadoopCommunicator {
         states.add("DECOMMISSIONED");
         states.add("LOST");
         states.add("REBOOTED");
-        rtn.put(hierarchy+"|"+id+"|state", String.valueOf(states.indexOf(node.get("state"))));
+        rtn.put(hierarchy+"|"+id+"|state", states.indexOf(node.get("state")));
 
-        rtn.put(hierarchy+"|"+id+"|usedMemoryMB", node.get("usedMemoryMB").toString());
-        rtn.put(hierarchy+"|"+id+"|availMemoryMB", node.get("availMemoryMB").toString());
-        rtn.put(hierarchy+"|"+id+"|numContainers", node.get("numContainers").toString());
+        rtn.put(hierarchy+"|"+id+"|usedMemoryMB", node.get("usedMemoryMB"));
+        rtn.put(hierarchy+"|"+id+"|availMemoryMB", node.get("availMemoryMB"));
+        rtn.put(hierarchy+"|"+id+"|numContainers", node.get("numContainers"));
         return rtn;
-    }
-
-    /**
-     *
-     * @param num
-     * @return String representation of rounded <code>num</code> in integer format
-     */
-    private String roundDecimal(Number num){
-        if (num instanceof Float || num instanceof Double){
-            return numberFormat.format(Math.round((Double) num));
-        }
-        return num.toString();
     }
 
     /**
