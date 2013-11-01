@@ -42,7 +42,7 @@ public class HadoopMonitor extends AManagedMonitor
                     if (Integer.parseInt(hadoopVersionSplit[1]) >= 23) {
                         hasResourceManager = true;
                     }
-                } else if (majorVer > 2){
+                } else if (majorVer >= 2){
                     hasResourceManager = true;
                 }
             } catch (NumberFormatException e){
@@ -55,6 +55,7 @@ public class HadoopMonitor extends AManagedMonitor
                 if (!metricPath.endsWith("|")){
                     metricPath += "|";
                 }
+                metricPath += "Hadoop|";
             }
 
             if (xmlParser == null){
