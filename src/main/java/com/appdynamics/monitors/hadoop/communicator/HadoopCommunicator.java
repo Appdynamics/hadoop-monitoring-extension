@@ -354,7 +354,7 @@ public class HadoopCommunicator {
             return rtn;
         }
 
-        if (node.get("healthStatus").equals("Healthy")){
+        if (node.get("healthStatus") != null && node.get("healthStatus").equals("Healthy")){
             rtn.put(hierarchy+"|"+id+"|healthStatus", "1");
         } else {
             rtn.put(hierarchy+"|"+id+"|healthStatus", "0");
