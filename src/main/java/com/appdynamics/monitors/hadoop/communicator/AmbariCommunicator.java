@@ -346,8 +346,12 @@ public class AmbariCommunicator {
             if (val instanceof Map){
                 getAllMetrics((Map) val, hierarchy + "|" + key);
             } else if (val instanceof Number){
-                if (key.startsWith("load_")){   //convert all load factors to integers
-                    metrics.put(hierarchy + "|" + key, (Double) val*100);
+                if (key.startsWith("load_")){   //convert all load factors to percentage integers
+                    if (val instanceof Double) {
+                        metrics.put(hierarchy + "|" + key, (Double) val*100);
+                    } else {   //if Ganglia is down, load metrics are Long
+                        metrics.put(hierarchy + "|" + key, val);
+                    }
                 } else {
                     metrics.put(hierarchy + "|" + key, val);
                 }

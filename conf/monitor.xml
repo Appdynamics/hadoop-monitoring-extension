@@ -12,18 +12,29 @@
                 <type>java</type>
                 <execution-timeout-in-secs>60</execution-timeout-in-secs>
                 <task-arguments>
-                        <!-- ENABLE/DISABLE RESOURCE MANAGER METRICS
-                            To enable or diable Hadoop Resource Manager metrics, set
-                            default-value="true" or "false"
+                        <!-- HADOOP VERSION
+                            The Hadoop version for the cluster you want to monitor using Resource Manager.
+                            Example:
+                                1.3, 2.2, 0.23
                         -->
-                        <argument name="resource-manager-monitor" is-required="true" default-value="true" />
-                        <argument name="host" is-required="true" default-value="localhost" />
-                        <argument name="port" is-required="true" default-value="8088" />
+                        <argument name="hadoop-version" is-required="true" default-value="1.3" />
                         
                         <!-- ENABLE/DISABLE AMBARI METRICS
                             To enable or diable Ambari metrics, set default-value="true" or "false"
+                            Ambari metrics are only available for clusters inistalled using Ambari, 
+                            manual installs are not eligible
                         -->
                         <argument name="ambari-monitor" is-required="true" default-value="false" />
+
+                        <!-- RESOURCE MANAGER CONFIGS
+                            Resource Manager is only usable for Hadoop 2.x and Hadoop 0.23.x
+                        -->
+                        <argument name="host" is-required="true" default-value="localhost" />
+                        <argument name="port" is-required="true" default-value="8088" />
+                        
+                        <!-- AMBARI CONFIGS
+                            Only configure if 'ambari-monitor' is set to 'true'
+                        -->
                         <argument name="ambari-host" is-required="true" default-value="localhost" />
                         <argument name="ambari-port" is-required="true" default-value="8080" />
                         <argument name="ambari-user" is-required="true" default-value="admin" />

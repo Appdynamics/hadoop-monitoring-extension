@@ -32,14 +32,23 @@ public class HadoopMonitor extends AManagedMonitor
         logger.info("Executing HadoopMonitor");
 
         try {
-            String host = args.get("host");
-            String port = args.get("port");
+            boolean hasResourceManager = false;
+            String hadoopVersion = args.get("hadoop-version");
+            String[] hadoopVersionSplit = hadoopVersion.split("\\.");
 
-            String ambariHost = args.get("ambari-host");
-            String ambariPort = args.get("ambari-port");
-            String ambariUser = args.get("ambari-user");
-            String ambariPassword = args.get("ambari-password");
-
+            try {
+                int majorVer = Integer.parseInt(hadoopVersionSplit[0]);
+                if (majorVer == 0) {
+                    if (Integer.parseInt(hadoopVersionSplit[1]) >= 23) {
+                        hasResourceManager = true;
+                    }
+                } else if (majorVer > 2){
+                    hasResourceManager = true;
+                }
+            } catch (NumberFormatException e){
+                hasResourceManager = false;
+                logger.error("Invalid Hadoop version '" + hadoopVersion + "'");
+            }
 
             if (!args.get("metric-path").equals("")){
                 metricPath = args.get("metric-path");
@@ -62,11 +71,19 @@ public class HadoopMonitor extends AManagedMonitor
             Map<String, Object> hadoopMetrics = new HashMap<String, Object>();
             Map<String, Object> ambariMetrics = new HashMap<String, Object>();
 
-            if (args.get("resource-manager-monitor").equals("true")){
+            if (hasResourceManager){
+                String host = args.get("host");
+                String port = args.get("port");
                 hadoopCommunicator = new HadoopCommunicator(host,port,logger,xmlParser);
                 hadoopCommunicator.populate(hadoopMetrics);
+            } else {
+                logger.warn("Monitor is running without Resource Manager metrics");
             }
             if (args.get("ambari-monitor").equals("true")){
+                String ambariHost = args.get("ambari-host");
+                String ambariPort = args.get("ambari-port");
+                String ambariUser = args.get("ambari-user");
+                String ambariPassword = args.get("ambari-password");
                 ambariCommunicator = new AmbariCommunicator(ambariHost, ambariPort, ambariUser, ambariPassword, logger, xmlParser);
                 ambariCommunicator.populate(ambariMetrics);
             }
