@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -21,7 +20,6 @@ public class AmbariCommunicator {
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
     private Map<String, Object> metrics;
-    private NumberFormat numberFormat = NumberFormat.getInstance();
     private ExecutorService executor;
 
     private static final String CLUSTER_FIELDS = "?fields=services,hosts";
@@ -60,7 +58,6 @@ public class AmbariCommunicator {
         this.logger = logger;
         this.xmlParser = xmlParser;
 
-        numberFormat.setGroupingUsed(false);
         executor = Executors.newFixedThreadPool(xmlParser.getThreadLimit());
     }
 
