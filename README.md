@@ -33,8 +33,8 @@ OR
 If the cluster version is 1.x and not installed by Ambari, no metrics can be gathered at this time.
 
 #### Steps
-1. Run 'ant package' from the hadoop-monitoring-extension directory.
-2. Deploy the file HadoopMonitor.zip found in the 'dist' directory into \<machineagent install dir>/monitors/.
+1. Run `mvn clean install` from the hadoop-monitoring-extension directory.
+2. Deploy the file HadoopMonitor.zip found in the 'target' directory into \<machineagent install dir>/monitors/.
 3. Unzip the deployed file.
 4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters.
 5. (Optional, recommended) For metric filtering, configure  \<machineagent install dir>/monitors/HadoopMonitor/properties.xml.

@@ -50,7 +50,7 @@ public class Parser {
      *
      * @param logger
      */
-    public Parser(Logger logger){
+    public Parser(Logger logger) {
         this.logger = logger;
 
         aggrAppPeriod = DEFAULT_AGGR_APP_PERIOD;
@@ -73,7 +73,7 @@ public class Parser {
      * @param xml
      * @throws DocumentException
      */
-    public Parser(Logger logger, String xml) throws DocumentException{
+    public Parser(Logger logger, String xml) throws DocumentException {
         this(logger);
         parseXML(xml);
     }
@@ -84,7 +84,7 @@ public class Parser {
      * @param xml
      * @throws DocumentException
      */
-    public void parseXML(String xml) throws DocumentException{
+    public void parseXML(String xml) throws DocumentException {
         SAXReader reader = new SAXReader();
         Document doc = reader.read(xml);
         Element root = doc.getRootElement();
@@ -93,20 +93,20 @@ public class Parser {
         Iterator<Element> hrmIter = root.element("hadoop-resource-manager").elementIterator();
         Iterator<Element> ambariIter = root.element("ambari").elementIterator();
 
-        while(hrmIter.hasNext()){
+        while (hrmIter.hasNext()) {
             Element element = hrmIter.next();
-            if (element.getName().equals("aggregate-app-period")){
-                if (!(text = element.getText()).equals("")){
+            if (element.getName().equals("aggregate-app-period")) {
+                if (!(text = element.getText()).equals("")) {
                     try {
                         aggrAppPeriod = Integer.parseInt(text);
-                    } catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         logger.error("Error parsing aggregate-app-period: " + e + "\n" +
                                 "Using default value instead: " + DEFAULT_THREAD_LIMIT);
                         aggrAppPeriod = DEFAULT_AGGR_APP_PERIOD;
                     }
                 }
-            } else if (element.getName().equals("exclude-nodeid")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("exclude-nodeid")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] nodeId = text.split(",");
                     excludeNodeid.addAll(Arrays.asList(nodeId));
                 }
@@ -115,51 +115,51 @@ public class Parser {
             }
         }
 
-        while(ambariIter.hasNext()){
+        while (ambariIter.hasNext()) {
             Element element = ambariIter.next();
 
-            if (element.getName().equals("thread-limit")){
-                if (!(text = element.getText()).equals("")){
+            if (element.getName().equals("thread-limit")) {
+                if (!(text = element.getText()).equals("")) {
                     try {
                         threadLimit = Integer.parseInt(text);
-                    } catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         logger.error("Error parsing thread-limit " + e + "\n" +
                                 "Using default value instead: " + DEFAULT_THREAD_LIMIT);
                         threadLimit = DEFAULT_THREAD_LIMIT;
                     }
                 }
-            } else if (element.getName().equals("include-cluster")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("include-cluster")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.split(",");
                     includeAmbariCluster.addAll(Arrays.asList(appId));
                 }
-            } else if (element.getName().equals("include-host")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("include-host")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.split(",");
                     includeAmbariHost.addAll(Arrays.asList(appId));
                 }
-            } else if (element.getName().equals("exclude-host")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("exclude-host")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.split(",");
                     excludeAmbariHost.addAll(Arrays.asList(appId));
                 }
-            } else if (element.getName().equals("exclude-service")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("exclude-service")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.toLowerCase().split(",");
                     excludeAmbariService.addAll(Arrays.asList(appId));
                 }
-            } else if (element.getName().equals("exclude-service-component")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("exclude-service-component")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.toLowerCase().split(",");
                     excludeAmbariServiceComponent.addAll(Arrays.asList(appId));
                 }
-            } else if (element.getName().equals("include-host-metrics")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("include-host-metrics")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.toLowerCase().split(",");
                     includeAmbariHostMetrics.addAll(Arrays.asList(appId));
                 }
-            } else if (element.getName().equals("include-component-metrics")){
-                if (!(text = element.getText()).equals("")){
+            } else if (element.getName().equals("include-component-metrics")) {
+                if (!(text = element.getText()).equals("")) {
                     String[] appId = text.toLowerCase().split(",");
                     includeAmbariComponentMetrics.addAll(Arrays.asList(appId));
                 }
@@ -167,47 +167,47 @@ public class Parser {
         }
     }
 
-    public int getAggrAppPeriod(){
+    public int getAggrAppPeriod() {
         return aggrAppPeriod;
     }
 
-    public int getThreadLimit(){
+    public int getThreadLimit() {
         return threadLimit;
     }
 
-    public boolean isIncludeNodeid(String nodeid){
+    public boolean isIncludeNodeid(String nodeid) {
         return !(excludeNodeid.contains("*") || excludeNodeid.contains(nodeid));
     }
 
-    public boolean isIncludeCluster(String cluster){
+    public boolean isIncludeCluster(String cluster) {
         return (includeAmbariCluster.contains("*") || includeAmbariCluster.contains(cluster));
     }
 
-    public boolean isIncludeHost(String host){
-        if (!excludeAmbariHost.contains("*") && !excludeAmbariHost.contains(host)){
-            if (includeAmbariHost.contains("*") || includeAmbariHost.contains(host)){
+    public boolean isIncludeHost(String host) {
+        if (!excludeAmbariHost.contains("*") && !excludeAmbariHost.contains(host)) {
+            if (includeAmbariHost.contains("*") || includeAmbariHost.contains(host)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isIncludeService(String service){
+    public boolean isIncludeService(String service) {
         return !(excludeAmbariService.contains("*")
                 || excludeAmbariService.contains(service.toLowerCase()));
     }
 
-    public boolean isIncludeServiceComponent(String service, String component){
+    public boolean isIncludeServiceComponent(String service, String component) {
         return !(excludeAmbariServiceComponent.contains("*")
                 || excludeAmbariServiceComponent.contains(service.toLowerCase() + "/" + component.toLowerCase()));
     }
 
-    public boolean isIncludeHostMetrics(String host){
+    public boolean isIncludeHostMetrics(String host) {
         return (includeAmbariHostMetrics.contains("*")
                 || includeAmbariHostMetrics.contains(host.toLowerCase()));
     }
 
-    public boolean isIncludeComponentMetrics(String component){
+    public boolean isIncludeComponentMetrics(String component) {
         return (includeAmbariComponentMetrics.contains("*")
                 || includeAmbariComponentMetrics.contains(component.toLowerCase()));
     }

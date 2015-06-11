@@ -16,9 +16,9 @@
 
 package com.appdynamics.monitors.hadoop.communicator;
 
+import com.appdynamics.TaskInputArgs;
+import com.appdynamics.extensions.http.SimpleHttpClient;
 import com.appdynamics.monitors.hadoop.parser.Parser;
-import com.singularity.ee.util.httpclient.*;
-import com.singularity.ee.util.log4j.Log4JLogger;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
@@ -27,8 +27,16 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AmbariCommunicator {
     private String host, port, user, password;
@@ -66,7 +74,7 @@ public class AmbariCommunicator {
      * @param logger
      * @param xmlParser XML parser for metric filtering
      */
-    public AmbariCommunicator(String host, String port, String user, String password, Logger logger, Parser xmlParser){
+    public AmbariCommunicator(String host, String port, String user, String password, Logger logger, Parser xmlParser) {
         this.host = host;
         this.port = port;
         this.user = user;
@@ -79,14 +87,14 @@ public class AmbariCommunicator {
 
     /**
      * Populates <code>metrics</code> Map with all numeric Ambari clusters metrics.
-     * @see #getClusterMetrics(java.io.Reader)
      *
      * @param metrics
+     * @see #getClusterMetrics(java.io.Reader)
      */
     public void populate(Map<String, Object> metrics) {
         this.metrics = metrics;
         try {
-            Reader response = (new Response("http://" + host + ":" + port + "/api/v1/clusters")).call();
+            Reader response = (new Response("/api/v1/clusters")).call();
 
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -94,13 +102,13 @@ public class AmbariCommunicator {
 
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
-                for (Map cluster : clusters){
-                    if (xmlParser.isIncludeCluster((String) ((Map) cluster.get("Clusters")).get("cluster_name"))){
+                for (Map cluster : clusters) {
+                    if (xmlParser.isIncludeCluster((String) ((Map) cluster.get("Clusters")).get("cluster_name"))) {
                         threadPool.submit(new Response(cluster.get("href") + CLUSTER_FIELDS));
                         count++;
                     }
                 }
-                for(;count>0;count--){
+                for (; count > 0; count--) {
                     getClusterMetrics(threadPool.take().get());
                 }
             } catch (Exception e) {
@@ -112,9 +120,9 @@ public class AmbariCommunicator {
         executor.shutdown();
     }
 
-    private class Response implements Callable<Reader>{
-        private IHttpClientWrapper httpClient;
-        private HttpExecutionRequest request;
+    private class Response implements Callable<Reader> {
+        private SimpleHttpClient httpClient;
+        private String location;
 
         /**
          * Creates a preemptive basic authentication GET request to <code>location</code>
@@ -122,38 +130,48 @@ public class AmbariCommunicator {
          * @param location
          * @throws Exception
          */
-        public Response(String location) throws Exception{
-            httpClient = HttpClientWrapper.getInstance();
-            request = new HttpExecutionRequest(location,"", HttpOperation.GET);
-            httpClient.authenticateHost(host, Integer.parseInt(port), "", user, password, true);
+        public Response(String location) throws Exception {
+            httpClient = SimpleHttpClient.builder(buildHttpClientArguments()).build();
+            this.location = location;
         }
 
         /**
-         *
          * @return StringReader representation of http response body
          * @throws Exception
          */
         @Override
         public Reader call() throws Exception {
-            HttpExecutionResponse response = httpClient.executeHttpOperation(request,new Log4JLogger(logger));
-            if (response.isExceptionHappened()){
-                throw new Exception(response.getExceptionMessage());
-            } else if (response.isStatusNotOk()){
-                throw new Exception("HTTP request failed, status code: "+response.getStatusCode());
-            } else {
-                return new StringReader(response.getResponseBody());
+            com.appdynamics.extensions.http.Response response = null;
+            try {
+                response = httpClient.target().path(location).get();
+                return new StringReader(response.string());
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                if (response != null) {
+                    response.close();
+                }
             }
         }
     }
 
+    private Map<String, String> buildHttpClientArguments() {
+        Map<String, String> clientArgs = new HashMap<String, String>();
+        clientArgs.put(TaskInputArgs.HOST, host);
+        clientArgs.put(TaskInputArgs.PORT, String.valueOf(port));
+        clientArgs.put(TaskInputArgs.USER, user);
+        clientArgs.put(TaskInputArgs.PASSWORD, password);
+        return clientArgs;
+    }
+
     /**
      * Parses a JSON Reader object as cluster metrics and collect service and host metrics.
-     * @see #getServiceMetrics(java.io.Reader, String)
-     * @see #getHostMetrics(java.io.Reader, String)
      *
      * @param response
+     * @see #getServiceMetrics(java.io.Reader, String)
+     * @see #getHostMetrics(java.io.Reader, String)
      */
-    private void getClusterMetrics(Reader response){
+    private void getClusterMetrics(Reader response) {
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -163,23 +181,23 @@ public class AmbariCommunicator {
 
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
-                for (Map service : services){
-                    if (xmlParser.isIncludeService((String) ((Map) service.get("ServiceInfo")).get("service_name"))){
+                for (Map service : services) {
+                    if (xmlParser.isIncludeService((String) ((Map) service.get("ServiceInfo")).get("service_name"))) {
                         threadPool.submit(new Response(service.get("href") + SERVICE_FIELDS));
                         count++;
                     }
                 }
-                for(;count>0;count--){
+                for (; count > 0; count--) {
                     getServiceMetrics(threadPool.take().get(), clusterName + "|services");
                 }
 
-                for (Map host : hosts){
-                    if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("host_name"))){
+                for (Map host : hosts) {
+                    if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("host_name"))) {
                         threadPool.submit(new Response(host.get("href") + HOST_FIELDS));
                         count++;
                     }
                 }
-                for(;count>0;count--){
+                for (; count > 0; count--) {
                     getHostMetrics(threadPool.take().get(), clusterName + "|hosts");
                 }
             } catch (Exception e) {
@@ -193,12 +211,12 @@ public class AmbariCommunicator {
     /**
      * Parses a JSON Reader object as service metrics and collect service state plus service
      * component metrics. Prefixes metric name with <code>hierarchy</code>.
-     * @see #getComponentMetrics(java.io.Reader, String)
      *
      * @param response
      * @param hierarchy
+     * @see #getComponentMetrics(java.io.Reader, String)
      */
-    private void getServiceMetrics(Reader response, String hierarchy){
+    private void getServiceMetrics(Reader response, String hierarchy) {
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -226,14 +244,14 @@ public class AmbariCommunicator {
 
                 CompletionService<Reader> threadPool = new ExecutorCompletionService<Reader>(executor);
                 int count = 0;
-                for (Map component : components){
+                for (Map component : components) {
                     if (xmlParser.isIncludeServiceComponent(serviceName,
-                            (String) ((Map) component.get("ServiceComponentInfo")).get("component_name"))){
+                            (String) ((Map) component.get("ServiceComponentInfo")).get("component_name"))) {
                         threadPool.submit(new Response(component.get("href") + COMPONENT_FIELDS));
                         count++;
                     }
                 }
-                for(;count>0;count--){
+                for (; count > 0; count--) {
                     getComponentMetrics(threadPool.take().get(), hierarchy + "|" + serviceName);
                 }
             } catch (Exception e) {
@@ -247,12 +265,12 @@ public class AmbariCommunicator {
     /**
      * Parses a JSON Reader object as host metrics and collect host state plus host metrics.
      * Prefixes metric name with <code>hierarchy</code>.
-     * @see #getAllMetrics(java.util.Map, String)
      *
      * @param response
      * @param hierarchy
+     * @see #getAllMetrics(java.util.Map, String)
      */
-    private void getHostMetrics(Reader response, String hierarchy){
+    private void getHostMetrics(Reader response, String hierarchy) {
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -274,8 +292,8 @@ public class AmbariCommunicator {
                 hostMetrics.remove("boottime");
 
                 Iterator<Map.Entry> iter = hostMetrics.entrySet().iterator();
-                while(iter.hasNext()){
-                    if (!xmlParser.isIncludeHostMetrics((String) iter.next().getKey())){
+                while (iter.hasNext()) {
+                    if (!xmlParser.isIncludeHostMetrics((String) iter.next().getKey())) {
                         iter.remove();
                     }
                 }
@@ -292,12 +310,12 @@ public class AmbariCommunicator {
     /**
      * Parses a JSON Reader object as component metrics and collect component state plus all
      * numeric metrics. Prefixes metric name with <code>hierarchy</code>.
-     * @see #getAllMetrics(java.util.Map, String)
      *
      * @param response
      * @param hierarchy
+     * @see #getAllMetrics(java.util.Map, String)
      */
-    private void getComponentMetrics(Reader response, String hierarchy){
+    private void getComponentMetrics(Reader response, String hierarchy) {
         try {
             Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
             try {
@@ -322,7 +340,7 @@ public class AmbariCommunicator {
                 metrics.put(hierarchy + "|" + componentName + "|state", states.indexOf(componentState));
 
                 Map componentMetrics = (Map) json.get("metrics");
-                if (componentMetrics == null){
+                if (componentMetrics == null) {
                     //no metrics
                     return;
                 }
@@ -330,8 +348,8 @@ public class AmbariCommunicator {
                 componentMetrics.remove("boottime");
 
                 Iterator<Map.Entry> iter = componentMetrics.entrySet().iterator();
-                while(iter.hasNext()){
-                    if (!xmlParser.isIncludeComponentMetrics((String) iter.next().getKey())){
+                while (iter.hasNext()) {
+                    if (!xmlParser.isIncludeComponentMetrics((String) iter.next().getKey())) {
                         iter.remove();
                     }
                 }
@@ -353,15 +371,15 @@ public class AmbariCommunicator {
      * @param hierarchy
      */
     private void getAllMetrics(Map<String, Object> json, String hierarchy) {
-        for (Map.Entry<String, Object> entry : json.entrySet()){
+        for (Map.Entry<String, Object> entry : json.entrySet()) {
             String key = entry.getKey();
             Object val = entry.getValue();
-            if (val instanceof Map){
+            if (val instanceof Map) {
                 getAllMetrics((Map) val, hierarchy + "|" + key);
-            } else if (val instanceof Number){
-                if (key.startsWith("load_")){   //convert all load factors to percentage integers
+            } else if (val instanceof Number) {
+                if (key.startsWith("load_")) {   //convert all load factors to percentage integers
                     if (val instanceof Double) {
-                        metrics.put(hierarchy + "|" + key, (Double) val*100);
+                        metrics.put(hierarchy + "|" + key, (Double) val * 100);
                     } else {   //if Ganglia is down, load metrics are Long
                         metrics.put(hierarchy + "|" + key, val);
                     }
@@ -373,11 +391,10 @@ public class AmbariCommunicator {
     }
 
     /**
-     *
      * @param e
      * @return String representation of output from <code>printStackTrace()</code>
      */
-    private String stackTraceToString(Exception e){
+    private String stackTraceToString(Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
