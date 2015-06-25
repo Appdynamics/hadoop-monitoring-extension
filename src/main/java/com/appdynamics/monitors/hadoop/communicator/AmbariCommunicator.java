@@ -51,17 +51,6 @@ public class AmbariCommunicator {
     private static final String HOST_FIELDS = "?fields=Hosts/host_state,metrics";
     private static final String COMPONENT_FIELDS = "?fields=ServiceComponentInfo/state,metrics";
 
-    private ContainerFactory simpleContainer = new ContainerFactory() {
-        @Override
-        public Map createObjectContainer() {
-            return new HashMap();
-        }
-
-        @Override
-        public List creatArrayContainer() {
-            return new ArrayList();
-        }
-    };
 
     /**
      * Constructs a new AmbariCommunicator. Metrics can be collected by calling {@link #populate(java.util.Map)}
@@ -94,9 +83,9 @@ public class AmbariCommunicator {
     public void populate(Map<String, Object> metrics) {
         this.metrics = metrics;
         try {
-            Reader response = (new Response("/api/v1/clusters")).call();
+            Reader response = (new Response("", "/api/v1/clusters")).call();
 
-            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response);
             try {
                 List<Map> clusters = (ArrayList<Map>) json.get("items");
 
@@ -104,7 +93,7 @@ public class AmbariCommunicator {
                 int count = 0;
                 for (Map cluster : clusters) {
                     if (xmlParser.isIncludeCluster((String) ((Map) cluster.get("Clusters")).get("cluster_name"))) {
-                        threadPool.submit(new Response(cluster.get("href") + CLUSTER_FIELDS));
+                        threadPool.submit(new Response(cluster.get("href") + CLUSTER_FIELDS, ""));
                         count++;
                     }
                 }
@@ -122,28 +111,30 @@ public class AmbariCommunicator {
 
     private class Response implements Callable<Reader> {
         private SimpleHttpClient httpClient;
-        private String location;
+        private String url;
+        private String uriPath;
 
         /**
          * Creates a preemptive basic authentication GET request to <code>location</code>
          *
-         * @param location
+         * @param url
          * @throws Exception
          */
-        public Response(String location) throws Exception {
+        public Response(String url, String uriPath) throws Exception {
             httpClient = SimpleHttpClient.builder(buildHttpClientArguments()).build();
-            this.location = location;
+            this.url = url;
+            this.uriPath = uriPath;
         }
 
         /**
          * @return StringReader representation of http response body
          * @throws Exception
          */
-        @Override
+
         public Reader call() throws Exception {
             com.appdynamics.extensions.http.Response response = null;
             try {
-                response = httpClient.target().path(location).get();
+                response = httpClient.target(url).path(uriPath).get();
                 return new StringReader(response.string());
             } catch (Exception e) {
                 throw e;
@@ -173,7 +164,7 @@ public class AmbariCommunicator {
      */
     private void getClusterMetrics(Reader response) {
         try {
-            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response);
             try {
                 String clusterName = (String) ((Map) json.get("Clusters")).get("cluster_name");
                 List<Map> services = (ArrayList<Map>) json.get("services");
@@ -183,7 +174,7 @@ public class AmbariCommunicator {
                 int count = 0;
                 for (Map service : services) {
                     if (xmlParser.isIncludeService((String) ((Map) service.get("ServiceInfo")).get("service_name"))) {
-                        threadPool.submit(new Response(service.get("href") + SERVICE_FIELDS));
+                        threadPool.submit(new Response(service.get("href") + SERVICE_FIELDS, ""));
                         count++;
                     }
                 }
@@ -193,7 +184,7 @@ public class AmbariCommunicator {
 
                 for (Map host : hosts) {
                     if (xmlParser.isIncludeHost((String) ((Map) host.get("Hosts")).get("host_name"))) {
-                        threadPool.submit(new Response(host.get("href") + HOST_FIELDS));
+                        threadPool.submit(new Response(host.get("href") + HOST_FIELDS, ""));
                         count++;
                     }
                 }
@@ -218,7 +209,7 @@ public class AmbariCommunicator {
      */
     private void getServiceMetrics(Reader response, String hierarchy) {
         try {
-            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response);
             try {
                 Map serviceInfo = (Map) json.get("ServiceInfo");
                 String serviceName = (String) serviceInfo.get("service_name");
@@ -247,7 +238,7 @@ public class AmbariCommunicator {
                 for (Map component : components) {
                     if (xmlParser.isIncludeServiceComponent(serviceName,
                             (String) ((Map) component.get("ServiceComponentInfo")).get("component_name"))) {
-                        threadPool.submit(new Response(component.get("href") + COMPONENT_FIELDS));
+                        threadPool.submit(new Response(component.get("href") + COMPONENT_FIELDS, ""));
                         count++;
                     }
                 }
@@ -272,7 +263,7 @@ public class AmbariCommunicator {
      */
     private void getHostMetrics(Reader response, String hierarchy) {
         try {
-            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response);
             try {
                 Map hostInfo = (Map) json.get("Hosts");
                 String hostName = (String) hostInfo.get("host_name");
@@ -289,16 +280,18 @@ public class AmbariCommunicator {
                 Map hostMetrics = (Map) json.get("metrics");
 
                 //remove non metric data
-                hostMetrics.remove("boottime");
+                if(hostMetrics != null) {
+                    hostMetrics.remove("boottime");
 
-                Iterator<Map.Entry> iter = hostMetrics.entrySet().iterator();
-                while (iter.hasNext()) {
-                    if (!xmlParser.isIncludeHostMetrics((String) iter.next().getKey())) {
-                        iter.remove();
+                    Iterator<Map.Entry> iter = hostMetrics.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        if (!xmlParser.isIncludeHostMetrics((String) iter.next().getKey())) {
+                            iter.remove();
+                        }
                     }
-                }
 
-                getAllMetrics(hostMetrics, hierarchy + "|" + hostName);
+                    getAllMetrics(hostMetrics, hierarchy + "|" + hostName);
+                }
             } catch (Exception e) {
                 logger.error("Failed to parse host metrics: " + stackTraceToString(e));
             }
@@ -317,7 +310,7 @@ public class AmbariCommunicator {
      */
     private void getComponentMetrics(Reader response, String hierarchy) {
         try {
-            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response);
             try {
                 Map componentInfo = (Map) json.get("ServiceComponentInfo");
                 String componentName = (String) componentInfo.get("component_name");
@@ -355,6 +348,7 @@ public class AmbariCommunicator {
                 }
 
                 getAllMetrics(componentMetrics, hierarchy + "|" + componentName);
+
             } catch (Exception e) {
                 logger.error("Failed to parse component metrics: " + stackTraceToString(e));
             }
