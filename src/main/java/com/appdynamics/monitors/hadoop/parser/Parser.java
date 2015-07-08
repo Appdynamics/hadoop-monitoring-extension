@@ -28,9 +28,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class Parser {
+    private static final int DEFAULT_THREAD_LIMIT = 1;
+    private static final int DEFAULT_AGGR_APP_PERIOD = 15;
+    Logger logger;
     private int aggrAppPeriod;
     private Set<String> excludeNodeid;
-
     private int threadLimit;
     private Set<String> includeAmbariCluster;
     private Set<String> includeAmbariHost;
@@ -39,11 +41,6 @@ public class Parser {
     private Set<String> excludeAmbariServiceComponent;
     private Set<String> includeAmbariHostMetrics;
     private Set<String> includeAmbariComponentMetrics;
-
-    private static final int DEFAULT_THREAD_LIMIT = 1;
-    private static final int DEFAULT_AGGR_APP_PERIOD = 15;
-
-    Logger logger;
 
     /**
      * Constructs an empty Parser that can be populated by calling {@link #parseXML(String)}

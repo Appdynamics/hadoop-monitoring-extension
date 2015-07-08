@@ -1,0 +1,24 @@
+
+# The Hadoop version for the cluster you want to monitor using Resource Manager.
+# Example: 1.3, 2.2, 0.23
+# RESOURCE MANAGER Web UI CONFIG: Resource Manager is only usable for Hadoop 2.x and Hadoop 0.23.x
+
+hadoopVersion: "2.3"
+resourceManagerConfig:
+     host: "localhost"
+     port: 8088
+
+
+# To enable or diable Ambari metrics, set ambariMonitor to "true" or "false"
+# Ambari metrics are only available for clusters inistalled using Ambari, manual installs are not eligible
+# ambariConfig: Only configure if 'ambariMonitor' is set to 'true'
+
+ambariMonitor: true
+ambariConfig:
+    host: "192.168.0.101"
+    port: 8080
+    username: "admin"
+    password: "admin"
+
+#prefix used to show up metrics in AppDynamics
+metricPathPrefix: "Custom Metrics|HadoopMonitor|"

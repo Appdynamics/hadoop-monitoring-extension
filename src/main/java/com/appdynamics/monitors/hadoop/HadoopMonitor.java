@@ -16,10 +16,16 @@
 
 package com.appdynamics.monitors.hadoop;
 
+import com.appdynamics.extensions.PathResolver;
 import com.appdynamics.extensions.util.MetricUtils;
+import com.appdynamics.extensions.yml.YmlReader;
 import com.appdynamics.monitors.hadoop.communicator.AmbariCommunicator;
 import com.appdynamics.monitors.hadoop.communicator.HadoopCommunicator;
+import com.appdynamics.monitors.hadoop.config.AmbariConfig;
+import com.appdynamics.monitors.hadoop.config.Configuration;
+import com.appdynamics.monitors.hadoop.config.ResourceManagerConfig;
 import com.appdynamics.monitors.hadoop.parser.Parser;
+import com.google.common.base.Strings;
 import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
 import com.singularity.ee.agent.systemagent.api.MetricWriter;
 import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
@@ -28,19 +34,14 @@ import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HadoopMonitor extends AManagedMonitor {
-    Parser xmlParser;
-
-    private String metricPath = "Custom Metrics|Hadoop|";
-    HadoopCommunicator hadoopCommunicator;
-    AmbariCommunicator ambariCommunicator;
-
+    public static final String CONFIG_ARG = "config-file";
     private static Logger logger = Logger.getLogger(HadoopMonitor.class);
+    Parser xmlParser;
 
     public HadoopMonitor() {
         String msg = "Using Monitor Version [" + getImplementationVersion() + "]";
@@ -48,115 +49,117 @@ public class HadoopMonitor extends AManagedMonitor {
         System.out.println(msg);
     }
 
-    public TaskOutput execute(Map<String, String> args, TaskExecutionContext arg1)
+    public static String getConfigFilename(String filename) {
+        if (filename == null) {
+            return "";
+        }
+        // for absolute paths
+        if (new File(filename).exists()) {
+            return filename;
+        }
+        // for relative paths
+        File jarPath = PathResolver.resolveDirectory(AManagedMonitor.class);
+        String configFileName = "";
+        if (!Strings.isNullOrEmpty(filename)) {
+            configFileName = jarPath + File.separator + filename;
+        }
+        return configFileName;
+    }
+
+    public static String getImplementationVersion() {
+        return HadoopMonitor.class.getPackage().getImplementationTitle();
+    }
+
+    public TaskOutput execute(Map<String, String> taskArgs, TaskExecutionContext arg1)
             throws TaskExecutionException {
-        if (args != null) {
-            logger.info("Executing HadoopMonitor");
+        if (taskArgs != null) {
+            logger.info("Starting HadoopMonitor Task");
+            String configFilename = getConfigFilename(taskArgs.get(CONFIG_ARG));
             try {
-                boolean hasResourceManager = false;
-                String hadoopVersion = args.get("hadoop-version");
-                String[] hadoopVersionSplit = hadoopVersion.split("\\.");
-
-                try {
-                    int majorVer = Integer.parseInt(hadoopVersionSplit[0]);
-                    if (majorVer == 0) {
-                        if (Integer.parseInt(hadoopVersionSplit[1]) >= 23) {
-                            hasResourceManager = true;
-                        }
-                    } else if (majorVer >= 2) {
-                        hasResourceManager = true;
-                    }
-                } catch (NumberFormatException e) {
-                    hasResourceManager = false;
-                    logger.error("Invalid Hadoop version '" + hadoopVersion + "'");
-                }
-
-                if (!args.get("metric-path").equals("")) {
-                    metricPath = args.get("metric-path");
-                    if (!metricPath.endsWith("|")) {
-                        metricPath += "|";
-                    }
-                    metricPath += "Hadoop|";
-                }
+                Configuration config = YmlReader.readFromFile(configFilename, Configuration.class);
 
                 if (xmlParser == null) {
-                    String xml = args.get("properties-path");
+                    String xml = taskArgs.get("properties-path");
                     try {
                         xmlParser = new Parser(logger, xml);
                     } catch (DocumentException e) {
                         logger.error("Cannot read '" + xml + "'. Monitor is running without metric filtering\n" +
-                                "Error: " + stackTraceToString(e));
+                                "Error: ", e);
                         xmlParser = new Parser(logger);
                     }
                 }
-
+                boolean hasResourceManager = determineIfHadoopHasResourceManger(config.getHadoopVersion());
                 Map<String, Object> hadoopMetrics = new HashMap<String, Object>();
-                Map<String, Object> ambariMetrics = new HashMap<String, Object>();
-
                 if (hasResourceManager) {
-                    String host = args.get("host");
-                    String port = args.get("port");
-                    hadoopCommunicator = new HadoopCommunicator(host, port, logger, xmlParser);
+                    ResourceManagerConfig resourceManagerConfig = config.getResourceManagerConfig();
+                    HadoopCommunicator hadoopCommunicator = new HadoopCommunicator(resourceManagerConfig, xmlParser);
                     hadoopCommunicator.populate(hadoopMetrics);
                 } else {
                     logger.warn("Monitor is running without Resource Manager metrics");
                 }
-                if (args.get("ambari-monitor").equals("true")) {
-                    String ambariHost = args.get("ambari-host");
-                    String ambariPort = args.get("ambari-port");
-                    String ambariUser = args.get("ambari-user");
-                    String ambariPassword = args.get("ambari-password");
-                    ambariCommunicator = new AmbariCommunicator(ambariHost, ambariPort, ambariUser, ambariPassword, logger, xmlParser);
-                    ambariCommunicator.populate(ambariMetrics);
+
+
+                Map<String, Number> ambariMetrics = new HashMap<String, Number>();
+                if (config.isAmbariMonitor()) {
+                    AmbariConfig ambariConfig = config.getAmbariConfig();
+                    AmbariCommunicator ambariCommunicator = new AmbariCommunicator(ambariConfig, xmlParser);
+                    ambariMetrics = ambariCommunicator.fetchAmbariMetrics();
                 }
 
-                try {
-                    for (Map.Entry<String, Object> entry : hadoopMetrics.entrySet()) {
-                        printMetric(metricPath + "Resource Manager|" + entry.getKey(), entry.getValue(),
-                                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                                MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
-                                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
-                    }
+                printHadoopMetrics(config.getMetricPathPrefix(), hadoopMetrics, ambariMetrics);
 
-                    for (Map.Entry<String, Object> entry : ambariMetrics.entrySet()) {
-                        printMetric(metricPath + entry.getKey(), entry.getValue(),
-                                MetricWriter.METRIC_AGGREGATION_TYPE_OBSERVATION,
-                                MetricWriter.METRIC_TIME_ROLLUP_TYPE_CURRENT,
-                                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_COLLECTIVE);
-                    }
-                } catch (Exception e) {
-                    logger.error("Error printing metrics: " + stackTraceToString(e));
-                }
-                logger.info("Hadoop Metric Upload Complete");
-                return new TaskOutput("Hadoop Metric Upload Complete");
+                logger.info("Hadoop Monioring Task completed successfully");
+                return new TaskOutput("Hadoop Monioring Task completed successfully");
             } catch (Exception e) {
                 logger.error("Metrics collection failed", e);
             }
         }
-        throw new TaskExecutionException("Hadoop Monitoring Task failed");
+        throw new TaskExecutionException("Hadoop Monioring Task completed with failures");
     }
 
+    private void printHadoopMetrics(String metricPathPrefix, Map<String, Object> hadoopMetrics, Map<String, Number> ambariMetrics) {
+        try {
+            for (Map.Entry<String, Object> entry : hadoopMetrics.entrySet()) {
+                printMetric(metricPathPrefix + "Resource Manager|" + entry.getKey(), entry.getValue());
+            }
 
-    private void printMetric(String metricName, Object metricValue, String aggregation, String timeRollup, String cluster) {
+            for (Map.Entry<String, Number> entry : ambariMetrics.entrySet()) {
+                printMetric(metricPathPrefix + "Ambari|" + entry.getKey(), entry.getValue());
+            }
+        } catch (Exception e) {
+            logger.error("Error printing metrics: ", e);
+        }
+    }
+
+    private boolean determineIfHadoopHasResourceManger(String hadoopVersion) {
+        boolean hasResourceManager = false;
+        String[] hadoopVersionSplit = hadoopVersion.trim().split("\\.");
+
+        try {
+            int majorVer = Integer.parseInt(hadoopVersionSplit[0]);
+            if (majorVer == 0) {
+                if (Integer.parseInt(hadoopVersionSplit[1]) >= 23) {
+                    hasResourceManager = true;
+                }
+            } else if (majorVer >= 2) {
+                hasResourceManager = true;
+            }
+        } catch (NumberFormatException e) {
+            hasResourceManager = false;
+            logger.error("Invalid Hadoop version " + hadoopVersion);
+        }
+        return hasResourceManager;
+    }
+
+    private void printMetric(String metricName, Object metricValue) {
         MetricWriter metricWriter = getMetricWriter(metricName,
-                aggregation,
-                timeRollup,
-                cluster
+                MetricWriter.METRIC_AGGREGATION_TYPE_AVERAGE,
+                MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
+                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_INDIVIDUAL
         );
         if (metricValue instanceof Number) {
             String value = MetricUtils.toWholeNumberString(metricValue);
             metricWriter.printMetric(value);
         }
-    }
-
-    private String stackTraceToString(Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        return sw.toString();
-    }
-
-    public static String getImplementationVersion() {
-        return HadoopMonitor.class.getPackage().getImplementationTitle();
     }
 }

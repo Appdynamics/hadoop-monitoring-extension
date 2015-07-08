@@ -19,15 +19,15 @@ package com.appdynamics.monitors.hadoop.communicator;
 import com.appdynamics.TaskInputArgs;
 import com.appdynamics.extensions.http.Response;
 import com.appdynamics.extensions.http.SimpleHttpClient;
+import com.appdynamics.monitors.hadoop.config.ResourceManagerConfig;
 import com.appdynamics.monitors.hadoop.parser.Parser;
+import com.google.common.base.Strings;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,27 +36,22 @@ import java.util.List;
 import java.util.Map;
 
 public class HadoopCommunicator {
-    private Logger logger;
+    private static final String CLUSTER_METRIC_PATH = "/ws/v1/cluster/metrics";
+    private static final String CLUSTER_SCHEDULER_PATH = "/ws/v1/cluster/scheduler";
+    private static final String CLUSTER_APPS_PATH = "/ws/v1/cluster/apps";
+    private static final String CLUSTER_NODES_PATH = "/ws/v1/cluster/nodes";
+    private Logger logger = Logger.getLogger(HadoopCommunicator.class);
     private JSONParser parser = new JSONParser();
     private Parser xmlParser;
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private Map<String, Object> metrics;
     private long aggrAppPeriod;
     private SimpleHttpClient httpClient;
-
-
-    private static final String CLUSTER_METRIC_PATH = "/ws/v1/cluster/metrics";
-    private static final String CLUSTER_SCHEDULER_PATH = "/ws/v1/cluster/scheduler";
-    private static final String CLUSTER_APPS_PATH = "/ws/v1/cluster/apps";
-    private static final String CLUSTER_NODES_PATH = "/ws/v1/cluster/nodes";
-
     private ContainerFactory simpleContainer = new ContainerFactory() {
-        @Override
         public Map createObjectContainer() {
             return new HashMap();
         }
 
-        @Override
         public List creatArrayContainer() {
             return new ArrayList();
         }
@@ -66,17 +61,13 @@ public class HadoopCommunicator {
      * Constructs a new HadoopCommunicator. Metrics can be collected by calling {@link #populate(java.util.Map)}
      * Only metrics that match the conditions in <code>xmlParser</code> are collected.
      *
-     * @param host
-     * @param port
-     * @param logger
      * @param xmlParser
      */
-    public HadoopCommunicator(String host, String port, Logger logger, Parser xmlParser) {
-        this.logger = logger;
+    public HadoopCommunicator(ResourceManagerConfig resourceManagerConfig, Parser xmlParser) {
         this.xmlParser = xmlParser;
         numberFormat.setGroupingUsed(false);
         aggrAppPeriod = xmlParser.getAggrAppPeriod();
-        httpClient = SimpleHttpClient.builder(buildHttpClientArguments(host, port)).build();
+        httpClient = SimpleHttpClient.builder(buildHttpClientArguments(resourceManagerConfig)).build();
     }
 
     /**
@@ -89,13 +80,14 @@ public class HadoopCommunicator {
         getClusterMetrics();
         getClusterScheduler();
         getAggrApps();
+        getApplicationMetrics();
         getClusterNodes();
     }
 
-    private Map<String, String> buildHttpClientArguments(String host, String port) {
+    private Map<String, String> buildHttpClientArguments(ResourceManagerConfig resourceManagerConfig) {
         Map<String, String> clientArgs = new HashMap<String, String>();
-        clientArgs.put(TaskInputArgs.HOST, host);
-        clientArgs.put(TaskInputArgs.PORT, String.valueOf(port));
+        clientArgs.put(TaskInputArgs.HOST, resourceManagerConfig.getHost());
+        clientArgs.put(TaskInputArgs.PORT, String.valueOf(resourceManagerConfig.getPort()));
         return clientArgs;
     }
 
@@ -118,6 +110,9 @@ public class HadoopCommunicator {
             if (response != null) {
                 response.close();
             }
+            if (httpClient != null) {
+                httpClient.close();
+            }
         }
     }
 
@@ -136,10 +131,10 @@ public class HadoopCommunicator {
                     metrics.put("clusterMetrics|" + entry.getKey(), entry.getValue());
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterMetrics: " + stackTraceToString(e));
+                logger.error("Failed to parse ClusterMetrics: ", e);
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterMetrics: " + stackTraceToString(e));
+            logger.error("Failed to get response for ClusterMetrics: ", e);
         }
     }
 
@@ -183,10 +178,10 @@ public class HadoopCommunicator {
                     }
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterScheduler: " + stackTraceToString(e));
+                logger.error("Failed to parse ClusterScheduler: ", e);
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterScheduler: " + stackTraceToString(e));
+            logger.error("Failed to get response for ClusterScheduler: ", e);
         }
     }
 
@@ -274,10 +269,6 @@ public class HadoopCommunicator {
         return rtn;
     }
 
-    private enum AppState {
-        NEW, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED
-    }
-
     /**
      * Populates <code>metrics</code> with aggregated app metrics from non-finished apps
      * and apps finished in the last <code>aggrAppPeriod</code> milliseconds.
@@ -309,6 +300,9 @@ public class HadoopCommunicator {
                     List<Map> appList = (ArrayList<Map>) json.get("app");
 
                     for (Map<String, Object> app : appList) {
+
+                        String appName = (String) app.get("name");
+
                         String appId = (String) app.get("id");
                         if (!appIds.contains(appId)) {
                             String appState = (String) app.get("state");
@@ -320,23 +314,53 @@ public class HadoopCommunicator {
                         }
                     }
                 } catch (Exception e) {
-                    logger.error("Failed to parse aggregated apps: " + stackTraceToString(e));
+                    logger.error("Failed to parse aggregated apps: ", e);
                 }
             }
 
             avgProgress = avgProgress / appIds.size();
 
-            metrics.put("Apps|Average Progress", avgProgress);
-            metrics.put("Apps|New Apps", appStateCount[AppState.NEW.ordinal()]);
-            metrics.put("Apps|Submitted Apps", appStateCount[AppState.SUBMITTED.ordinal()]);
-            metrics.put("Apps|Accepted Apps", appStateCount[AppState.ACCEPTED.ordinal()]);
-            metrics.put("Apps|Running Apps", appStateCount[AppState.RUNNING.ordinal()]);
-            metrics.put("Apps|Finished Apps", appStateCount[AppState.FINISHED.ordinal()]);
-            metrics.put("Apps|Failed Apps", appStateCount[AppState.FAILED.ordinal()]);
-            metrics.put("Apps|Killed Apps", appStateCount[AppState.KILLED.ordinal()]);
+            metrics.put("AggregatedApps|Average Progress", avgProgress);
+            metrics.put("AggregatedApps|New Apps", appStateCount[AppState.NEW.ordinal()]);
+            metrics.put("AggregatedApps|Submitted Apps", appStateCount[AppState.SUBMITTED.ordinal()]);
+            metrics.put("AggregatedApps|Accepted Apps", appStateCount[AppState.ACCEPTED.ordinal()]);
+            metrics.put("AggregatedApps|Running Apps", appStateCount[AppState.RUNNING.ordinal()]);
+            metrics.put("AggregatedApps|Finished Apps", appStateCount[AppState.FINISHED.ordinal()]);
+            metrics.put("AggregatedApps|Failed Apps", appStateCount[AppState.FAILED.ordinal()]);
+            metrics.put("AggregatedApps|Killed Apps", appStateCount[AppState.KILLED.ordinal()]);
 
         } catch (Exception e) {
-            logger.error("Failed to get response for aggregated apps: " + stackTraceToString(e));
+            logger.error("Failed to get response for aggregated apps: ", e);
+        }
+    }
+
+    private void getApplicationMetrics() {
+        try {
+            Reader response = getResponse(CLUSTER_APPS_PATH);
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response, simpleContainer);
+            try {
+                json = (Map<String, Object>) json.get("apps");
+                if(json != null) {
+                    List<Map> appList = (ArrayList<Map>) json.get("app");
+
+                    for (Map<String, Object> app : appList) {
+
+                        String appName = (String) app.get("name");
+                        String metricPath = "Apps|" + appName + "|";
+                        double progress = (Double) app.get("progress");
+                        if (!Strings.isNullOrEmpty(String.valueOf(app.get("elapsedTime")))) {
+                            double elapsedTime = (Double) app.get("elapsedTime");
+                            metrics.put(metricPath + "ElapsedTime", elapsedTime);
+                        }
+                        metrics.put(metricPath + "Progress", progress);
+                    }
+                }
+
+            } catch (Exception e) {
+                logger.error("Failed to parse response for apps: ", e);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to parse response for apps: ", e);
         }
     }
 
@@ -356,10 +380,10 @@ public class HadoopCommunicator {
                     metrics.putAll(getNode(node, "Nodes"));
                 }
             } catch (Exception e) {
-                logger.error("Failed to parse ClusterNodes: " + stackTraceToString(e));
+                logger.error("Failed to parse ClusterNodes: ", e);
             }
         } catch (Exception e) {
-            logger.error("Failed to get response for ClusterNodes: " + stackTraceToString(e));
+            logger.error("Failed to get response for ClusterNodes: ", e);
         }
     }
 
@@ -400,14 +424,7 @@ public class HadoopCommunicator {
         return rtn;
     }
 
-    /**
-     * @param e
-     * @return String representation of output from <code>printStackTrace()</code>
-     */
-    private String stackTraceToString(Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        return sw.toString();
+    private enum AppState {
+        NEW, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED
     }
 }
