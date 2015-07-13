@@ -2,6 +2,7 @@ package com.appdynamics.monitors.hadoop.communicator;
 
 import com.appdynamics.extensions.http.Response;
 import com.appdynamics.extensions.http.SimpleHttpClient;
+import com.appdynamics.monitors.hadoop.hadoopexception.AmbariMonitorException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
@@ -23,14 +24,14 @@ public class AmbariTask implements Callable<JsonNode> {
         this.uriPath = uriPath;
     }
 
-    public JsonNode call() throws Exception {
+    public JsonNode call() throws AmbariMonitorException {
         Response response = null;
         try {
             response = httpClient.target(url).path(uriPath).get();
             JsonNode node = new ObjectMapper().readValue(response.string(), JsonNode.class);
             return node;
         } catch (Exception e) {
-            throw e;
+            throw new AmbariMonitorException(e);
         } finally {
             if (response != null) {
                 response.close();

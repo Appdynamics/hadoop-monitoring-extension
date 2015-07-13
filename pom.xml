@@ -6,7 +6,7 @@
 
     <groupId>com.appdynamics.monitors</groupId>
     <artifactId>hadoop-monitoring-extension</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
     <name>hadoop-monitoring-extension</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -35,11 +35,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -113,7 +108,6 @@
                                 <mkdir dir="${target.dir}"/>
                                 <copy todir="${target.dir}">
                                     <fileset dir="src/main/resources/conf" includes="monitor.xml"/>
-                                    <fileset dir="src/main/resources/conf" includes="properties.xml"/>
                                     <fileset dir="src/main/resources/conf" includes="config.yml"/>
                                 </copy>
                                 <copy todir="${target.dir}">

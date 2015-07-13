@@ -4,7 +4,7 @@ package com.appdynamics.monitors.hadoop.config;
  * Created by balakrishnav on 24/6/15.
  */
 public class Configuration {
-    private String hadoopVersion;
+    private boolean resourceManagerMonitor;
     private ResourceManagerConfig resourceManagerConfig;
     private boolean ambariMonitor;
     private AmbariConfig ambariConfig;
@@ -16,14 +16,6 @@ public class Configuration {
 
     public void setResourceManagerConfig(ResourceManagerConfig resourceManagerConfig) {
         this.resourceManagerConfig = resourceManagerConfig;
-    }
-
-    public String getHadoopVersion() {
-        return hadoopVersion;
-    }
-
-    public void setHadoopVersion(String hadoopVersion) {
-        this.hadoopVersion = hadoopVersion;
     }
 
     public boolean isAmbariMonitor() {
@@ -48,5 +40,13 @@ public class Configuration {
 
     public void setMetricPathPrefix(String metricPathPrefix) {
         this.metricPathPrefix = metricPathPrefix;
+    }
+
+    public boolean isResourceManagerMonitor() {
+        return resourceManagerMonitor;
+    }
+
+    public void setResourceManagerMonitor(boolean resourceManagerMonitor) {
+        this.resourceManagerMonitor = resourceManagerMonitor;
     }
 }

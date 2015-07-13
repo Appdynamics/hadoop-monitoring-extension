@@ -12,11 +12,6 @@
         <type>java</type>
         <execution-timeout-in-secs>60</execution-timeout-in-secs>
         <task-arguments>
-            <!-- CONFIGURE PROPERTIES PATH (REQUIRED):
-                Set the properties path to the absolute path of properties.xml.
-                Metric filtering rules can be configured in properties.xml
-            -->
-            <argument name="properties-path" is-required="true" default-value="monitors/HadoopMonitor/properties.xml"/>
             <argument name="config-file" is-required="true" default-value="monitors/HadoopMonitor/config.yml"/>
         </task-arguments>
         <java-task>

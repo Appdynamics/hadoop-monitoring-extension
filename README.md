@@ -33,24 +33,92 @@ OR
 If the cluster version is 1.x and not installed by Ambari, no metrics can be gathered at this time.
 
 #### Steps
-1. Run `mvn clean install` from the hadoop-monitoring-extension directory.
-2. Deploy the file HadoopMonitor.zip found in the 'target' directory into \<machineagent install dir>/monitors/.
-3. Unzip the deployed file.
-4. Open \<machineagent install dir>/monitors/HadoopMonitor/monitor.xml and configure the HRM and/or Ambari parameters.
-5. (Optional, recommended) For metric filtering, configure  \<machineagent install dir>/monitors/HadoopMonitor/properties.xml.
-6. Restart the machine agent.
-7. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop.
+1. To build from source, clone this repository and run `mvn clean install`. This will produce a HadoopMonitor-VERSION.zip in the target directory. Alternatively, download the latest release archive from [Github](https://github.com/Appdynamics/hadoop-monitoring-extension/releases/latest).
+2. Unzip as "HadoopMonitor" and copy the "HadoopMonitor" directory to `<MACHINE_AGENT_HOME>/monitors`.
+3. Configure the extension by referring to the below section.
+4. Open `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/config.yml` and configure the HRM and/or Ambari parameters.
+5. Restart the machine agent.
+6. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop.
+
+## Configuration ##
+Note : Please make sure to not use tab (\t) while editing yaml files. You may want to validate the yaml file using a [yaml validator](http://yamllint.com/)
+1. Configure the extension by editing the config.yml file in `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/`.
+
+   For eg.
+   ```
+    # To enable or diable ResourceManager metrics, set resourceManagerMonitor to "true" or "false"
+    # The Hadoop version for the cluster you want to monitor using Resource Manager.
+    # Example: 1.3, 2.2, 0.23
+    # RESOURCE MANAGER Web UI CONFIG: Resource Manager is only usable for Hadoop 2.x and Hadoop 0.23.x
+
+    resourceManagerMonitor: true
+    resourceManagerConfig:
+    hadoopVersion: "2.3"
+    host: "localhost"
+    port: 8088
+    username: ""
+    password: ""
+
+    # application metrics within last X number of minutes to aggregate
+    aggregateAppPeriod: 15
+
+
+    # To enable or diable Ambari metrics, set ambariMonitor to "true" or "false"
+    # Ambari metrics are only available for clusters inistalled using Ambari, manual installs are not eligible
+    # ambariConfig: Only configure if 'ambariMonitor' is set to 'true'
+
+    ambariMonitor: true
+    ambariConfig:
+    host: "192.168.0.101"
+    port: 8080
+    username: "admin"
+    password: "admin"
+
+    numberOfThreads: 10
+
+    # includeClusters: comma-separated cluster names (case sensitive) you want to gather metrics for. If empty, all clusters are reported
+    # includeHosts: comma-separated host names (case sensitive) you want to gather metrics for. If empty, all hosts are reported
+    # includeServices: comma-separated service names (case sensitive) you want to gather metrics for. If empty, all services are reported
+    includeClusters: []
+    includeHosts: []
+    includeServices: []
+
+    #prefix used to show up metrics in AppDynamics
+    metricPathPrefix: "Custom Metrics|HadoopMonitor|"
+
+   ```
+
+3. Configure the path to the config.yml file by editing the <task-arguments> in the monitor.xml file in the `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/` directory. Below is the sample
+
+     ```
+     <task-arguments>
+         <!-- config file-->
+         <argument name="config-file" is-required="true" default-value="monitors/HadoopMonitor/config.yml" />
+          ....
+     </task-arguments>
+    ```
+
+
+**Note** : By default, a Machine agent or a AppServer agent can send a fixed number of metrics to the controller. To change this limit, please follow the instructions mentioned [here](http://docs.appdynamics.com/display/PRO14S/Metrics+Limits).
+For eg.  
+```    
+    java -Dappdynamics.agent.maxMetrics=2500 -jar machineagent.jar
+```
 
 Metrics
 ------------
 ### Hadoop Resource Manager: 
 http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
+#### ClusterMetrics
+#### Nodes
+#### SchedulerInfo
 #### Apps
-Metrics under Apps are aggregated metrics from all running and recently finished apps. To specify the period for which metrics are gathered, set \<aggregate-app-period> in properties.xml.
+#### AggregatedApps
+Metrics under AggregatedApps are aggregated metrics from all running and recently finished apps. To specify the period for which metrics are gathered, set `aggregateAppPeriod` in config.yml.
 
 
 ### Ambari
-
+https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/index.md#monitoring
 #### Host Metrics
 
 | Metric Name   | Description
@@ -87,7 +155,7 @@ Metrics under Apps are aggregated metrics from all running and recently finished
 | HEARTBEAT_LOST                  | 3     | The server has not received a heartbeat from the host in the configured heartbeat expiry window.
 | UNHEALTHY                       | 4     | Host is in unhealthy state as reported either by the Host itself or via any other additional means ( monitoring layer ).
 
-#### Service States
+#### Service, Service Component and Host Component States
 
 | State           | Value | Description
 |-----------------|-------|----------------
@@ -121,23 +189,6 @@ Metrics under Apps are aggregated metrics from all running and recently finished
 | UGI         | User Group Information
 | State       | Component state
 
-#### Service Component States
-
-|State           | Value | Description
-|----------------|-------|-------------
-|INIT            | 0     | The initial clean state after the component is first created.
-|INSTALLING      | 1     | In the process of installing the component.
-|INSTALL_FAILED  | 2     | The component install failed.
-|INSTALLED       | 3     | The component has been installed successfully but is not currently running.
-|STARTING        | 4     | In the process of starting the component.
-|STARTED         | 5     | The component has been installed and started.
-|STOPPING        | 6     | In the process of stopping the component.
-|UNINSTALLING    | 7     | In the process of uninstalling the component.
-|UNINSTALLED     | 8     | The component has been successfully uninstalled.
-|WIPING_OUT      | 9     | In the process of wiping out the installed component.
-|UPGRADING       | 10    | In the process of upgrading the component.
-|MAINTENANCE     | 11    | The component has been marked for maintenance.
-|UNKNOWN         | 12    | The component state can not be determined.
 
 Custom Dashboard
 ------------------
@@ -163,5 +214,5 @@ Find out more in the <a href="http://appsphere.appdynamics.com/t5/eXchange/Hadoo
 Support
 -------
 
-For any questions or feature request, please contact <a href="mailto:ace-request@appdynamics.com">AppDynamics Center of Excellence</a>.
+For any questions or feature request, please contact <a href="mailto:help@appdynamics.com">AppDynamics Center of Excellence</a>.
 
