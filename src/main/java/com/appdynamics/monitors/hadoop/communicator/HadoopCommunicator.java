@@ -64,7 +64,8 @@ public class HadoopCommunicator {
         getClusterMetrics();
         getClusterScheduler();
         getAggrApps();
-        getApplicationMetrics();
+        // Added for RBC but then ignoring as there were lot of auto-generated apps which were causing instability to Controller
+        // getApplicationMetrics();
         getClusterNodes();
     }
 
@@ -315,6 +316,7 @@ public class HadoopCommunicator {
                 for (Map<String, Object> app : appList) {
 
                     String appName = (String) app.get("name");
+
                     String metricPath = "Apps|" + appName + "|";
                     if (app.get("finishedTime") != null) {
                         metrics.put(metricPath + "finishedTime", app.get("finishedTime"));
@@ -329,6 +331,8 @@ public class HadoopCommunicator {
                     metrics.put(metricPath + "runningContainers", app.get("runningContainers"));
                     metrics.put(metricPath + "memorySeconds", app.get("memorySeconds"));
                     metrics.put(metricPath + "vcoreSeconds", app.get("vcoreSeconds"));
+                    String appState = (String) app.get("state");
+                    metrics.put(metricPath + "state", AppState.valueOf(appState).ordinal());
                 }
             }
         } catch (Exception e) {
@@ -390,6 +394,6 @@ public class HadoopCommunicator {
     }
 
     private enum AppState {
-        NEW, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED
+        NEW, NEW_SAVING, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED
     }
 }

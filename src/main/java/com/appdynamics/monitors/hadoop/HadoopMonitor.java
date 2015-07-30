@@ -108,34 +108,33 @@ public class HadoopMonitor extends AManagedMonitor {
     }
 
     private void printResourceManagerMetrics(String metricPathPrefix, Map<String, Object> hadoopMetrics) {
-        try {
-            for (Map.Entry<String, Object> entry : hadoopMetrics.entrySet()) {
-                printMetric(metricPathPrefix + entry.getKey(), entry.getValue());
-            }
-        } catch (Exception e) {
-            logger.error("Error printing ResourceManager Metrics: ", e);
+        for (Map.Entry<String, Object> entry : hadoopMetrics.entrySet()) {
+            printMetric(metricPathPrefix + entry.getKey(), entry.getValue());
         }
     }
 
     private void printAmbariMetrics(String metricPathPrefix, Map<String, Number> ambariMetrics) {
-        try {
-            for (Map.Entry<String, Number> entry : ambariMetrics.entrySet()) {
-                printMetric(metricPathPrefix + entry.getKey(), entry.getValue());
-            }
-        } catch (Exception e) {
-            logger.error("Error printing Ambari Metrics: ", e);
+        for (Map.Entry<String, Number> entry : ambariMetrics.entrySet()) {
+            printMetric(metricPathPrefix + entry.getKey(), entry.getValue());
         }
     }
 
     private void printMetric(String metricName, Object metricValue) {
-        MetricWriter metricWriter = getMetricWriter(metricName,
-                MetricWriter.METRIC_AGGREGATION_TYPE_AVERAGE,
-                MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
-                MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_INDIVIDUAL
-        );
-        if (metricValue != null && metricValue instanceof Number) {
-            String value = MetricUtils.toWholeNumberString(metricValue);
-            metricWriter.printMetric(value);
+        try {
+            MetricWriter metricWriter = getMetricWriter(metricName,
+                    MetricWriter.METRIC_AGGREGATION_TYPE_AVERAGE,
+                    MetricWriter.METRIC_TIME_ROLLUP_TYPE_AVERAGE,
+                    MetricWriter.METRIC_CLUSTER_ROLLUP_TYPE_INDIVIDUAL
+            );
+            if (metricValue != null && metricValue instanceof Number) {
+                String value = MetricUtils.toWholeNumberString(metricValue);
+                metricWriter.printMetric(value);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Metric: " + metricName + " value: "+ metricValue+" -> " + value);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Exception while printing the metric: " + metricName + " value: "+ metricValue, e);
         }
     }
 

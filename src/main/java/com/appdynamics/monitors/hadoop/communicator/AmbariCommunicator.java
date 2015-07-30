@@ -101,7 +101,7 @@ public class AmbariCommunicator {
             if (httpClient != null) {
                 httpClient.close();
             }
-            if (executor != null) {
+            if (executor != null && !executor.isShutdown()) {
                 executor.shutdown();
             }
         }

@@ -112,7 +112,6 @@ http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/ResourceManag
 #### ClusterMetrics
 #### Nodes
 #### SchedulerInfo
-#### Apps
 #### AggregatedApps
 Metrics under AggregatedApps are aggregated metrics from all running and recently finished apps. To specify the period for which metrics are gathered, set `aggregateAppPeriod` in config.yml.
 
@@ -203,7 +202,7 @@ Custom Dashboard
 Contributing
 ------------
 
-Always feel free to fork and contribute any changes directly via <a href="https://github.com/Appdynamics/hadoop-monitoring-extension">GitHub</a>.
+Always feel free to fork and contribute any changes directly here on GitHub.
 
 
 Community
