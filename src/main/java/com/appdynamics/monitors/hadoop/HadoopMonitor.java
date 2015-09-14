@@ -49,7 +49,7 @@ public class HadoopMonitor extends AManagedMonitor {
     public TaskOutput execute(Map<String, String> taskArgs, TaskExecutionContext arg1)
             throws TaskExecutionException {
         if (taskArgs != null) {
-            logger.info("Starting HadoopMonitor Task");
+            logger.info("Starting " + getImplementationVersion() + " Monitoring Task");
             String configFilename = getConfigFilename(taskArgs.get(CONFIG_ARG));
             try {
                 Configuration config = YmlReader.readFromFile(configFilename, Configuration.class);
