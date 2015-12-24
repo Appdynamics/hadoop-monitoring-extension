@@ -82,7 +82,7 @@ public class HadoopMonitor extends AManagedMonitor {
                 logger.info("Hadoop Monioring Task completed successfully");
                 return new TaskOutput("Hadoop Monioring Task completed successfully");
             } catch (Exception e) {
-                logger.error("Metrics collection failed", e);
+                logger.error("Metrics collection failed ", e);
             }
         }
         throw new TaskExecutionException("Hadoop Monioring Task completed with failures");

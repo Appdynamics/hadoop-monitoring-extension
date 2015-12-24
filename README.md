@@ -59,8 +59,12 @@ Note : Please make sure to not use tab (\t) while editing yaml files. You may wa
     username: ""
     password: ""
 
-    # application metrics within last X number of minutes to aggregate
-    aggregateAppPeriod: 15
+    # application metrics within last X number of minutes to monitor
+    monitoringTimePeriod: 15
+
+    # mapReduceJobsToBeMonitored: comma separated jobs to be monitored within time specified by monitoringTimePeriod
+    # with their state (NEW, NEW_SAVING, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED) as integers reported to controller
+    mapReduceJobsToBeMonitored: ["grep-search","grep-sort"]
 
 
     # To enable or diable Ambari metrics, set ambariMonitor to "true" or "false"

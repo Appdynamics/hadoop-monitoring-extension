@@ -18,12 +18,11 @@ resourceManagerConfig:
 # with their state (NEW, NEW_SAVING, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED) as integers reported to controller
      mapReduceJobsToBeMonitored: ["grep-search","grep-sort"]
 
-
-# To enable or disable Ambari metrics, set ambariMonitor to "true" or "false"
+# To enable or diable Ambari metrics, set ambariMonitor to "true" or "false"
 # Ambari metrics are only available for clusters inistalled using Ambari, manual installs are not eligible
 # ambariConfig: Only configure if 'ambariMonitor' is set to 'true'
 
-ambariMonitor: true
+ambariMonitor: false
 ambariConfig:
     host: "192.168.0.101"
     port: 8080

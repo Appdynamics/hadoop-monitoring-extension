@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HadoopCommunicator {
     private static final String CLUSTER_METRIC_PATH = "/ws/v1/cluster/metrics";
@@ -41,8 +42,10 @@ public class HadoopCommunicator {
     private JSONParser parser = new JSONParser();
 
     private Map<String, Object> metrics;
-    private long aggrAppPeriod;
+
     private SimpleHttpClient httpClient;
+    private Set<String> mapReduceJobsToBeMonitored;
+    private long monitoringTimePeriod;
 
 
     /**
@@ -50,8 +53,9 @@ public class HadoopCommunicator {
      * Only metrics that match the conditions in <code>xmlParser</code> are collected.
      */
     public HadoopCommunicator(ResourceManagerConfig resourceManagerConfig) {
-        aggrAppPeriod = resourceManagerConfig.getAggregateAppPeriod();
         httpClient = SimpleHttpClient.builder(buildHttpClientArguments(resourceManagerConfig)).build();
+        mapReduceJobsToBeMonitored = resourceManagerConfig.getMapReduceJobsToBeMonitored();
+        monitoringTimePeriod = resourceManagerConfig.getMonitoringTimePeriod();
     }
 
     /**
@@ -67,6 +71,7 @@ public class HadoopCommunicator {
         // Added for RBC but then ignoring as there were lot of auto-generated apps which were causing instability to Controller
         // getApplicationMetrics();
         getClusterNodes();
+        getMapReduceJobMetrics();
     }
 
     private Map<String, String> buildHttpClientArguments(ResourceManagerConfig resourceManagerConfig) {
@@ -251,6 +256,7 @@ public class HadoopCommunicator {
         try {
             Date time = new Date();
             long currentTime = time.getTime();
+            long monitoringPeriod = currentTime - monitoringTimePeriod * 60 * 1000;
 
             List<String> appIds = new ArrayList<String>();
 
@@ -258,7 +264,7 @@ public class HadoopCommunicator {
             double avgProgress = 0;
 
             List<Reader> responses = new ArrayList<Reader>();
-            responses.add(getResponse(CLUSTER_APPS_PATH + "?finishedTimeBegin=" + (currentTime - aggrAppPeriod)));
+            responses.add(getResponse(CLUSTER_APPS_PATH + "?finishedTimeBegin=" + monitoringPeriod));
             responses.add(getResponse(CLUSTER_APPS_PATH + "?finalStatus=UNDEFINED"));
 
             for (Reader response : responses) {
@@ -272,8 +278,6 @@ public class HadoopCommunicator {
                     List<Map> appList = (ArrayList<Map>) json.get("app");
 
                     for (Map<String, Object> app : appList) {
-
-                        String appName = (String) app.get("name");
 
                         String appId = (String) app.get("id");
                         if (!appIds.contains(appId)) {
@@ -305,6 +309,36 @@ public class HadoopCommunicator {
             logger.error("Failed to get response for aggregated apps: ", e);
         }
     }
+
+    private void getMapReduceJobMetrics() {
+        try {
+            Date time = new Date();
+            long currentTime = time.getTime();
+            long monitoringPeriod = currentTime - monitoringTimePeriod * 60 * 1000;
+            Reader response = getResponse(CLUSTER_APPS_PATH + "?startedTimeBegin=" + monitoringPeriod + "&applicationTypes=MAPREDUCE");
+            Map<String, Object> json = (Map<String, Object>) parser.parse(response);
+            json = (Map<String, Object>) json.get("apps");
+            if (json != null) {
+                List<Map> appList = (ArrayList<Map>) json.get("app");
+
+                for (Map<String, Object> app : appList) {
+
+                    String appName = (String) app.get("name");
+
+                    if(mapReduceJobsToBeMonitored.contains(appName)) {
+                        String metricPath = "MapReduceJobs|" + appName + "|";
+                        String appState = (String) app.get("state");
+                        metrics.put(metricPath + "state", AppState.valueOf(appState).ordinal());
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Failed to parse response for MapReduce metrics: ", e);
+        }
+
+    }
+
 
     private void getApplicationMetrics() {
         try {
