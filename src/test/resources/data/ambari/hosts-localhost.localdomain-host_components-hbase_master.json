@@ -1,0 +1,372 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HBASE_MASTER",
+  "HostRoles" : {
+    "cluster_name" : "extensions",
+    "component_name" : "HBASE_MASTER",
+    "desired_stack_id" : "HDP-2.4",
+    "desired_state" : "STARTED",
+    "hdp_version" : "HDP-2.4.2.0-258",
+    "host_name" : "localhost.localdomain",
+    "maintenance_state" : "OFF",
+    "service_name" : "HBASE",
+    "stack_id" : "HDP-2.4",
+    "stale_configs" : false,
+    "state" : "STARTED",
+    "upgrade_state" : "NONE",
+    "actual_configs" : {
+      "ams-env" : {
+        "default" : "version1"
+      },
+      "ams-hbase-env" : {
+        "default" : "version1"
+      },
+      "ams-hbase-log4j" : {
+        "default" : "version1"
+      },
+      "ams-hbase-policy" : {
+        "default" : "version1"
+      },
+      "ams-hbase-security-site" : {
+        "default" : "version1"
+      },
+      "ams-hbase-site" : {
+        "default" : "version1"
+      },
+      "ams-log4j" : {
+        "default" : "version1"
+      },
+      "ams-site" : {
+        "default" : "version1"
+      },
+      "capacity-scheduler" : {
+        "default" : "version1"
+      },
+      "cluster-env" : {
+        "default" : "version1"
+      },
+      "core-site" : {
+        "default" : "version1"
+      },
+      "hadoop-env" : {
+        "default" : "version1"
+      },
+      "hadoop-policy" : {
+        "default" : "version1"
+      },
+      "hbase-env" : {
+        "default" : "version1"
+      },
+      "hbase-log4j" : {
+        "default" : "version1"
+      },
+      "hbase-policy" : {
+        "default" : "version1"
+      },
+      "hbase-site" : {
+        "default" : "version1"
+      },
+      "hdfs-log4j" : {
+        "default" : "version1"
+      },
+      "hdfs-site" : {
+        "default" : "version1"
+      },
+      "mapred-env" : {
+        "default" : "version1"
+      },
+      "mapred-site" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-audit" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-security" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-audit" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-security" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-audit" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-security" : {
+        "default" : "version1"
+      },
+      "ssl-client" : {
+        "default" : "version1"
+      },
+      "ssl-server" : {
+        "default" : "version1"
+      },
+      "yarn-env" : {
+        "default" : "version1"
+      },
+      "yarn-log4j" : {
+        "default" : "version1"
+      },
+      "yarn-site" : {
+        "default" : "version1"
+      },
+      "zoo.cfg" : {
+        "default" : "version1"
+      },
+      "zookeeper-env" : {
+        "default" : "version1"
+      },
+      "zookeeper-log4j" : {
+        "default" : "version1"
+      }
+    }
+  },
+  "host" : {
+    "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain"
+  },
+  "metrics" : {
+    "hbase" : {
+      "master" : {
+        "AverageLoad" : 3.0,
+        "ClusterId" : "29ca3ad6-4896-4bca-94f9-9ddd65d105ef",
+        "DeadRegionServers" : 0,
+        "IsActiveMaster" : "true",
+        "MasterActiveTime" : 1473367176861,
+        "MasterStartTime" : 1473367166497,
+        "RegionServers" : 1,
+        "ServerName" : "localhost,16000,1473367166497",
+        "ZookeeperQuorum" : "localhost.localdomain:2181",
+        "cluster_requests" : 5108
+      }
+    },
+    "jvm" : {
+      "HeapMemoryMax" : 1065025536,
+      "HeapMemoryUsed" : 40860440,
+      "NonHeapMemoryMax" : -1,
+      "NonHeapMemoryUsed" : 73982944,
+      "gcCount" : 0.0,
+      "gcTimeMillis" : 0.0,
+      "logError" : 0.0,
+      "logFatal" : 0.0,
+      "logInfo" : 0.0,
+      "logWarn" : 0.0,
+      "memHeapCommittedM" : 1004.0,
+      "memHeapUsedM" : 29.485305786132812,
+      "memMaxM" : 1015.6875,
+      "memNonHeapCommittedM" : 70.015625,
+      "memNonHeapUsedM" : 69.09516143798828,
+      "threadsBlocked" : 0.0,
+      "threadsNew" : 0.0,
+      "threadsRunnable" : 20.0,
+      "threadsTerminated" : 0.0,
+      "threadsTimedWaiting" : 23.0,
+      "threadsWaiting" : 80.0,
+      "JvmMetrics" : {
+        "GcCountConcurrentMarkSweep" : 0.0,
+        "GcCountParNew" : 0.0,
+        "GcTimeMillisConcurrentMarkSweep" : 0.0,
+        "GcTimeMillisParNew" : 0.0,
+        "MemHeapMaxM" : 1004.0,
+        "MemMaxM" : 1004.0,
+        "MemNonHeapMaxM" : -1.0
+      }
+    },
+    "master" : {
+      "AssignmentManger" : {
+        "Assign_75th_percentile" : 345.0,
+        "Assign_95th_percentile" : 345.0,
+        "Assign_99th_percentile" : 345.0,
+        "Assign_max" : 345.0,
+        "Assign_mean" : 345.0,
+        "Assign_median" : 345.0,
+        "Assign_min" : 345.0,
+        "Assign_num_ops" : 0.0,
+        "BulkAssign_75th_percentile" : 3084.0,
+        "BulkAssign_95th_percentile" : 3084.0,
+        "BulkAssign_99th_percentile" : 3084.0,
+        "BulkAssign_max" : 3084.0,
+        "BulkAssign_mean" : 3084.0,
+        "BulkAssign_median" : 3084.0,
+        "BulkAssign_min" : 3084.0,
+        "BulkAssign_num_ops" : 0.0,
+        "ritCount" : 0,
+        "ritCountOverThreshold" : 0.0,
+        "ritOldestAge" : 0.0
+      },
+      "Balancer" : {
+        "BalancerCluster_75th_percentile" : 0.0,
+        "BalancerCluster_95th_percentile" : 0.0,
+        "BalancerCluster_99th_percentile" : 0.0,
+        "BalancerCluster_max" : 0.0,
+        "BalancerCluster_mean" : 0.0,
+        "BalancerCluster_min" : 0.0,
+        "miscInvocationCount" : 0.0
+      },
+      "FileSystem" : {
+        "HlogSplitSize_75th_percentile" : 83.0,
+        "HlogSplitSize_95th_percentile" : 83.0,
+        "HlogSplitSize_99th_percentile" : 83.0,
+        "HlogSplitSize_max" : 83.0,
+        "HlogSplitSize_median" : 83.0,
+        "HlogSplitSize_min" : 83.0,
+        "HlogSplitTime_75th_percentile" : 4874.0,
+        "HlogSplitTime_95th_percentile" : 4874.0,
+        "HlogSplitTime_99th_percentile" : 4874.0,
+        "HlogSplitTime_max" : 4874.0,
+        "HlogSplitTime_mean" : 4874.0,
+        "HlogSplitTime_median" : 4874.0,
+        "HlogSplitTime_min" : 4874.0,
+        "MetaHlogSplitSize_75th_percentile" : 83.0,
+        "MetaHlogSplitSize_95th_percentile" : 83.0,
+        "MetaHlogSplitSize_99th_percentile" : 83.0,
+        "MetaHlogSplitSize_max" : 83.0,
+        "MetaHlogSplitSize_mean" : 41.5,
+        "MetaHlogSplitSize_median" : 41.5,
+        "MetaHlogSplitSize_min" : 0.0,
+        "MetaHlogSplitSize_num_ops" : 0.0,
+        "MetaHlogSplitTime_75th_percentile" : 9963.0,
+        "MetaHlogSplitTime_95th_percentile" : 9963.0,
+        "MetaHlogSplitTime_99th_percentile" : 9963.0,
+        "MetaHlogSplitTime_max" : 9963.0,
+        "MetaHlogSplitTime_mean" : 5012.0,
+        "MetaHlogSplitTime_median" : 5012.0,
+        "MetaHlogSplitTime_min" : 61.0,
+        "MetaHlogSplitTime_num_ops" : 0.0
+      },
+      "Master" : {
+        "ProcessCallTime_75th_percentile" : 0.0,
+        "ProcessCallTime_95th_percentile" : 0.0,
+        "ProcessCallTime_99th_percentile" : 1.0,
+        "ProcessCallTime_max" : 110.0,
+        "ProcessCallTime_mean" : 0.031170581212543885,
+        "ProcessCallTime_median" : 0.0,
+        "ProcessCallTime_min" : 0.0,
+        "QueueCallTime_75th_percentile" : 11.0,
+        "QueueCallTime_95th_percentile" : 13.0,
+        "QueueCallTime_99th_percentile" : 22.0,
+        "QueueCallTime_max" : 40.0,
+        "QueueCallTime_mean" : 0.33226752089268197,
+        "QueueCallTime_min" : 0.0,
+        "TotalCallTime_75th_percentile" : 11.0,
+        "TotalCallTime_95th_percentile" : 13.0,
+        "TotalCallTime_99th_percentile" : 22.0,
+        "TotalCallTime_max" : 122.0,
+        "TotalCallTime_mean" : 0.3634381021052258,
+        "TotalCallTime_median" : 2.0,
+        "TotalCallTime_min" : 0.0,
+        "TotalCallTime_num_ops" : 20.0,
+        "numActiveHandler" : 0.0,
+        "numCallsInGeneralQueue" : 0.0,
+        "numCallsInPriorityQueue" : 0.0,
+        "numCallsInReplicationQueue" : 0.0,
+        "numOpenConnections" : 1.0,
+        "queueSize" : 0.0,
+        "receivedBytes" : 11160.0,
+        "sentBytes" : 200.0
+      },
+      "Server" : {
+        "averageLoad" : 3.0,
+        "masterActiveTime" : 1.473367176861E12,
+        "masterStartTime" : 1.473367166497E12,
+        "numDeadRegionServers" : 0.0,
+        "numRegionServers" : 1.0
+      }
+    },
+    "metricssystem" : {
+      "MetricsSystem" : {
+        "DroppedPubAll" : 0.0,
+        "NumActiveSinks" : 1.0,
+        "NumActiveSources" : 7.0,
+        "NumAllSinks" : 0.0,
+        "NumAllSources" : 7.0,
+        "PublishAvgTime" : 0.0,
+        "PublishNumOps" : 1.0,
+        "Sink_timelineAvgTime" : 1.0,
+        "Sink_timelineDropped" : 0.0,
+        "Sink_timelineNumOps" : 1.0,
+        "Sink_timelineQsize" : 0.0,
+        "SnapshotAvgTime" : 0.28571428571428575,
+        "SnapshotNumOps" : 8.0
+      }
+    },
+    "regionserver" : {
+      "WAL" : {
+        "AppendSize_75th_percentile" : 320.5,
+        "AppendSize_95th_percentile" : 344.0,
+        "AppendSize_99th_percentile" : 344.0,
+        "AppendSize_max" : 344.0,
+        "AppendSize_mean" : 233.375,
+        "AppendSize_median" : 242.5,
+        "AppendSize_min" : 104.0,
+        "AppendSize_num_ops" : 0.0,
+        "AppendTime_75th_percentile" : 9.25,
+        "AppendTime_95th_percentile" : 45.0,
+        "AppendTime_99th_percentile" : 45.0,
+        "AppendTime_max" : 45.0,
+        "AppendTime_mean" : 8.0,
+        "AppendTime_median" : 1.0,
+        "AppendTime_min" : 0.0,
+        "AppendTime_num_ops" : 0.0,
+        "SyncTime_75th_percentile" : 28.5,
+        "SyncTime_95th_percentile" : 364.09999999999957,
+        "SyncTime_99th_percentile" : 930.0,
+        "SyncTime_max" : 1580.0,
+        "SyncTime_mean" : 25.931740614334473,
+        "SyncTime_median" : 9.0,
+        "SyncTime_min" : 0.0,
+        "SyncTime_num_ops" : 0.0,
+        "appendCount" : 0.0,
+        "lowReplicaRollRequest" : 0.0,
+        "rollRequest" : 0.0,
+        "slowAppendCount" : 0.0
+      }
+    },
+    "rpc" : {
+      "RpcProcessingTime_avg_time" : 20.0,
+      "RpcProcessingTime_num_ops" : 20.0,
+      "RpcQueueTime_avg_time" : 2.5,
+      "RpcQueueTime_num_ops" : 20.0,
+      "balance_avg_time" : 0.0,
+      "balance_num_ops" : 0.0
+    },
+    "ugi" : {
+      "UgiMetrics" : {
+        "GetGroupsAvgTime" : 0.0,
+        "GetGroupsNumOps" : 0.0,
+        "LoginFailureAvgTime" : 0.0,
+        "LoginFailureNumOps" : 0.0,
+        "LoginSuccessAvgTime" : 0.0,
+        "LoginSuccessNumOps" : 0.0
+      }
+    }
+  },
+  "component" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/HBASE_MASTER",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "HBASE_MASTER",
+        "service_name" : "HBASE"
+      }
+    }
+  ],
+  "processes" : [ ]
+}

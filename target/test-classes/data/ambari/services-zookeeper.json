@@ -1,0 +1,59 @@
+{
+  "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/ZOOKEEPER",
+  "ServiceInfo": {
+    "cluster_name": "extensions",
+    "maintenance_state": "OFF",
+    "service_name": "ZOOKEEPER",
+    "state": "STARTED"
+  },
+  "alerts_summary": {
+    "CRITICAL": 0,
+    "MAINTENANCE": 0,
+    "OK": 2,
+    "UNKNOWN": 0,
+    "WARNING": 0
+  },
+  "alerts": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/ZOOKEEPER/alerts/28",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 1,
+        "definition_name": "zookeeper_server_process_percent",
+        "host_name": null,
+        "id": 28,
+        "service_name": "ZOOKEEPER"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/ZOOKEEPER/alerts/23",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 2,
+        "definition_name": "zookeeper_server_process",
+        "host_name": "localhost.localdomain",
+        "id": 23,
+        "service_name": "ZOOKEEPER"
+      }
+    }
+  ],
+  "components": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/ZOOKEEPER/components/ZOOKEEPER_CLIENT",
+      "ServiceComponentInfo": {
+        "cluster_name": "extensions",
+        "component_name": "ZOOKEEPER_CLIENT",
+        "service_name": "ZOOKEEPER"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/ZOOKEEPER/components/ZOOKEEPER_SERVER",
+      "ServiceComponentInfo": {
+        "cluster_name": "extensions",
+        "component_name": "ZOOKEEPER_SERVER",
+        "service_name": "ZOOKEEPER"
+      }
+    }
+  ],
+  "artifacts": []
+}

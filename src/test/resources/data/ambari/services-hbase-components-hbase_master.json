@@ -1,0 +1,54 @@
+{
+  "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/HBASE_MASTER",
+  "ServiceComponentInfo": {
+    "AverageLoad": 3.0,
+    "HeapMemoryMax": 1065025536,
+    "HeapMemoryUsed": 62801600,
+    "MasterActiveTime": 1473367176861,
+    "MasterStartTime": 1473367166497,
+    "NonHeapMemoryMax": -1,
+    "NonHeapMemoryUsed": 73982944,
+    "category": "MASTER",
+    "cluster_name": "extensions",
+    "component_name": "HBASE_MASTER",
+    "installed_count": 0,
+    "service_name": "HBASE",
+    "started_count": 1,
+    "state": "STARTED",
+    "total_count": 1
+  },
+  "metrics": {
+    "hbase": {
+      "master": {
+        "AverageLoad": 3.0,
+        "ClusterId": "29ca3ad6-4896-4bca-94f9-9ddd65d105ef",
+        "DeadRegionServers": 0,
+        "IsActiveMaster": "true",
+        "MasterActiveTime": 1473367176861,
+        "MasterStartTime": 1473367166497,
+        "RegionServers": 1,
+        "ServerName": "localhost,16000,1473367166497",
+        "ZookeeperQuorum": "localhost.localdomain:2181",
+        "cluster_requests": 5111
+      }
+    },
+    "jvm": {
+      "memMaxM": 1015.6875
+    },
+    "master": {
+      "AssignmentManger": {
+        "ritCount": 0
+      }
+    }
+  },
+  "host_components": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HBASE_MASTER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "HBASE_MASTER",
+        "host_name": "localhost.localdomain"
+      }
+    }
+  ]
+}

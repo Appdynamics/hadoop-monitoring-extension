@@ -12,7 +12,12 @@
         <type>java</type>
         <execution-timeout-in-secs>60</execution-timeout-in-secs>
         <task-arguments>
-            <argument name="config-file" is-required="true" default-value="monitors/HadoopMonitor/config.yml"/>
+            <argument name="config-file" is-required="true"
+                      default-value="monitors/HadoopMonitor/config.yml"/>
+            <argument name="metrics-ambari-file" is-required="true"
+                      default-value="monitors/HadoopMonitor/metrics-ambari.xml"/>
+            <argument name="metrics-resource-manager-file" is-required="true"
+                      default-value="monitors/HadoopMonitor/metrics-resource-manager.xml"/>
         </task-arguments>
         <java-task>
             <classpath>hadoop-monitoring-extension.jar</classpath>

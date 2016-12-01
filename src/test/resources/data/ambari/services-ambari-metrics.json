@@ -1,0 +1,103 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS",
+  "ServiceInfo" : {
+    "cluster_name" : "extensions",
+    "maintenance_state" : "OFF",
+    "service_name" : "AMBARI_METRICS",
+    "state" : "STARTED"
+  },
+  "alerts_summary" : {
+    "CRITICAL" : 0,
+    "MAINTENANCE" : 0,
+    "OK" : 6,
+    "UNKNOWN" : 0,
+    "WARNING" : 0
+  },
+  "alerts" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/alerts/26",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 41,
+        "definition_name" : "metrics_monitor_process_percent",
+        "host_name" : null,
+        "id" : 26,
+        "service_name" : "AMBARI_METRICS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/alerts/9",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 38,
+        "definition_name" : "ams_metrics_collector_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 9,
+        "service_name" : "AMBARI_METRICS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/alerts/10",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 42,
+        "definition_name" : "ams_metrics_collector_autostart",
+        "host_name" : "localhost.localdomain",
+        "id" : 10,
+        "service_name" : "AMBARI_METRICS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/alerts/13",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 37,
+        "definition_name" : "ams_metrics_monitor_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 13,
+        "service_name" : "AMBARI_METRICS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/alerts/21",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 39,
+        "definition_name" : "ams_metrics_collector_hbase_master_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 21,
+        "service_name" : "AMBARI_METRICS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/alerts/43",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 40,
+        "definition_name" : "ams_metrics_collector_hbase_master_cpu",
+        "host_name" : "localhost.localdomain",
+        "id" : 43,
+        "service_name" : "AMBARI_METRICS"
+      }
+    }
+  ],
+  "components" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/components/METRICS_COLLECTOR",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "METRICS_COLLECTOR",
+        "service_name" : "AMBARI_METRICS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS/components/METRICS_MONITOR",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "METRICS_MONITOR",
+        "service_name" : "AMBARI_METRICS"
+      }
+    }
+  ],
+  "artifacts" : [ ]
+}

@@ -1,0 +1,27 @@
+<monitor>
+    <name>HadoopMonitor</name>
+    <type>managed</type>
+    <description>Hadoop resource manager monitor</description>
+    <monitor-configuration></monitor-configuration>
+    <monitor-run-task>
+        <execution-style>periodic</execution-style>
+        <execution-frequency-in-seconds>60</execution-frequency-in-seconds>
+        <name>Hadoop Monitor Run Task</name>
+        <display-name>Hadoop Monitor Task</display-name>
+        <description>Hadoop Monitor Task</description>
+        <type>java</type>
+        <execution-timeout-in-secs>60</execution-timeout-in-secs>
+        <task-arguments>
+            <argument name="config-file" is-required="true"
+                      default-value="monitors/HadoopMonitor/config.yml"/>
+            <argument name="metrics-ambari-file" is-required="true"
+                      default-value="monitors/HadoopMonitor/metrics-ambari.xml"/>
+            <argument name="metrics-resource-manager-file" is-required="true"
+                      default-value="monitors/HadoopMonitor/metrics-resource-manager.xml"/>
+        </task-arguments>
+        <java-task>
+            <classpath>hadoop-monitoring-extension.jar</classpath>
+            <impl-class>com.appdynamics.monitors.hadoop.HadoopMonitor</impl-class>
+        </java-task>
+    </monitor-run-task>
+</monitor>

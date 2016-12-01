@@ -1,0 +1,84 @@
+{
+  "href": "http://192.168.1.218:8080/api/v1/clusters?fields=Clusters,hosts,services",
+  "items": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions",
+      "Clusters": {
+        "cluster_id": 2,
+        "cluster_name": "extensions",
+        "credential_store_properties": null,
+        "desired_configs": null,
+        "desired_service_config_versions": null,
+        "health_report": {
+          "Host/stale_config": 0,
+          "Host/maintenance_state": 0,
+          "Host/host_state/HEALTHY": 1,
+          "Host/host_state/UNHEALTHY": 0,
+          "Host/host_state/HEARTBEAT_LOST": 0,
+          "Host/host_state/INIT": 0,
+          "Host/host_status/HEALTHY": 1,
+          "Host/host_status/UNHEALTHY": 0,
+          "Host/host_status/UNKNOWN": 0,
+          "Host/host_status/ALERT": 0
+        },
+        "provisioning_state": "INSTALLED",
+        "security_type": "NONE",
+        "total_hosts": 1,
+        "version": "HDP-2.4"
+      },
+      "hosts": [
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain",
+          "Hosts": {
+            "cluster_name": "extensions",
+            "host_name": "localhost.localdomain"
+          }
+        }
+      ],
+      "services": [
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/AMBARI_METRICS",
+          "ServiceInfo": {
+            "cluster_name": "extensions",
+            "service_name": "AMBARI_METRICS"
+          }
+        },
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE",
+          "ServiceInfo": {
+            "cluster_name": "extensions",
+            "service_name": "HBASE"
+          }
+        },
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS",
+          "ServiceInfo": {
+            "cluster_name": "extensions",
+            "service_name": "HDFS"
+          }
+        },
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/MAPREDUCE2",
+          "ServiceInfo": {
+            "cluster_name": "extensions",
+            "service_name": "MAPREDUCE2"
+          }
+        },
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/YARN",
+          "ServiceInfo": {
+            "cluster_name": "extensions",
+            "service_name": "YARN"
+          }
+        },
+        {
+          "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/services/ZOOKEEPER",
+          "ServiceInfo": {
+            "cluster_name": "extensions",
+            "service_name": "ZOOKEEPER"
+          }
+        }
+      ]
+    }
+  ]
+}

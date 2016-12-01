@@ -1,9 +1,11 @@
 package com.appdynamics.monitors.hadoop;
 
+import com.appdynamics.extensions.conf.MonitorConfiguration;
 import com.google.common.collect.Maps;
-import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -11,14 +13,37 @@ import java.util.Map;
  */
 public class HadoopMonitorTest {
 
-    public static final String CONFIG_ARG = "config-file";
+    @Test(expected = IllegalArgumentException.class)
+    public void initAmbariConfigWithNoArgs() throws Exception {
+        new HadoopMonitor().initAmbariConfig(Collections.<String, String>emptyMap());
+    }
 
     @Test
-    public void testHadoopCommunicator() throws TaskExecutionException {
+    public void initAmbariConfigCorrectArgs() throws Exception {
         Map<String, String> taskArgs = Maps.newHashMap();
-        taskArgs.put(CONFIG_ARG, "src/test/resources/conf/config.yml");
+        taskArgs.put(HadoopMonitor.CONFIG_ARG, "src/main/resources/conf/config.yml");
+        taskArgs.put(HadoopMonitor.AMBARI_METRICS_XML_ARG, "src/main/resources/conf/metrics-ambari.xml");
+        MonitorConfiguration config = new HadoopMonitor().initAmbariConfig(taskArgs);
+        Assert.assertNotNull(config.getConfigYml());
+        Assert.assertNotNull(config.getMetricsXmlConfiguration());
+        Assert.assertEquals("Custom Metrics|HadoopMonitor|Ambari",config.getMetricPrefix());
+        Assert.assertTrue(config.isEnabled());
+    }
 
-        HadoopMonitor monitor = new HadoopMonitor();
-        monitor.execute(taskArgs, null);
+    @Test(expected = IllegalArgumentException.class)
+    public void initResourceManagerConfigWithNoArgs() throws Exception {
+        new HadoopMonitor().initResourceManagerConfig(Collections.<String, String>emptyMap());
+    }
+
+    @Test
+    public void initResMgrConfigCorrectArgs() throws Exception {
+        Map<String, String> taskArgs = Maps.newHashMap();
+        taskArgs.put(HadoopMonitor.CONFIG_ARG, "src/main/resources/conf/config.yml");
+        taskArgs.put(HadoopMonitor.RM_METRICS_XML_ARG, "src/main/resources/conf/metrics-resource-manager.xml");
+        MonitorConfiguration config = new HadoopMonitor().initResourceManagerConfig(taskArgs);
+        Assert.assertNotNull(config.getConfigYml());
+        Assert.assertNotNull(config.getMetricsXmlConfiguration());
+        Assert.assertEquals("Custom Metrics|HadoopMonitor|ResourceManager",config.getMetricPrefix());
+        Assert.assertTrue(config.isEnabled());
     }
 }

@@ -1,0 +1,33 @@
+##########################################################
+######### START - ResourceManager Monitor  ###############
+##########################################################
+resourceManagerMonitor:
+  enabled: true
+  metricPrefix: "Custom Metrics|HadoopMonitor"
+  servers:
+    - uri: "http://192.168.1.216:8088"
+      #username: "admin"
+      #password: "admin"
+      #name: "" #Required only if there are multiple servers
+
+  monitoringTimePeriod: 15
+  # This will monitor the type of applications in the monitoringTimePeriod
+  applications:
+    - type: "MAPREDUCE"
+      names: [".*"]
+
+  numberOfThreads: 1
+  connection:
+    socketTimeout: 5000
+    connectTimeout: 2500
+    sslCertCheckEnabled: false
+    sslVerifyHostname: false
+  #Run it as a scheduled task instead of running every minute.
+  #If you want to run this every minute, comment this out
+  #taskSchedule:
+    #numberOfThreads: 1
+    #taskDelaySeconds: 120
+
+##########################################################
+######### END - ResourceManager Monitor  ###############
+##########################################################

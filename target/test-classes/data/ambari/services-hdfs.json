@@ -1,0 +1,264 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS",
+  "ServiceInfo" : {
+    "cluster_name" : "extensions",
+    "maintenance_state" : "OFF",
+    "service_name" : "HDFS",
+    "state" : "STARTED"
+  },
+  "alerts_summary" : {
+    "CRITICAL" : 0,
+    "MAINTENANCE" : 0,
+    "OK" : 17,
+    "UNKNOWN" : 0,
+    "WARNING" : 0
+  },
+  "alerts" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/29",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 27,
+        "definition_name" : "datanode_process_percent",
+        "host_name" : null,
+        "id" : 29,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/36",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 17,
+        "definition_name" : "datanode_storage_percent",
+        "host_name" : null,
+        "id" : 36,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/2",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 33,
+        "definition_name" : "datanode_webui",
+        "host_name" : "localhost.localdomain",
+        "id" : 2,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/5",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 20,
+        "definition_name" : "upgrade_finalized_state",
+        "host_name" : "localhost.localdomain",
+        "id" : 5,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/6",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 31,
+        "definition_name" : "namenode_last_checkpoint",
+        "host_name" : "localhost.localdomain",
+        "id" : 6,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/12",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 26,
+        "definition_name" : "datanode_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 12,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/15",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 16,
+        "definition_name" : "secondary_namenode_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 15,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/18",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 32,
+        "definition_name" : "namenode_webui",
+        "host_name" : "localhost.localdomain",
+        "id" : 18,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/19",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 21,
+        "definition_name" : "datanode_health_summary",
+        "host_name" : "localhost.localdomain",
+        "id" : 19,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/20",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 25,
+        "definition_name" : "namenode_directory_status",
+        "host_name" : "localhost.localdomain",
+        "id" : 20,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/30",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 23,
+        "definition_name" : "datanode_unmounted_data_dir",
+        "host_name" : "localhost.localdomain",
+        "id" : 30,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/31",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 34,
+        "definition_name" : "datanode_storage",
+        "host_name" : "localhost.localdomain",
+        "id" : 31,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/32",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 28,
+        "definition_name" : "namenode_hdfs_blocks_health",
+        "host_name" : "localhost.localdomain",
+        "id" : 32,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/33",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 29,
+        "definition_name" : "namenode_hdfs_capacity_utilization",
+        "host_name" : "localhost.localdomain",
+        "id" : 33,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/34",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 30,
+        "definition_name" : "namenode_rpc_latency",
+        "host_name" : "localhost.localdomain",
+        "id" : 34,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/35",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 18,
+        "definition_name" : "namenode_hdfs_pending_deletion_blocks",
+        "host_name" : "localhost.localdomain",
+        "id" : 35,
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/alerts/40",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 15,
+        "definition_name" : "namenode_cpu",
+        "host_name" : "localhost.localdomain",
+        "id" : 40,
+        "service_name" : "HDFS"
+      }
+    }
+  ],
+  "components" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/DATANODE",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "DATANODE",
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/HDFS_CLIENT",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "HDFS_CLIENT",
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/JOURNALNODE",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "JOURNALNODE",
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/NAMENODE",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "NAMENODE",
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/NFS_GATEWAY",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "NFS_GATEWAY",
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/SECONDARY_NAMENODE",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "SECONDARY_NAMENODE",
+        "service_name" : "HDFS"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/ZKFC",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "ZKFC",
+        "service_name" : "HDFS"
+      }
+    }
+  ],
+  "artifacts" : [ ]
+}

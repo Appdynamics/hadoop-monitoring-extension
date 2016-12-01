@@ -1,0 +1,21 @@
+{
+  "nodes": {
+    "node": [
+      {
+        "rack": "/default-rack",
+        "state": "RUNNING",
+        "id": "quickstart.cloudera:53636",
+        "nodeHostName": "quickstart.cloudera",
+        "nodeHTTPAddress": "quickstart.cloudera:8042",
+        "lastHealthUpdate": 1474568391423,
+        "version": "2.5.0-cdh5.3.0",
+        "healthReport": "",
+        "numContainers": 0,
+        "usedMemoryMB": 0,
+        "availMemoryMB": 8192,
+        "usedVirtualCores": 0,
+        "availableVirtualCores": 8
+      }
+    ]
+  }
+}

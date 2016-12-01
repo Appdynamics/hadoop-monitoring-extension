@@ -1,0 +1,305 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/NODEMANAGER",
+  "HostRoles" : {
+    "cluster_name" : "extensions",
+    "component_name" : "NODEMANAGER",
+    "desired_admin_state" : "INSERVICE",
+    "desired_stack_id" : "HDP-2.4",
+    "desired_state" : "STARTED",
+    "hdp_version" : "HDP-2.4.2.0-258",
+    "host_name" : "localhost.localdomain",
+    "maintenance_state" : "OFF",
+    "service_name" : "YARN",
+    "stack_id" : "HDP-2.4",
+    "stale_configs" : false,
+    "state" : "STARTED",
+    "upgrade_state" : "NONE",
+    "actual_configs" : {
+      "ams-env" : {
+        "default" : "version1"
+      },
+      "ams-hbase-env" : {
+        "default" : "version1"
+      },
+      "ams-hbase-log4j" : {
+        "default" : "version1"
+      },
+      "ams-hbase-policy" : {
+        "default" : "version1"
+      },
+      "ams-hbase-security-site" : {
+        "default" : "version1"
+      },
+      "ams-hbase-site" : {
+        "default" : "version1"
+      },
+      "ams-log4j" : {
+        "default" : "version1"
+      },
+      "ams-site" : {
+        "default" : "version1"
+      },
+      "capacity-scheduler" : {
+        "default" : "version1"
+      },
+      "cluster-env" : {
+        "default" : "version1"
+      },
+      "core-site" : {
+        "default" : "version1"
+      },
+      "hadoop-env" : {
+        "default" : "version1"
+      },
+      "hadoop-policy" : {
+        "default" : "version1"
+      },
+      "hbase-env" : {
+        "default" : "version1"
+      },
+      "hbase-log4j" : {
+        "default" : "version1"
+      },
+      "hbase-policy" : {
+        "default" : "version1"
+      },
+      "hbase-site" : {
+        "default" : "version1"
+      },
+      "hdfs-log4j" : {
+        "default" : "version1"
+      },
+      "hdfs-site" : {
+        "default" : "version1"
+      },
+      "mapred-env" : {
+        "default" : "version1"
+      },
+      "mapred-site" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-audit" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-security" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-audit" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-security" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-audit" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-security" : {
+        "default" : "version1"
+      },
+      "ssl-client" : {
+        "default" : "version1"
+      },
+      "ssl-server" : {
+        "default" : "version1"
+      },
+      "yarn-env" : {
+        "default" : "version1"
+      },
+      "yarn-log4j" : {
+        "default" : "version1"
+      },
+      "yarn-site" : {
+        "default" : "version1"
+      },
+      "zoo.cfg" : {
+        "default" : "version1"
+      },
+      "zookeeper-env" : {
+        "default" : "version1"
+      },
+      "zookeeper-log4j" : {
+        "default" : "version1"
+      }
+    }
+  },
+  "host" : {
+    "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain"
+  },
+  "metrics" : {
+    "cpu" : {
+      "cpu_idle" : 92.0,
+      "cpu_nice" : 0.0,
+      "cpu_system" : 1.2,
+      "cpu_user" : 6.5,
+      "cpu_wio" : 0.0
+    },
+    "disk" : {
+      "disk_free" : 86.34,
+      "disk_total" : 96.01,
+      "read_bytes" : 2.864756736E9,
+      "read_count" : 55254.0,
+      "read_time" : 795159.0,
+      "write_bytes" : 8.9501637632E10,
+      "write_count" : 2230593.0,
+      "write_time" : 4.3400006E7
+    },
+    "jvm" : {
+      "gcCount" : 328,
+      "gcTimeMillis" : 1391,
+      "logError" : 0,
+      "logFatal" : 0,
+      "logInfo" : 105,
+      "logWarn" : 82,
+      "memHeapCommittedM" : 120.0,
+      "memHeapUsedM" : 38.347527,
+      "memNonHeapCommittedM" : 67.6875,
+      "memNonHeapUsedM" : 65.84216,
+      "threadsBlocked" : 0,
+      "threadsNew" : 0,
+      "threadsRunnable" : 14,
+      "threadsTerminated" : 0,
+      "threadsTimedWaiting" : 38,
+      "threadsWaiting" : 8,
+      "JvmMetrics" : {
+        "GcCountCopy" : 0.0,
+        "GcCountMarkSweepCompact" : 0.0,
+        "GcTimeMillisCopy" : 0.0,
+        "GcTimeMillisMarkSweepCompact" : 0.0,
+        "MemHeapMaxM" : 989.875,
+        "MemMaxM" : 989.875,
+        "MemNonHeapMaxM" : -1.0
+      }
+    },
+    "load" : {
+      "load_fifteen" : 7.44,
+      "load_five" : 1.12,
+      "load_one" : 0.68
+    },
+    "mapred" : {
+      "ShuffleConnections" : 0.0,
+      "ShuffleOutputBytes" : 0.0,
+      "ShuffleOutputsFailed" : 0.0,
+      "ShuffleOutputsOK" : 0.0
+    },
+    "memory" : {
+      "mem_buffered" : 0.0,
+      "mem_cached" : 903564.0,
+      "mem_free" : 346564.0,
+      "mem_shared" : 0.0,
+      "mem_total" : 8011588.0,
+      "swap_free" : 4005164.0
+    },
+    "metricssystem" : {
+      "MetricsSystem" : {
+        "DroppedPubAll" : 0.0,
+        "NumActiveSinks" : 1.0,
+        "NumActiveSources" : 8.0,
+        "NumAllSinks" : 0.0,
+        "NumAllSources" : 8.0,
+        "PublishAvgTime" : 0.0,
+        "PublishNumOps" : 1.0,
+        "Sink_timelineAvgTime" : 0.0,
+        "Sink_timelineDropped" : 0.0,
+        "Sink_timelineNumOps" : 1.0,
+        "Sink_timelineQsize" : 0.0,
+        "SnapshotAvgTime" : 0.0,
+        "SnapshotNumOps" : 9.0
+      }
+    },
+    "network" : {
+      "bytes_in" : 1311.235995646435,
+      "bytes_out" : 4975.252911835752,
+      "pkts_in" : 3.7816460105164333,
+      "pkts_out" : 4.577782012730419
+    },
+    "nodemanager" : {
+      "AllocatedContainers" : 0,
+      "AllocatedGB" : 0,
+      "AllocatedVCores" : 0,
+      "BadLocalDirs" : 0,
+      "BadLogDirs" : 0,
+      "ContainersFailed" : 0,
+      "GoodLocalDirsDiskUtilizationPerc" : 0,
+      "GoodLogDirsDiskUtilizationPerc" : 0
+    },
+    "process" : {
+      "proc_run" : 1.0,
+      "proc_total" : 170.0
+    },
+    "rpc" : {
+      "NumOpenConnections" : 0,
+      "ReceivedBytes" : 0,
+      "RpcProcessingTime_avg_time" : 0.0,
+      "RpcProcessingTime_num_ops" : 0,
+      "RpcQueueTime_avg_time" : 0.0,
+      "RpcQueueTime_num_ops" : 0,
+      "SentBytes" : 0,
+      "callQueueLen" : 0,
+      "rpcAuthenticationFailures" : 0,
+      "rpcAuthenticationSuccesses" : 0,
+      "rpcAuthorizationFailures" : 0,
+      "rpcAuthorizationSuccesses" : 0,
+      "rpc" : {
+        "RpcClientBackoff" : 0.0
+      }
+    },
+    "ugi" : {
+      "loginFailure_avg_time" : 0.0,
+      "loginFailure_num_ops" : 0,
+      "loginSuccess_avg_time" : 0.0,
+      "loginSuccess_num_ops" : 0,
+      "UgiMetrics" : {
+        "GetGroupsAvgTime" : 0.0,
+        "GetGroupsNumOps" : 0.0
+      }
+    },
+    "yarn" : {
+      "AllocatedContainers" : 0.0,
+      "AllocatedGB" : 0.0,
+      "AllocatedVCores" : 0.0,
+      "AvailableGB" : 1.0,
+      "AvailableVCores" : 1.0,
+      "BadLocalDirs" : 0.0,
+      "BadLogDirs" : 0.0,
+      "ContainerLaunchDurationAvgTime" : 0.0,
+      "ContainerLaunchDurationNumOps" : 0.0,
+      "ContainersCompleted" : 0.0,
+      "ContainersFailed" : 0.0,
+      "ContainersIniting" : 0.0,
+      "ContainersKilled" : 0.0,
+      "ContainersLaunched" : 0.0,
+      "ContainersRunning" : 0.0,
+      "GoodLocalDirsDiskUtilizationPerc" : 0.0,
+      "GoodLogDirsDiskUtilizationPerc" : 0.0
+    }
+  },
+  "processes" : [ ],
+  "component" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/YARN/components/NODEMANAGER",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "NODEMANAGER",
+        "service_name" : "YARN"
+      }
+    }
+  ]
+}

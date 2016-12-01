@@ -1,0 +1,108 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE",
+  "ServiceInfo" : {
+    "cluster_name" : "extensions",
+    "maintenance_state" : "OFF",
+    "service_name" : "HBASE",
+    "state" : "STARTED"
+  },
+  "alerts_summary" : {
+    "CRITICAL" : 0,
+    "MAINTENANCE" : 0,
+    "OK" : 5,
+    "UNKNOWN" : 0,
+    "WARNING" : 0
+  },
+  "alerts" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/alerts/25",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 45,
+        "definition_name" : "hbase_regionserver_process_percent",
+        "host_name" : null,
+        "id" : 25,
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/alerts/1",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 47,
+        "definition_name" : "hbase_regionserver_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 1,
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/alerts/22",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 43,
+        "definition_name" : "hbase_master_process",
+        "host_name" : "localhost.localdomain",
+        "id" : 22,
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/alerts/24",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 46,
+        "definition_name" : "regionservers_health_summary",
+        "host_name" : "localhost.localdomain",
+        "id" : 24,
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/alerts/44",
+      "Alert" : {
+        "cluster_name" : "extensions",
+        "definition_id" : 44,
+        "definition_name" : "hbase_master_cpu",
+        "host_name" : "localhost.localdomain",
+        "id" : 44,
+        "service_name" : "HBASE"
+      }
+    }
+  ],
+  "components" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/HBASE_CLIENT",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "HBASE_CLIENT",
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/HBASE_MASTER",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "HBASE_MASTER",
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/HBASE_REGIONSERVER",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "HBASE_REGIONSERVER",
+        "service_name" : "HBASE"
+      }
+    },
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/PHOENIX_QUERY_SERVER",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "PHOENIX_QUERY_SERVER",
+        "service_name" : "HBASE"
+      }
+    }
+  ],
+  "artifacts" : [ ]
+}

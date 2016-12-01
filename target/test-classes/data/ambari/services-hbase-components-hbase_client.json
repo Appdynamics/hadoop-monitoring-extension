@@ -1,0 +1,23 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HBASE/components/HBASE_CLIENT",
+  "ServiceComponentInfo" : {
+    "category" : "CLIENT",
+    "cluster_name" : "extensions",
+    "component_name" : "HBASE_CLIENT",
+    "installed_count" : 1,
+    "service_name" : "HBASE",
+    "started_count" : 0,
+    "state" : "INSTALLED",
+    "total_count" : 1
+  },
+  "host_components" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HBASE_CLIENT",
+      "HostRoles" : {
+        "cluster_name" : "extensions",
+        "component_name" : "HBASE_CLIENT",
+        "host_name" : "localhost.localdomain"
+      }
+    }
+  ]
+}

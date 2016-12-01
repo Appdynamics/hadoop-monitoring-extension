@@ -1,0 +1,59 @@
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Apps|Submitted,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Apps|Completed,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Apps|Pending,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Apps|Running,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Apps|Failed,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Apps|Killed,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Memory|Reserved (MB),0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Memory|Available (MB),8192,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Memory|Allocated (MB),0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Memory|Total (MB),8192,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|VirtualCores|Reserved,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|VirtualCores|Available,8,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|VirtualCores|Allocated,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|VirtualCores|Total,8,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Containers|Allocated,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Containers|Reserved,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Containers|Pending,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Nodes|Total,1,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Nodes|Lost,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Nodes|Unhealthy,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Nodes|Decommissioned,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Nodes|Rebooted,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Cluster|Nodes|Active,1,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Nodes|quickstart.cloudera|State,100,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Nodes|quickstart.cloudera|Num of Containers,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Nodes|quickstart.cloudera|Memory Used (MB),0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Nodes|quickstart.cloudera|Memory Available (MB),8192,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Nodes|quickstart.cloudera|Virtual Cores Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Nodes|quickstart.cloudera|Virtual Cores Available,8,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Memory|Max,8192,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Memory|Min,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Memory|Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Virtual Cores|Max,8,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Virtual Cores|Min,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Virtual Cores|Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.default|Memory|Max,8192,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.default|Memory|Min,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.default|Memory|Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.default|Virtual Cores|Max,8,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.default|Virtual Cores|Min,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.default|Virtual Cores|Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.hdfs|Memory|Max,8192,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.hdfs|Memory|Min,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.hdfs|Memory|Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.hdfs|Virtual Cores|Max,8,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.hdfs|Virtual Cores|Min,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Fair Scheduler|Queues|root|Queues|root.hdfs|Virtual Cores|Used,0,AVG.AVG.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|Final Status|UNDEFINED,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|Final Status|SUCCEEDED,6,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|Final Status|FAILED,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|Final Status|KILLED,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|NEW,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|NEW_SAVING,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|SUBMITTED,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|ACCEPTED,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|RUNNING,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|FINISHED,6,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|FAILED,0,OBS.CUR.COL
+Custom Metrics|HadoopMonitor|ResourceManager|Current Apps|MAPREDUCE|State|KILLED,0,OBS.CUR.COL

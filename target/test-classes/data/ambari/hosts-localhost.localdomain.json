@@ -1,0 +1,1108 @@
+{
+  "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain",
+  "Hosts": {
+    "cluster_name": "extensions",
+    "cpu_count": 1,
+    "disk_info": [
+      {
+        "available": "45945608",
+        "device": "/dev/mapper/centos-root",
+        "used": "6457592",
+        "percent": "13%",
+        "size": "52403200",
+        "type": "xfs",
+        "mountpoint": "/"
+      },
+      {
+        "available": "3993984",
+        "device": "devtmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "3993984",
+        "type": "devtmpfs",
+        "mountpoint": "/dev"
+      },
+      {
+        "available": "4005684",
+        "device": "tmpfs",
+        "used": "108",
+        "percent": "1%",
+        "size": "4005792",
+        "type": "tmpfs",
+        "mountpoint": "/dev/shm"
+      },
+      {
+        "available": "3996804",
+        "device": "tmpfs",
+        "used": "8988",
+        "percent": "1%",
+        "size": "4005792",
+        "type": "tmpfs",
+        "mountpoint": "/run"
+      },
+      {
+        "available": "44271412",
+        "device": "/dev/mapper/centos-home",
+        "used": "3489192",
+        "percent": "8%",
+        "size": "47760604",
+        "type": "xfs",
+        "mountpoint": "/home"
+      },
+      {
+        "available": "337168",
+        "device": "/dev/sda1",
+        "used": "171420",
+        "percent": "34%",
+        "size": "508588",
+        "type": "xfs",
+        "mountpoint": "/boot"
+      },
+      {
+        "available": "801160",
+        "device": "tmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1004"
+      },
+      {
+        "available": "801160",
+        "device": "tmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1002"
+      },
+      {
+        "available": "801160",
+        "device": "tmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1001"
+      },
+      {
+        "available": "801160",
+        "device": "tmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1005"
+      },
+      {
+        "available": "801160",
+        "device": "tmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1007"
+      },
+      {
+        "available": "801160",
+        "device": "tmpfs",
+        "used": "0",
+        "percent": "0%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1006"
+      },
+      {
+        "available": "801148",
+        "device": "tmpfs",
+        "used": "12",
+        "percent": "1%",
+        "size": "801160",
+        "type": "tmpfs",
+        "mountpoint": "/run/user/1000"
+      }
+    ],
+    "host_health_report": "",
+    "host_name": "localhost.localdomain",
+    "host_state": "HEALTHY",
+    "host_status": "HEALTHY",
+    "ip": "127.0.0.1",
+    "last_agent_env": {
+      "stackFoldersAndFiles": [],
+      "alternatives": [],
+      "existingUsers": [],
+      "existingRepos": [],
+      "installedPackages": [],
+      "hostHealth": {
+        "activeJavaProcs": [
+          {
+            "user": "hdfs",
+            "pid": 3058,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_datanode -Xmx1024m -Dhdp.version=2.4.2.0-258 -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,console -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop-hdfs-datanode-localhost.localdomain.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -server -server -XX:ParallelGCThreads=4 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=200m -XX:MaxNewSize=200m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081637 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -server -XX:ParallelGCThreads=4 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=200m -XX:MaxNewSize=200m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081637 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -server -XX:ParallelGCThreads=4 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=200m -XX:MaxNewSize=200m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081637 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.datanode.DataNode",
+            "hadoop": true
+          },
+          {
+            "user": "zookeeper",
+            "pid": 3429,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dzookeeper.log.dir=/var/log/zookeeper -Dzookeeper.log.file=zookeeper-zookeeper-server-localhost.localdomain.log -Dzookeeper.root.logger=INFO,ROLLINGFILE -cp /usr/hdp/current/zookeeper-server/bin/../build/classes:/usr/hdp/current/zookeeper-server/bin/../build/lib/*.jar:/usr/hdp/current/zookeeper-server/bin/../lib/xercesMinimal-1.9.6.2.jar:/usr/hdp/current/zookeeper-server/bin/../lib/wagon-provider-api-2.4.jar:/usr/hdp/current/zookeeper-server/bin/../lib/wagon-http-shared4-2.4.jar:/usr/hdp/current/zookeeper-server/bin/../lib/wagon-http-shared-1.0-beta-6.jar:/usr/hdp/current/zookeeper-server/bin/../lib/wagon-http-lightweight-1.0-beta-6.jar:/usr/hdp/current/zookeeper-server/bin/../lib/wagon-http-2.4.jar:/usr/hdp/current/zookeeper-server/bin/../lib/wagon-file-1.0-beta-6.jar:/usr/hdp/current/zookeeper-server/bin/../lib/slf4j-log4j12-1.6.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/slf4j-api-1.6.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/plexus-utils-3.0.8.jar:/usr/hdp/current/zookeeper-server/bin/../lib/plexus-interpolation-1.11.jar:/usr/hdp/current/zookeeper-server/bin/../lib/plexus-container-default-1.0-alpha-9-stable-1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/netty-3.7.0.Final.jar:/usr/hdp/current/zookeeper-server/bin/../lib/nekohtml-1.9.6.2.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-settings-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-repository-metadata-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-project-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-profile-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-plugin-registry-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-model-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-error-diagnostics-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-artifact-manager-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-artifact-2.2.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/maven-ant-tasks-2.1.3.jar:/usr/hdp/current/zookeeper-server/bin/../lib/log4j-1.2.16.jar:/usr/hdp/current/zookeeper-server/bin/../lib/jsoup-1.7.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/jline-0.9.94.jar:/usr/hdp/current/zookeeper-server/bin/../lib/httpcore-4.2.3.jar:/usr/hdp/current/zookeeper-server/bin/../lib/httpclient-4.2.3.jar:/usr/hdp/current/zookeeper-server/bin/../lib/commons-logging-1.1.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/commons-io-2.2.jar:/usr/hdp/current/zookeeper-server/bin/../lib/commons-codec-1.6.jar:/usr/hdp/current/zookeeper-server/bin/../lib/classworlds-1.1-alpha-2.jar:/usr/hdp/current/zookeeper-server/bin/../lib/backport-util-concurrent-3.1.jar:/usr/hdp/current/zookeeper-server/bin/../lib/ant-launcher-1.8.0.jar:/usr/hdp/current/zookeeper-server/bin/../lib/ant-1.8.0.jar:/usr/hdp/current/zookeeper-server/bin/../zookeeper-3.4.6.2.4.2.0-258.jar:/usr/hdp/current/zookeeper-server/bin/../src/java/lib/*.jar:/usr/hdp/current/zookeeper-server/conf::/usr/share/zookeeper/*:/usr/share/zookeeper/* -Xmx1024m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain /usr/hdp/current/zookeeper-server/conf/zoo.cfg",
+            "hadoop": true
+          },
+          {
+            "user": "hdfs",
+            "pid": 3603,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_namenode -Xmx1024m -Dhdp.version=2.4.2.0-258 -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,console -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop-hdfs-namenode-localhost.localdomain.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -server -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=128m -XX:MaxNewSize=128m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081637 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -XX:OnOutOfMemoryError=\"/usr/hdp/current/hadoop-hdfs-namenode/bin/kill-name-node\" -Dorg.mortbay.jetty.Request.maxFormContentSize=-1 -server -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=128m -XX:MaxNewSize=128m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081637 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -XX:OnOutOfMemoryError=\"/usr/hdp/current/hadoop-hdfs-namenode/bin/kill-name-node\" -Dorg.mortbay.jetty.Request.maxFormContentSize=-1 -server -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=128m -XX:MaxNewSize=128m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081637 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -XX:OnOutOfMemoryError=\"/usr/hdp/current/hadoop-hdfs-namenode/bin/kill-name-node\" -Dorg.mortbay.jetty.Request.maxFormContentSize=-1 -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.namenode.NameNode",
+            "hadoop": true
+          },
+          {
+            "user": "yarn",
+            "pid": 5231,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_timelineserver -Xmx1024m -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop-yarn/yarn -Dyarn.log.dir=/var/log/hadoop-yarn/yarn -Dhadoop.log.file=yarn-yarn-timelineserver-localhost.localdomain.log -Dyarn.log.file=yarn-yarn-timelineserver-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=yarn -Dhadoop.root.logger=INFO,EWMA,RFA -Dyarn.root.logger=INFO,EWMA,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -Dyarn.policy.file=hadoop-policy.xml -Djava.io.tmpdir=/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -Dhadoop.log.dir=/var/log/hadoop-yarn/yarn -Dyarn.log.dir=/var/log/hadoop-yarn/yarn -Dhadoop.log.file=yarn-yarn-timelineserver-localhost.localdomain.log -Dyarn.log.file=yarn-yarn-timelineserver-localhost.localdomain.log -Dyarn.home.dir=/usr/hdp/current/hadoop-yarn-timelineserver -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.root.logger=INFO,EWMA,RFA -Dyarn.root.logger=INFO,EWMA,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -classpath /usr/hdp/current/hadoop-client/conf:/usr/hdp/current/hadoop-client/conf:/usr/hdp/current/hadoop-client/conf:/usr/hdp/2.4.2.0-258/hadoop/lib/*:/usr/hdp/2.4.2.0-258/hadoop/.//*:/usr/hdp/2.4.2.0-258/hadoop-hdfs/./:/usr/hdp/2.4.2.0-258/hadoop-hdfs/lib/*:/usr/hdp/2.4.2.0-258/hadoop-hdfs/.//*:/usr/hdp/2.4.2.0-258/hadoop-yarn/lib/*:/usr/hdp/2.4.2.0-258/hadoop-yarn/.//*:/usr/hdp/2.4.2.0-258/hadoop-mapreduce/lib/*:/usr/hdp/2.4.2.0-258/hadoop-mapreduce/.//*:/usr/hdp/current/hadoop-yarn-timelineserver/.//*:/usr/hdp/current/hadoop-yarn-timelineserver/lib/*:/usr/hdp/current/hadoop-client/conf/timelineserver-config/log4j.properties org.apache.hadoop.yarn.server.applicationhistoryservice.ApplicationHistoryServer",
+            "hadoop": true
+          },
+          {
+            "user": "hbase",
+            "pid": 5547,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_master -XX:OnOutOfMemoryError=kill -9 %p -Dhdp.version=2.4.2.0-258 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hbase/hs_err_pid%p.log -Djava.io.tmpdir=/tmp -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/var/log/hbase/gc.log-201609081639 -Xmx1024m -Dhbase.log.dir=/var/log/hbase -Dhbase.log.file=hbase-hbase-master-localhost.localdomain.log -Dhbase.home.dir=/usr/hdp/current/hbase-master/bin/.. -Dhbase.id.str=hbase -Dhbase.root.logger=INFO,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhbase.security.logger=INFO,RFAS org.apache.hadoop.hbase.master.HMaster start",
+            "hadoop": true
+          },
+          {
+            "user": "mapred",
+            "pid": 6163,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_historyserver -Xmx900m -Dhdp.version=2.4.2.0-258 -Djava.net.preferIPv4Stack=true -Djava.io.tmpdir=/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -Dhdp.version= -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop/mapred -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=mapred -Dhadoop.root.logger=INFO,console -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop-mapreduce/mapred -Dhadoop.log.file=hadoop.log -Dhadoop.root.logger=INFO,console -Dhadoop.id.str=mapred -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop/mapred -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=mapred -Dhadoop.root.logger=INFO,console -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop-mapreduce/mapred -Dhadoop.log.file=mapred-mapred-historyserver-localhost.localdomain.log -Dhadoop.root.logger=INFO,RFA -Dmapred.jobsummary.logger=INFO,JSA -Dhadoop.security.logger=INFO,NullAppender org.apache.hadoop.mapreduce.v2.hs.JobHistoryServer",
+            "hadoop": true
+          },
+          {
+            "user": "ams",
+            "pid": 6624,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_master -XX:OnOutOfMemoryError=kill -9 %p -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/ambari-metrics-collector/hs_err_pid%p.log -Djava.io.tmpdir=/var/lib/ambari-metrics-collector/hbase-tmp -Djava.library.path=/usr/lib/ams-hbase/lib/hadoop-native/ -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/var/log/ambari-metrics-collector/gc.log-201609110710 -Xms1152m -Xmx1152m -Xmn192m -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -Dhbase.log.dir=/var/log/ambari-metrics-collector -Dhbase.log.file=hbase-ams-master-localhost.localdomain.log -Dhbase.home.dir=/usr/lib/ams-hbase/bin/.. -Dhbase.id.str=ams -Dhbase.root.logger=INFO,RFA -Dhbase.security.logger=INFO,RFAS org.apache.hadoop.hbase.master.HMaster start",
+            "hadoop": true
+          },
+          {
+            "user": "ams",
+            "pid": 6659,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Xms512m -Xmx512m -Djava.library.path=/usr/lib/ams-hbase/lib/hadoop-native -XX:+UseConcMarkSweepGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/var/log/ambari-metrics-collector/collector-gc.log-201609110710 -cp /usr/lib/ambari-metrics-collector/*:/etc/ambari-metrics-collector/conf -Djava.net.preferIPv4Stack=true -Dams.log.dir=/var/log/ambari-metrics-collector -Dproc_timelineserver org.apache.hadoop.yarn.server.applicationhistoryservice.ApplicationHistoryServer",
+            "hadoop": true
+          },
+          {
+            "user": "yarn",
+            "pid": 6663,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_resourcemanager -Xmx1024m -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop-yarn/yarn -Dyarn.log.dir=/var/log/hadoop-yarn/yarn -Dhadoop.log.file=yarn-yarn-resourcemanager-localhost.localdomain.log -Dyarn.log.file=yarn-yarn-resourcemanager-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=yarn -Dhadoop.root.logger=INFO,EWMA,RFA -Dyarn.root.logger=INFO,EWMA,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -Dyarn.policy.file=hadoop-policy.xml -Djava.io.tmpdir=/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY -Dhadoop.log.dir=/var/log/hadoop-yarn/yarn -Dyarn.log.dir=/var/log/hadoop-yarn/yarn -Dhadoop.log.file=yarn-yarn-resourcemanager-localhost.localdomain.log -Dyarn.log.file=yarn-yarn-resourcemanager-localhost.localdomain.log -Dyarn.home.dir=/usr/hdp/current/hadoop-yarn-resourcemanager -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.root.logger=INFO,EWMA,RFA -Dyarn.root.logger=INFO,EWMA,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -classpath /usr/hdp/current/hadoop-client/conf:/usr/hdp/current/hadoop-client/conf:/usr/hdp/current/hadoop-client/conf:/usr/hdp/2.4.2.0-258/hadoop/lib/*:/usr/hdp/2.4.2.0-258/hadoop/.//*:/usr/hdp/2.4.2.0-258/hadoop-hdfs/./:/usr/hdp/2.4.2.0-258/hadoop-hdfs/lib/*:/usr/hdp/2.4.2.0-258/hadoop-hdfs/.//*:/usr/hdp/2.4.2.0-258/hadoop-yarn/lib/*:/usr/hdp/2.4.2.0-258/hadoop-yarn/.//*:/usr/hdp/2.4.2.0-258/hadoop-mapreduce/lib/*:/usr/hdp/2.4.2.0-258/hadoop-mapreduce/.//*:/usr/hdp/current/hadoop-yarn-resourcemanager/.//*:/usr/hdp/current/hadoop-yarn-resourcemanager/lib/*:/usr/hdp/current/hadoop-client/conf/rm-config/log4j.properties org.apache.hadoop.yarn.server.resourcemanager.ResourceManager",
+            "hadoop": true
+          },
+          {
+            "user": "hdfs",
+            "pid": 6889,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_secondarynamenode -Xmx1024m -Dhdp.version=2.4.2.0-258 -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhdp.version= -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,console -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop/hdfs -Dhadoop.log.file=hadoop-hdfs-secondarynamenode-localhost.localdomain.log -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.id.str=hdfs -Dhadoop.root.logger=INFO,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true -server -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=128m -XX:MaxNewSize=128m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081639 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -XX:OnOutOfMemoryError=\"/usr/hdp/current/hadoop-hdfs-secondarynamenode/bin/kill-secondary-name-node\" -server -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=128m -XX:MaxNewSize=128m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081639 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -XX:OnOutOfMemoryError=\"/usr/hdp/current/hadoop-hdfs-secondarynamenode/bin/kill-secondary-name-node\" -server -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hadoop/hdfs/hs_err_pid%p.log -XX:NewSize=128m -XX:MaxNewSize=128m -Xloggc:/var/log/hadoop/hdfs/gc.log-201609081639 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xms1024m -Xmx1024m -Dhadoop.security.logger=INFO,DRFAS -Dhdfs.audit.logger=INFO,DRFAAUDIT -XX:OnOutOfMemoryError=\"/usr/hdp/current/hadoop-hdfs-secondarynamenode/bin/kill-secondary-name-node\" -Dhadoop.security.logger=INFO,RFAS org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode",
+            "hadoop": true
+          },
+          {
+            "user": "hbase",
+            "pid": 7382,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_regionserver -XX:OnOutOfMemoryError=kill -9 %p -Dhdp.version=2.4.2.0-258 -XX:+UseConcMarkSweepGC -XX:ErrorFile=/var/log/hbase/hs_err_pid%p.log -Djava.io.tmpdir=/tmp -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/var/log/hbase/gc.log-201609081640 -Xmn200m -XX:CMSInitiatingOccupancyFraction=70 -Xms1024m -Xmx1024m -Dhbase.log.dir=/var/log/hbase -Dhbase.log.file=hbase-hbase-regionserver-localhost.localdomain.log -Dhbase.home.dir=/usr/hdp/current/hbase-regionserver/bin/.. -Dhbase.id.str=hbase -Dhbase.root.logger=INFO,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native -Dhbase.security.logger=INFO,RFAS org.apache.hadoop.hbase.regionserver.HRegionServer start",
+            "hadoop": true
+          },
+          {
+            "user": "yarn",
+            "pid": 8876,
+            "command": "/usr/jdk64/jdk1.8.0_60/bin/java -Dproc_nodemanager -Xmx1024m -Dhdp.version=2.4.2.0-258 -Dhadoop.log.dir=/var/log/hadoop-yarn/yarn -Dyarn.log.dir=/var/log/hadoop-yarn/yarn -Dhadoop.log.file=yarn-yarn-nodemanager-localhost.localdomain.log -Dyarn.log.file=yarn-yarn-nodemanager-localhost.localdomain.log -Dyarn.home.dir= -Dyarn.id.str=yarn -Dhadoop.root.logger=INFO,EWMA,RFA -Dyarn.root.logger=INFO,EWMA,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -Dyarn.policy.file=hadoop-policy.xml -Djava.io.tmpdir=/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -server -Dhadoop.log.dir=/var/log/hadoop-yarn/yarn -Dyarn.log.dir=/var/log/hadoop-yarn/yarn -Dhadoop.log.file=yarn-yarn-nodemanager-localhost.localdomain.log -Dyarn.log.file=yarn-yarn-nodemanager-localhost.localdomain.log -Dyarn.home.dir=/usr/hdp/current/hadoop-yarn-nodemanager -Dhadoop.home.dir=/usr/hdp/2.4.2.0-258/hadoop -Dhadoop.root.logger=INFO,EWMA,RFA -Dyarn.root.logger=INFO,EWMA,RFA -Djava.library.path=:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir:/usr/hdp/2.4.2.0-258/hadoop/lib/native/Linux-amd64-64:/usr/hdp/2.4.2.0-258/hadoop/lib/native:/var/lib/ambari-agent/tmp/hadoop_java_io_tmpdir -classpath /usr/hdp/current/hadoop-client/conf:/usr/hdp/current/hadoop-client/conf:/usr/hdp/current/hadoop-client/conf:/usr/hdp/2.4.2.0-258/hadoop/lib/*:/usr/hdp/2.4.2.0-258/hadoop/.//*:/usr/hdp/2.4.2.0-258/hadoop-hdfs/./:/usr/hdp/2.4.2.0-258/hadoop-hdfs/lib/*:/usr/hdp/2.4.2.0-258/hadoop-hdfs/.//*:/usr/hdp/2.4.2.0-258/hadoop-yarn/lib/*:/usr/hdp/2.4.2.0-258/hadoop-yarn/.//*:/usr/hdp/2.4.2.0-258/hadoop-mapreduce/lib/*:/usr/hdp/2.4.2.0-258/hadoop-mapreduce/.//*:/usr/hdp/current/hadoop-yarn-nodemanager/.//*:/usr/hdp/current/hadoop-yarn-nodemanager/lib/*:/usr/hdp/current/hadoop-client/conf/nm-config/log4j.properties org.apache.hadoop.yarn.server.nodemanager.NodeManager",
+            "hadoop": true
+          }
+        ],
+        "agentTimeStampAtReporting": 1473874848771,
+        "serverTimeStampAtReporting": 1473874848968,
+        "liveServices": [
+          {
+            "desc": "â ntpd.service - Network Time Service\n   Loaded: loaded (/usr/lib/systemd/system/ntpd.service; enabled; vendor preset: disabled)\n   Active: failed (Result: exit-code) since Mon 2016-09-12 14:33:01 EDT; 1 day 23h ago\n  Process: 589 ExecStart=/usr/sbin/ntpd -u ntp:ntp $OPTIONS (code=exited, status=0/SUCCESS)\n Main PID: 604 (code=exited, status=255)\n\nSep 08 16:35:23 localhost.localdomain ntpd_intres[621]: DNS 3.centos.pool.ntp.org -> 208.53.158.34\nSep 08 16:35:24 localhost.localdomain ntpd[604]: 0.0.0.0 c61c 0c clock_step -14.617185 s\nSep 08 16:35:09 localhost.localdomain ntpd[604]: 0.0.0.0 c614 04 freq_mode\nSep 08 16:35:11 localhost.localdomain ntpd[604]: 0.0.0.0 c618 08 no_sys_peer\nSep 08 16:51:00 localhost.localdomain ntpd[604]: 0.0.0.0 c612 02 freq_set kernel -78.902 PPM\nSep 08 16:51:00 localhost.localdomain ntpd[604]: 0.0.0.0 c615 05 clock_sync\nSep 12 12:25:33 localhost.localdomain ntpd[604]: 0.0.0.0 0618 08 no_sys_peer\nSep 12 14:33:01 localhost.localdomain systemd[1]: ntpd.service: main process exited, code=exited, status=255/n/a\nSep 12 14:33:01 localhost.localdomain systemd[1]: Unit ntpd.service entered failed state.\nSep 12 14:33:01 localhost.localdomain systemd[1]: ntpd.service failed.\n",
+            "status": "Unhealthy",
+            "name": "ntpd"
+          }
+        ]
+      },
+      "umask": 18,
+      "transparentHugePage": "",
+      "firewallRunning": false,
+      "firewallName": "iptables",
+      "reverseLookup": true
+    },
+    "last_heartbeat_time": 1473874858973,
+    "last_registration_time": 1473366970947,
+    "maintenance_state": "OFF",
+    "os_arch": "x86_64",
+    "os_family": "redhat7",
+    "os_type": "centos7",
+    "ph_cpu_count": 1,
+    "public_host_name": "localhost.localdomain",
+    "rack_info": "/default-rack",
+    "recovery_report": {
+      "summary": "RECOVERABLE",
+      "component_reports": [
+        {
+          "name": "METRICS_COLLECTOR",
+          "num_attempts": 1,
+          "limit_reached": false
+        }
+      ]
+    },
+    "recovery_summary": "RECOVERABLE",
+    "total_mem": 8011588,
+    "desired_configs": {
+      "ams-env": {
+        "default": "version1"
+      },
+      "ams-hbase-env": {
+        "default": "version1"
+      },
+      "ams-hbase-log4j": {
+        "default": "version1"
+      },
+      "ams-hbase-policy": {
+        "default": "version1"
+      },
+      "ams-hbase-security-site": {
+        "default": "version1"
+      },
+      "ams-hbase-site": {
+        "default": "version1"
+      },
+      "ams-log4j": {
+        "default": "version1"
+      },
+      "ams-site": {
+        "default": "version1"
+      },
+      "capacity-scheduler": {
+        "default": "version1"
+      },
+      "cluster-env": {
+        "default": "version1"
+      },
+      "core-site": {
+        "default": "version1"
+      },
+      "hadoop-env": {
+        "default": "version1"
+      },
+      "hadoop-policy": {
+        "default": "version1"
+      },
+      "hbase-env": {
+        "default": "version1"
+      },
+      "hbase-log4j": {
+        "default": "version1"
+      },
+      "hbase-policy": {
+        "default": "version1"
+      },
+      "hbase-site": {
+        "default": "version1"
+      },
+      "hdfs-log4j": {
+        "default": "version1"
+      },
+      "hdfs-site": {
+        "default": "version1"
+      },
+      "mapred-env": {
+        "default": "version1"
+      },
+      "mapred-site": {
+        "default": "version1"
+      },
+      "ranger-hbase-audit": {
+        "default": "version1"
+      },
+      "ranger-hbase-plugin-properties": {
+        "default": "version1"
+      },
+      "ranger-hbase-policymgr-ssl": {
+        "default": "version1"
+      },
+      "ranger-hbase-security": {
+        "default": "version1"
+      },
+      "ranger-hdfs-audit": {
+        "default": "version1"
+      },
+      "ranger-hdfs-plugin-properties": {
+        "default": "version1"
+      },
+      "ranger-hdfs-policymgr-ssl": {
+        "default": "version1"
+      },
+      "ranger-hdfs-security": {
+        "default": "version1"
+      },
+      "ranger-yarn-audit": {
+        "default": "version1"
+      },
+      "ranger-yarn-plugin-properties": {
+        "default": "version1"
+      },
+      "ranger-yarn-policymgr-ssl": {
+        "default": "version1"
+      },
+      "ranger-yarn-security": {
+        "default": "version1"
+      },
+      "ssl-client": {
+        "default": "version1"
+      },
+      "ssl-server": {
+        "default": "version1"
+      },
+      "yarn-env": {
+        "default": "version1"
+      },
+      "yarn-log4j": {
+        "default": "version1"
+      },
+      "yarn-site": {
+        "default": "version1"
+      },
+      "zoo.cfg": {
+        "default": "version1"
+      },
+      "zookeeper-env": {
+        "default": "version1"
+      },
+      "zookeeper-log4j": {
+        "default": "version1"
+      }
+    }
+  },
+  "alerts_summary": {
+    "CRITICAL": 0,
+    "MAINTENANCE": 0,
+    "OK": 38,
+    "UNKNOWN": 0,
+    "WARNING": 0
+  },
+  "metrics": {
+    "cpu": {
+      "cpu_idle": 75.4,
+      "cpu_nice": 0.0,
+      "cpu_num": 1.0,
+      "cpu_system": 1.8,
+      "cpu_user": 20.4,
+      "cpu_wio": 2.4
+    },
+    "disk": {
+      "disk_free": 86.38,
+      "disk_total": 96.01,
+      "read_bytes": 2.860947456E9,
+      "read_count": 55156.0,
+      "read_time": 792938.0,
+      "write_bytes": 8.9416548352E10,
+      "write_count": 2226878.0,
+      "write_time": 4.3378297E7
+    },
+    "load": {
+      "load_fifteen": 15.62,
+      "load_five": 2.44,
+      "load_one": 0.89
+    },
+    "memory": {
+      "mem_cached": 872540.0,
+      "mem_free": 386116.0,
+      "mem_shared": 0.0,
+      "mem_total": 8011588.0,
+      "swap_free": 4005104.0
+    },
+    "network": {
+      "bytes_in": 936.7463329971245,
+      "bytes_out": 1486.3333762196194,
+      "pkts_in": 1.990536194214034,
+      "pkts_out": 2.1895898136354375
+    },
+    "process": {
+      "proc_run": 1.0,
+      "proc_total": 170.0
+    }
+  },
+  "alerts": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/11",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 48,
+        "definition_name": "ambari_agent_disk_usage",
+        "host_name": "localhost.localdomain",
+        "id": 11,
+        "service_name": "AMBARI"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/37",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 49,
+        "definition_name": "ambari_server_agent_heartbeat",
+        "host_name": "localhost.localdomain",
+        "id": 37,
+        "service_name": "AMBARI"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/9",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 38,
+        "definition_name": "ams_metrics_collector_process",
+        "host_name": "localhost.localdomain",
+        "id": 9,
+        "service_name": "AMBARI_METRICS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/10",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 42,
+        "definition_name": "ams_metrics_collector_autostart",
+        "host_name": "localhost.localdomain",
+        "id": 10,
+        "service_name": "AMBARI_METRICS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/13",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 37,
+        "definition_name": "ams_metrics_monitor_process",
+        "host_name": "localhost.localdomain",
+        "id": 13,
+        "service_name": "AMBARI_METRICS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/21",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 39,
+        "definition_name": "ams_metrics_collector_hbase_master_process",
+        "host_name": "localhost.localdomain",
+        "id": 21,
+        "service_name": "AMBARI_METRICS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/43",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 40,
+        "definition_name": "ams_metrics_collector_hbase_master_cpu",
+        "host_name": "localhost.localdomain",
+        "id": 43,
+        "service_name": "AMBARI_METRICS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/1",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 47,
+        "definition_name": "hbase_regionserver_process",
+        "host_name": "localhost.localdomain",
+        "id": 1,
+        "service_name": "HBASE"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/22",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 43,
+        "definition_name": "hbase_master_process",
+        "host_name": "localhost.localdomain",
+        "id": 22,
+        "service_name": "HBASE"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/24",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 46,
+        "definition_name": "regionservers_health_summary",
+        "host_name": "localhost.localdomain",
+        "id": 24,
+        "service_name": "HBASE"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/44",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 44,
+        "definition_name": "hbase_master_cpu",
+        "host_name": "localhost.localdomain",
+        "id": 44,
+        "service_name": "HBASE"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/2",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 33,
+        "definition_name": "datanode_webui",
+        "host_name": "localhost.localdomain",
+        "id": 2,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/5",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 20,
+        "definition_name": "upgrade_finalized_state",
+        "host_name": "localhost.localdomain",
+        "id": 5,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/6",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 31,
+        "definition_name": "namenode_last_checkpoint",
+        "host_name": "localhost.localdomain",
+        "id": 6,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/12",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 26,
+        "definition_name": "datanode_process",
+        "host_name": "localhost.localdomain",
+        "id": 12,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/15",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 16,
+        "definition_name": "secondary_namenode_process",
+        "host_name": "localhost.localdomain",
+        "id": 15,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/18",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 32,
+        "definition_name": "namenode_webui",
+        "host_name": "localhost.localdomain",
+        "id": 18,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/19",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 21,
+        "definition_name": "datanode_health_summary",
+        "host_name": "localhost.localdomain",
+        "id": 19,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/20",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 25,
+        "definition_name": "namenode_directory_status",
+        "host_name": "localhost.localdomain",
+        "id": 20,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/30",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 23,
+        "definition_name": "datanode_unmounted_data_dir",
+        "host_name": "localhost.localdomain",
+        "id": 30,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/31",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 34,
+        "definition_name": "datanode_storage",
+        "host_name": "localhost.localdomain",
+        "id": 31,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/32",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 28,
+        "definition_name": "namenode_hdfs_blocks_health",
+        "host_name": "localhost.localdomain",
+        "id": 32,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/33",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 29,
+        "definition_name": "namenode_hdfs_capacity_utilization",
+        "host_name": "localhost.localdomain",
+        "id": 33,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/34",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 30,
+        "definition_name": "namenode_rpc_latency",
+        "host_name": "localhost.localdomain",
+        "id": 34,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/35",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 18,
+        "definition_name": "namenode_hdfs_pending_deletion_blocks",
+        "host_name": "localhost.localdomain",
+        "id": 35,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/40",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 15,
+        "definition_name": "namenode_cpu",
+        "host_name": "localhost.localdomain",
+        "id": 40,
+        "service_name": "HDFS"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/3",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 12,
+        "definition_name": "mapreduce_history_server_webui",
+        "host_name": "localhost.localdomain",
+        "id": 3,
+        "service_name": "MAPREDUCE2"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/14",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 11,
+        "definition_name": "mapreduce_history_server_process",
+        "host_name": "localhost.localdomain",
+        "id": 14,
+        "service_name": "MAPREDUCE2"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/38",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 14,
+        "definition_name": "mapreduce_history_server_cpu",
+        "host_name": "localhost.localdomain",
+        "id": 38,
+        "service_name": "MAPREDUCE2"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/39",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 13,
+        "definition_name": "mapreduce_history_server_rpc_latency",
+        "host_name": "localhost.localdomain",
+        "id": 39,
+        "service_name": "MAPREDUCE2"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/4",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 10,
+        "definition_name": "yarn_app_timeline_server_webui",
+        "host_name": "localhost.localdomain",
+        "id": 4,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/7",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 5,
+        "definition_name": "yarn_resourcemanager_webui",
+        "host_name": "localhost.localdomain",
+        "id": 7,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/8",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 9,
+        "definition_name": "nodemanager_health_summary",
+        "host_name": "localhost.localdomain",
+        "id": 8,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/16",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 7,
+        "definition_name": "yarn_nodemanager_webui",
+        "host_name": "localhost.localdomain",
+        "id": 16,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/17",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 4,
+        "definition_name": "yarn_nodemanager_health",
+        "host_name": "localhost.localdomain",
+        "id": 17,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/41",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 8,
+        "definition_name": "yarn_resourcemanager_rpc_latency",
+        "host_name": "localhost.localdomain",
+        "id": 41,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/42",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 6,
+        "definition_name": "yarn_resourcemanager_cpu",
+        "host_name": "localhost.localdomain",
+        "id": 42,
+        "service_name": "YARN"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/alerts/23",
+      "Alert": {
+        "cluster_name": "extensions",
+        "definition_id": 2,
+        "definition_name": "zookeeper_server_process",
+        "host_name": "localhost.localdomain",
+        "id": 23,
+        "service_name": "ZOOKEEPER"
+      }
+    }
+  ],
+  "kerberos_identities": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/HTTP%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "HTTP/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/ambari-qa-extensions%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "ambari-qa-extensions@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/amshbase%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "amshbase/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/amszk%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "amszk/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/dn%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "dn/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/hbase-extensions%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "hbase-extensions@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/hbase%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "hbase/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/hdfs-extensions%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "hdfs-extensions@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/jhs%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "jhs/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/nm%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "nm/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/nn%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "nn/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/rm%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "rm/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/yarn%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "yarn/localhost.localdomain@${kerberos-env/realm}"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/kerberos_identities/zookeeper%2Flocalhost.localdomain%40%24%7Bkerberos-env%2Frealm%7D",
+      "KerberosIdentity": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "principal_name": "zookeeper/localhost.localdomain@${kerberos-env/realm}"
+      }
+    }
+  ],
+  "stack_versions": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/stack_versions/1",
+      "HostStackVersions": {
+        "cluster_name": "extensions",
+        "host_name": "localhost.localdomain",
+        "id": 1,
+        "repository_version": 1,
+        "stack": "HDP",
+        "version": "2.4"
+      }
+    }
+  ],
+  "host_components": [
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/APP_TIMELINE_SERVER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "APP_TIMELINE_SERVER",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/DATANODE",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "DATANODE",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HBASE_CLIENT",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "HBASE_CLIENT",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HBASE_MASTER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "HBASE_MASTER",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HBASE_REGIONSERVER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "HBASE_REGIONSERVER",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HDFS_CLIENT",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "HDFS_CLIENT",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/HISTORYSERVER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "HISTORYSERVER",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/MAPREDUCE2_CLIENT",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "MAPREDUCE2_CLIENT",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/METRICS_COLLECTOR",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "METRICS_COLLECTOR",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/METRICS_MONITOR",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "METRICS_MONITOR",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/NAMENODE",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "NAMENODE",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/NODEMANAGER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "NODEMANAGER",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/RESOURCEMANAGER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "RESOURCEMANAGER",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/SECONDARY_NAMENODE",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "SECONDARY_NAMENODE",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/YARN_CLIENT",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "YARN_CLIENT",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/ZOOKEEPER_CLIENT",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "ZOOKEEPER_CLIENT",
+        "host_name": "localhost.localdomain"
+      }
+    },
+    {
+      "href": "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/ZOOKEEPER_SERVER",
+      "HostRoles": {
+        "cluster_name": "extensions",
+        "component_name": "ZOOKEEPER_SERVER",
+        "host_name": "localhost.localdomain"
+      }
+    }
+  ]
+}

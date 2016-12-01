@@ -1,0 +1,90 @@
+<!--
+Hadoop Resource Manager API documentation
+http://hadoop.apache.org/docs/r2.5.2/hadoop-yarn/hadoop-yarn-site/ResourceManagerRest.html
+
+This code is written with Cloudera 5.3 Virtualbox VM
+-->
+<metric-config>
+    <stat url="ws/v1/cluster/metrics" metric-type="AVG.AVG.COL">
+        <metric attr="clusterMetrics|appsSubmitted" label="Cluster|Apps|Submitted"/>
+        <metric attr="clusterMetrics|appsCompleted" label="Cluster|Apps|Completed"/>
+        <metric attr="clusterMetrics|appsPending" label="Cluster|Apps|Pending"/>
+        <metric attr="clusterMetrics|appsRunning" label="Cluster|Apps|Running"/>
+        <metric attr="clusterMetrics|appsFailed" label="Cluster|Apps|Failed"/>
+        <metric attr="clusterMetrics|appsKilled" label="Cluster|Apps|Killed"/>
+        <metric attr="clusterMetrics|reservedMB" label="Cluster|Memory|Reserved (MB)"/>
+        <metric attr="clusterMetrics|availableMB" label="Cluster|Memory|Available (MB)"/>
+        <metric attr="clusterMetrics|allocatedMB" label="Cluster|Memory|Allocated (MB)"/>
+        <metric attr="clusterMetrics|totalMB" label="Cluster|Memory|Total (MB)"/>
+        <metric attr="clusterMetrics|reservedVirtualCores" label="Cluster|VirtualCores|Reserved"/>
+        <metric attr="clusterMetrics|availableVirtualCores" label="Cluster|VirtualCores|Available"/>
+        <metric attr="clusterMetrics|allocatedVirtualCores" label="Cluster|VirtualCores|Allocated"/>
+        <metric attr="clusterMetrics|totalVirtualCores" label="Cluster|VirtualCores|Total"/>
+        <metric attr="clusterMetrics|containersAllocated" label="Cluster|Containers|Allocated"/>
+        <metric attr="clusterMetrics|containersReserved" label="Cluster|Containers|Reserved"/>
+        <metric attr="clusterMetrics|containersPending" label="Cluster|Containers|Pending"/>
+        <metric attr="clusterMetrics|totalNodes" label="Cluster|Nodes|Total"/>
+        <metric attr="clusterMetrics|lostNodes" label="Cluster|Nodes|Lost"/>
+        <metric attr="clusterMetrics|unhealthyNodes" label="Cluster|Nodes|Unhealthy"/>
+        <metric attr="clusterMetrics|decommissionedNodes" label="Cluster|Nodes|Decommissioned"/>
+        <metric attr="clusterMetrics|rebootedNodes" label="Cluster|Nodes|Rebooted"/>
+        <metric attr="clusterMetrics|activeNodes" label="Cluster|Nodes|Active"/>
+    </stat>
+
+    <stat url="ws/v1/cluster/nodes" children="nodes|node" label="Nodes" metric-type="AVG.AVG.COL">
+        <metric attr="state" label="{nodeHostName}|State" converter="node-state-converter"/>
+        <metric attr="numContainers" label="{nodeHostName}|Num of Containers"/>
+        <metric attr="usedMemoryMB" label="{nodeHostName}|Memory Used (MB)"/>
+        <metric attr="availMemoryMB" label="{nodeHostName}|Memory Available (MB)"/>
+        <metric attr="usedVirtualCores" label="{nodeHostName}|Virtual Cores Used"/>
+        <metric attr="availableVirtualCores" label="{nodeHostName}|Virtual Cores Available"/>
+    </stat>
+
+    <stat name="capacitySchedulerQueue" metric-type="AVG.AVG.COL">
+        <metric attr="state" label="{queueName}|State" converter="node-state-converter"/>
+        <metric attr="capacity" label="{queueName}|Capacity"/>
+        <metric attr="usedCapacity" label="{queueName}|Capacity Used"/>
+        <metric attr="maxCapacity" label="{queueName}|Capacity Max"/>
+        <metric attr="resourcesUsed|memory" label="{queueName}|Memory Used"/>
+        <metric attr="resourcesUsed|vCores" label="{queueName}|Virtual Cores Used"/>
+
+        <metric attr="numActiveApplications" label="{queueName}|Applications Active"/>
+        <metric attr="numApplications" label="{queueName}|Applications"/>
+        <metric attr="numContainers" label="{queueName}|Containers"/>
+
+    </stat>
+    <stat name="fairSchedulerQueue" metric-type="AVG.AVG.COL">
+        <metric attr="maxResources|memory" label="{queueName}|Memory|Max"/>
+        <metric attr="minResources|memory" label="{queueName}|Memory|Min"/>
+        <metric attr="usedResources|memory" label="{queueName}|Memory|Used"/>
+        <metric attr="maxResources|vCores" label="{queueName}|Virtual Cores|Max"/>
+        <metric attr="minResources|vCores" label="{queueName}|Virtual Cores|Min"/>
+        <metric attr="usedResources|vCores" label="{queueName}|Virtual Cores|Used"/>
+    </stat>
+
+    <stat name="fifoScheduler" metric-type="AVG.AVG.COL">
+        <metric attr="capacity" label="Capacity"/>
+        <metric attr="usedCapacity" label="Capacity Used"/>
+        <metric attr="qstate" label="Queue State" converter="node-state-converter"/>
+        <metric attr="minQueueMemoryCapacity" label="Min Queue Memory Capacity"/>
+        <metric attr="maxQueueMemoryCapacity" label="Max Queue Memory Capacity"/>
+        <metric attr="numNodes" label="Node|Count"/>
+        <metric attr="usedNodeCapacity" label="Node|Used Capacity"/>
+        <metric attr="availNodeCapacity" label="Node|Available Capacity"/>
+        <metric attr="totalNodeCapacity" label="Node|Total Capacity"/>
+        <metric attr="numContainers" label="Containers"/>
+    </stat>
+
+    <converter-group name="node-state-converter">
+        <!-- Less Than 10 CRITICAL-->
+        <converter str="UNHEALTHY" value="2"/>
+        <converter str="DECOMMISSIONED" value="3"/>
+        <converter str="LOST" value="4"/>
+        <!-- Less Than 20 WARNING-->
+        <converter str="NEW" value="10"/>
+        <converter str="REBOOTED" value="11"/>
+
+        <converter str="RUNNING" value="100"/>
+
+    </converter-group>
+</metric-config>

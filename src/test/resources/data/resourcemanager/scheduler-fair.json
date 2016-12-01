@@ -1,0 +1,102 @@
+{
+  "scheduler": {
+    "schedulerInfo": {
+      "type": "fairScheduler",
+      "rootQueue": {
+        "maxApps": 2147483647,
+        "minResources": {
+          "memory": 0,
+          "vCores": 0
+        },
+        "maxResources": {
+          "memory": 8192,
+          "vCores": 8
+        },
+        "usedResources": {
+          "memory": 0,
+          "vCores": 0
+        },
+        "steadyFairResources": {
+          "memory": 8192,
+          "vCores": 8
+        },
+        "fairResources": {
+          "memory": 8192,
+          "vCores": 8
+        },
+        "clusterResources": {
+          "memory": 8192,
+          "vCores": 8
+        },
+        "queueName": "root",
+        "schedulingPolicy": "fair",
+        "childQueues": [
+          {
+            "type": "fairSchedulerLeafQueueInfo",
+            "maxApps": 2147483647,
+            "minResources": {
+              "memory": 0,
+              "vCores": 0
+            },
+            "maxResources": {
+              "memory": 8192,
+              "vCores": 8
+            },
+            "usedResources": {
+              "memory": 0,
+              "vCores": 0
+            },
+            "steadyFairResources": {
+              "memory": 4096,
+              "vCores": 0
+            },
+            "fairResources": {
+              "memory": 0,
+              "vCores": 0
+            },
+            "clusterResources": {
+              "memory": 8192,
+              "vCores": 8
+            },
+            "queueName": "root.default",
+            "schedulingPolicy": "fair",
+            "numPendingApps": 0,
+            "numActiveApps": 0
+          },
+          {
+            "type": "fairSchedulerLeafQueueInfo",
+            "maxApps": 2147483647,
+            "minResources": {
+              "memory": 0,
+              "vCores": 0
+            },
+            "maxResources": {
+              "memory": 8192,
+              "vCores": 8
+            },
+            "usedResources": {
+              "memory": 0,
+              "vCores": 0
+            },
+            "steadyFairResources": {
+              "memory": 4096,
+              "vCores": 0
+            },
+            "fairResources": {
+              "memory": 0,
+              "vCores": 0
+            },
+            "clusterResources": {
+              "memory": 8192,
+              "vCores": 8
+            },
+            "queueName": "root.hdfs",
+            "schedulingPolicy": "fair",
+            "numPendingApps": 0,
+            "numActiveApps": 0
+          }
+        ]
+      }
+    }
+  }
+}

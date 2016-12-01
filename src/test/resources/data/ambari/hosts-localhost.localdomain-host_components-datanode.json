@@ -1,0 +1,380 @@
+{
+  "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain/host_components/DATANODE",
+  "HostRoles" : {
+    "cluster_name" : "extensions",
+    "component_name" : "DATANODE",
+    "desired_admin_state" : "INSERVICE",
+    "desired_stack_id" : "HDP-2.4",
+    "desired_state" : "STARTED",
+    "hdp_version" : "HDP-2.4.2.0-258",
+    "host_name" : "localhost.localdomain",
+    "maintenance_state" : "OFF",
+    "service_name" : "HDFS",
+    "stack_id" : "HDP-2.4",
+    "stale_configs" : false,
+    "state" : "STARTED",
+    "upgrade_state" : "NONE",
+    "actual_configs" : {
+      "ams-env" : {
+        "default" : "version1"
+      },
+      "ams-hbase-env" : {
+        "default" : "version1"
+      },
+      "ams-hbase-log4j" : {
+        "default" : "version1"
+      },
+      "ams-hbase-policy" : {
+        "default" : "version1"
+      },
+      "ams-hbase-security-site" : {
+        "default" : "version1"
+      },
+      "ams-hbase-site" : {
+        "default" : "version1"
+      },
+      "ams-log4j" : {
+        "default" : "version1"
+      },
+      "ams-site" : {
+        "default" : "version1"
+      },
+      "capacity-scheduler" : {
+        "default" : "version1"
+      },
+      "cluster-env" : {
+        "default" : "version1"
+      },
+      "core-site" : {
+        "default" : "version1"
+      },
+      "hadoop-env" : {
+        "default" : "version1"
+      },
+      "hadoop-policy" : {
+        "default" : "version1"
+      },
+      "hbase-env" : {
+        "default" : "version1"
+      },
+      "hbase-log4j" : {
+        "default" : "version1"
+      },
+      "hbase-policy" : {
+        "default" : "version1"
+      },
+      "hbase-site" : {
+        "default" : "version1"
+      },
+      "hdfs-log4j" : {
+        "default" : "version1"
+      },
+      "hdfs-site" : {
+        "default" : "version1"
+      },
+      "mapred-env" : {
+        "default" : "version1"
+      },
+      "mapred-site" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-audit" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-hbase-security" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-audit" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-hdfs-security" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-audit" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-plugin-properties" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-policymgr-ssl" : {
+        "default" : "version1"
+      },
+      "ranger-yarn-security" : {
+        "default" : "version1"
+      },
+      "ssl-client" : {
+        "default" : "version1"
+      },
+      "ssl-server" : {
+        "default" : "version1"
+      },
+      "yarn-env" : {
+        "default" : "version1"
+      },
+      "yarn-log4j" : {
+        "default" : "version1"
+      },
+      "yarn-site" : {
+        "default" : "version1"
+      },
+      "zoo.cfg" : {
+        "default" : "version1"
+      },
+      "zookeeper-env" : {
+        "default" : "version1"
+      },
+      "zookeeper-log4j" : {
+        "default" : "version1"
+      }
+    }
+  },
+  "host" : {
+    "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/hosts/localhost.localdomain"
+  },
+  "metrics" : {
+    "FSDatasetState" : {
+      "org" : {
+        "apache" : {
+          "hadoop" : {
+            "hdfs" : {
+              "server" : {
+                "datanode" : {
+                  "fsdataset" : {
+                    "impl" : {
+                      "FsDatasetImpl" : {
+                        "CacheCapacity" : 0.0,
+                        "CacheUsed" : 0.0,
+                        "EstimatedCapacityLostTotal" : 0.0,
+                        "LastVolumeFailureDate" : 0.0,
+                        "NumBlocksCached" : 0.0,
+                        "NumBlocksFailedToCache" : 0.0,
+                        "NumBlocksFailedToUnCache" : 438.0,
+                        "Remaining" : 4.5526732966E10
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cpu" : {
+      "cpu_idle" : 76.7,
+      "cpu_nice" : 0.0,
+      "cpu_system" : 2.0,
+      "cpu_user" : 15.7,
+      "cpu_wio" : 5.1
+    },
+    "dfs" : {
+      "FSDatasetState" : {
+        "Capacity" : 52587134976,
+        "DfsUsed" : 212516966,
+        "NumFailedVolumes" : 0
+      },
+      "FSNamesystem" : {
+        "HostName" : "localhost",
+        "HttpPort" : null,
+        "NamenodeAddress" : "{\"localhost.localdomain\":\"BP-199472237-127.0.0.1-1468940940039\"}",
+        "RpcPort" : "8010",
+        "Version" : "2.7.1.2.4.2.0-258",
+        "VolumeInfo" : "{\"/hadoop/hdfs/data/current\":{\"usedSpace\":212516966,\"freeSpace\":45518147750,\"reservedSpace\":1073741824}}"
+      },
+      "datanode" : {
+        "BlocksCached" : 0.0,
+        "BlocksUncached" : 0.0,
+        "CacheReportsAvgTime" : 0.0,
+        "CacheReportsNumOps" : 0.0,
+        "Capacity" : 5.2587134976E10,
+        "DatanodeNetworkErrors" : 0.0,
+        "DfsUsed" : 2.12516966E8,
+        "FlushNanosAvgTime" : 315155.0,
+        "FlushNanosNumOps" : 0.0,
+        "FsyncCount" : 0.0,
+        "FsyncNanosAvgTime" : 0.0,
+        "FsyncNanosNumOps" : 0.0,
+        "IncrementalBlockReportsAvgTime" : 0.0,
+        "IncrementalBlockReportsNumOps" : 0.0,
+        "NumFailedVolumes" : 0.0,
+        "PacketAckRoundTripTimeNanosAvgTime" : 0.0,
+        "PacketAckRoundTripTimeNanosNumOps" : 0.0,
+        "RamDiskBlocksDeletedBeforeLazyPersisted" : 0.0,
+        "RamDiskBlocksEvicted" : 0.0,
+        "RamDiskBlocksEvictedWithoutRead" : 0.0,
+        "RamDiskBlocksEvictionWindowMsAvgTime" : 0.0,
+        "RamDiskBlocksEvictionWindowMsNumOps" : 0.0,
+        "RamDiskBlocksLazyPersistWindowMsAvgTime" : 0.0,
+        "RamDiskBlocksLazyPersistWindowMsNumOps" : 0.0,
+        "RamDiskBlocksLazyPersisted" : 0.0,
+        "RamDiskBlocksReadHits" : 0.0,
+        "RamDiskBlocksWrite" : 0.0,
+        "RamDiskBlocksWriteFallback" : 0.0,
+        "RamDiskBytesLazyPersisted" : 0.0,
+        "RamDiskBytesWrite" : 0.0,
+        "RemoteBytesRead" : 0.0,
+        "RemoteBytesWritten" : 0.0,
+        "SendDataPacketBlockedOnNetworkNanosAvgTime" : 0.0,
+        "SendDataPacketBlockedOnNetworkNanosNumOps" : 0.0,
+        "SendDataPacketTransferNanosAvgTime" : 0.0,
+        "SendDataPacketTransferNanosNumOps" : 0.0,
+        "TotalReadTime" : 0.0,
+        "TotalWriteTime" : 0.0,
+        "VolumeFailures" : 0.0,
+        "blockChecksumOp_avg_time" : 0.0,
+        "blockChecksumOp_num_ops" : 0.0,
+        "blockReports_avg_time" : 15.0,
+        "blockReports_num_ops" : 0.0,
+        "block_verification_failures" : 0.0,
+        "blocks_get_local_pathinfo" : 0.0,
+        "blocks_read" : 0.0,
+        "blocks_removed" : 0.0,
+        "blocks_replicated" : 0.0,
+        "blocks_verified" : 0.0,
+        "blocks_written" : 0.0,
+        "bytes_read" : 0.0,
+        "bytes_written" : 0.0,
+        "copyBlockOp_avg_time" : 0.0,
+        "copyBlockOp_num_ops" : 0.0,
+        "heartBeats_avg_time" : 0.7999999999999999,
+        "heartBeats_num_ops" : 20.0,
+        "readBlockOp_avg_time" : 0.0,
+        "readBlockOp_num_ops" : 0.0,
+        "reads_from_local_client" : 0.0,
+        "reads_from_remote_client" : 0.0,
+        "replaceBlockOp_avg_time" : 0.0,
+        "replaceBlockOp_num_ops" : 0.0,
+        "writeBlockOp_avg_time" : 3600854.0,
+        "writeBlockOp_num_ops" : 0.0,
+        "writes_from_local_client" : 0.0,
+        "writes_from_remote_client" : 0.0
+      }
+    },
+    "disk" : {
+      "disk_free" : 86.19,
+      "disk_total" : 96.01,
+      "read_bytes" : 2.868811776E9,
+      "read_count" : 55780.0,
+      "read_time" : 799933.0,
+      "write_bytes" : 8.9979321344E10,
+      "write_count" : 2243695.0,
+      "write_time" : 4.3597871E7
+    },
+    "jvm" : {
+      "HeapMemoryMax" : 1052770304,
+      "HeapMemoryUsed" : 275425624,
+      "NonHeapMemoryMax" : -1,
+      "NonHeapMemoryUsed" : 60229560,
+      "gcCount" : 54,
+      "gcTimeMillis" : 4144,
+      "logError" : 0,
+      "logFatal" : 0,
+      "logInfo" : 2410,
+      "logWarn" : 88,
+      "memHeapCommittedM" : 1004.0,
+      "memHeapUsedM" : 262.4779,
+      "memNonHeapCommittedM" : 58.585938,
+      "memNonHeapUsedM" : 57.439384,
+      "threadsBlocked" : 0,
+      "threadsNew" : 0,
+      "threadsRunnable" : 14,
+      "threadsTerminated" : 0,
+      "threadsTimedWaiting" : 22,
+      "threadsWaiting" : 12,
+      "JvmMetrics" : {
+        "GcCountConcurrentMarkSweep" : 0.0,
+        "GcCountParNew" : 0.0,
+        "GcNumInfoThresholdExceeded" : 0.0,
+        "GcNumWarnThresholdExceeded" : 0.0,
+        "GcTimeMillisConcurrentMarkSweep" : 0.0,
+        "GcTimeMillisParNew" : 0.0,
+        "GcTotalExtraSleepTime" : 201.0,
+        "MemHeapMaxM" : 1004.0,
+        "MemMaxM" : 1004.0,
+        "MemNonHeapMaxM" : -1.0
+      }
+    },
+    "load" : {
+      "load_fifteen" : 1.42,
+      "load_five" : 1.37,
+      "load_one" : 0.74
+    },
+    "memory" : {
+      "mem_cached" : 1062124.0,
+      "mem_free" : 178364.0,
+      "mem_shared" : 0.0,
+      "mem_total" : 8011588.0,
+      "swap_free" : 4005584.0
+    },
+    "metricssystem" : {
+      "MetricsSystem" : {
+        "DroppedPubAll" : 0.0,
+        "NumActiveSinks" : 1.0,
+        "NumActiveSources" : 6.0,
+        "NumAllSinks" : 0.0,
+        "NumAllSources" : 6.0,
+        "PublishAvgTime" : 0.0,
+        "PublishNumOps" : 1.0,
+        "Sink_timelineAvgTime" : 1.0,
+        "Sink_timelineDropped" : 0.0,
+        "Sink_timelineNumOps" : 1.0,
+        "Sink_timelineQsize" : 0.0,
+        "SnapshotAvgTime" : 0.0,
+        "SnapshotNumOps" : 7.0
+      }
+    },
+    "network" : {
+      "bytes_in" : 774.1518146144878,
+      "bytes_out" : 1149.044218131359,
+      "pkts_in" : 1.5978365626718012,
+      "pkts_out" : 1.5978365626718012
+    },
+    "process" : {
+      "proc_run" : 1.0,
+      "proc_total" : 172.0
+    },
+    "rpc" : {
+      "NumOpenConnections" : 0,
+      "ReceivedBytes" : 0,
+      "RpcProcessingTime_avg_time" : 0.0,
+      "RpcProcessingTime_num_ops" : 0,
+      "RpcQueueTime_avg_time" : 0.0,
+      "RpcQueueTime_num_ops" : 0,
+      "SentBytes" : 0,
+      "callQueueLen" : 0,
+      "rpcAuthenticationFailures" : 0,
+      "rpcAuthenticationSuccesses" : 0,
+      "rpcAuthorizationFailures" : 0,
+      "rpcAuthorizationSuccesses" : 0
+    },
+    "ugi" : {
+      "UgiMetrics" : {
+        "GetGroupsAvgTime" : 0.0,
+        "GetGroupsNumOps" : 0.0
+      }
+    }
+  },
+  "processes" : [ ],
+  "component" : [
+    {
+      "href" : "http://192.168.1.218:8080/api/v1/clusters/extensions/services/HDFS/components/DATANODE",
+      "ServiceComponentInfo" : {
+        "cluster_name" : "extensions",
+        "component_name" : "DATANODE",
+        "service_name" : "HDFS"
+      }
+    }
+  ]
+}
