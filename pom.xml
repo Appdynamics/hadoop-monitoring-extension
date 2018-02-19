@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2013. AppDynamics LLC and its affiliates.
+  ~  * All Rights Reserved.
+  ~  * This is unpublished proprietary source code of AppDynamics LLC and its affiliates.
+  ~  * The copyright notice above does not evidence any actual or intended publication of such source code.
+  -->
+
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -6,7 +13,7 @@
 
     <groupId>com.appdynamics.monitors</groupId>
     <artifactId>hadoop-monitoring-extension</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.1</version>
     <name>hadoop-monitoring-extension</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -137,6 +144,12 @@
                                 <copy todir="${target.dir}">
                                     <fileset dir="${project.build.directory}"
                                              includes="${project.artifactId}.${project.packaging}"/>
+                                </copy>
+                                <copy todir="${target.dir}">
+                                    <fileset dir="${project.basedir}" includes="LICENSE"/>
+                                </copy>
+                                <copy todir="${target.dir}">
+                                    <fileset dir="${project.basedir}" includes="NOTICE.txt"/>
                                 </copy>
                                 <zip destfile="${target.dir}-${project.version}.zip">
                                     <zipfileset dir="${target.dir}" filemode="755"
