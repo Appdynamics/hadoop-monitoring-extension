@@ -7,21 +7,25 @@
 
 package com.appdynamics.monitors.hadoop.communicator;
 
-import com.appdynamics.extensions.NumberUtils;
-import com.appdynamics.extensions.StringUtils;
-import com.appdynamics.extensions.conf.MonitorConfiguration;
+import com.appdynamics.extensions.AMonitorTaskRunnable;
+import com.appdynamics.extensions.MetricWriteHelper;
+
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.http.UrlBuilder;
+import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
+import com.appdynamics.extensions.metrics.PerMinValueCalculator;
 import com.appdynamics.extensions.util.JsonUtils;
-import com.appdynamics.extensions.util.MetricUtils;
-import com.appdynamics.extensions.util.PerMinValueCalculator;
-import com.appdynamics.extensions.util.ext.AntPathMatcher;
+import com.appdynamics.extensions.util.NumberUtils;
+import com.appdynamics.extensions.util.StringUtils;
+import com.appdynamics.monitors.hadoop.Utility.AntPathMatcher;
+import com.appdynamics.monitors.hadoop.Utility.Constants;
+import com.appdynamics.monitors.hadoop.Utility.MetricUtils;
 import com.appdynamics.monitors.hadoop.input.*;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -31,21 +35,30 @@ import java.util.Map;
 /**
  * Created by abey.tom on 9/7/16.
  */
-public class AmbariMetricsFetcherTask implements Runnable {
-    public static final Logger logger = LoggerFactory.getLogger(AmbariMetricsFetcherTask.class);
+public class AmbariMetricsFetcherTask implements AMonitorTaskRunnable {
+    private static final Logger logger = ExtensionsLoggerFactory.getLogger(AmbariMetricsFetcherTask.class);
 
-    private MonitorConfiguration configuration;
+    private MonitorContextConfiguration configuration;
+    private MetricWriteHelper metricWriteHelper;
     private Map<String, ?> server;
+    private Map<String,?> ambariMonitor;
+    private String metricPrefix;
+    private MetricConfig metricConfig;
 
-    public AmbariMetricsFetcherTask(MonitorConfiguration configuration, Map<String, ?> server) {
+    private static PerMinValueCalculator calculator = new PerMinValueCalculator();
+
+    public AmbariMetricsFetcherTask(MonitorContextConfiguration configuration, MetricWriteHelper metricWriteHelper, Map<String, ?> server, Map<String,?> ambariMonitor, MetricConfig metricConfig) {
         this.configuration = configuration;
+        this.metricWriteHelper=metricWriteHelper;
         this.server = server;
+        this.ambariMonitor=ambariMonitor;
+        this.metricPrefix=configuration.getMetricPrefix()+ Constants.SEPARATOR+Constants.AMBARI_MONITOR+Constants.SEPARATOR+server.get(Constants.DISPLAY_NAME);
+        this.metricConfig=metricConfig;
     }
 
     public void run() {
         try {
-            String url = UrlBuilder.fromYmlServerConfig(server)
-                    .path("clusters").query("fields=Clusters,hosts,services").build();
+            String url = UrlBuilder.fromYmlServerConfig(server).path("clusters").query("fields=Clusters,hosts,services").build();
             fetchMetrics(url);
         } catch (Exception e) {
             logger.error("Unexpected error while fetching the data", e);
@@ -62,9 +75,7 @@ public class AmbariMetricsFetcherTask implements Runnable {
                 JsonNode response = getResponseAsJson(url);
                 if (response != null) {
                     String statLabel = getStatLabel(url, stat);
-                    String serverName = (String) server.get("name"); //This name could be null or Empty
-                    String basePrefix = configuration.getMetricPrefix();
-                    String statMetricPrefix = StringUtils.concatMetricPath(basePrefix, serverName, statLabel);
+                    String statMetricPrefix = StringUtils.concatMetricPath(metricPrefix, statLabel);
                     collectStats(stat, response, statMetricPrefix);
                 } else {
                     logger.info("The url {} didnt return the expected response", url);
@@ -78,12 +89,12 @@ public class AmbariMetricsFetcherTask implements Runnable {
     }
 
     protected JsonNode getResponseAsJson(String url) {
-        return HttpClientUtils.getResponseAsJson(configuration.getHttpClient(), url, JsonNode.class);
+        return HttpClientUtils.getResponseAsJson(configuration.getContext().getHttpClient(), url, JsonNode.class);
     }
 
     private boolean filterIncludes(Stat stat, String url) {
         Filter[] filters = stat.getFilters();
-        Map<String, ?> filtersConf = (Map<String, ?>) configuration.getConfigYml().get("filters");
+        Map<String, ?> filtersConf = (Map<String, ?>) ambariMonitor.get("filters");
         if (filters != null && filters.length > 0 & filtersConf != null) {
             String[] urlSegments = url.split("/");
             boolean include = true;
@@ -186,8 +197,7 @@ public class AmbariMetricsFetcherTask implements Runnable {
     }
 
     private Stat[] getStats() {
-        MetricConfig statConf = (MetricConfig) configuration.getMetricsXmlConfiguration();
-        return statConf.getStats();
+        return metricConfig.getStats();
     }
 
     private void collectStats(Stat stat, JsonNode response, String statMetricPrefix) {
@@ -212,11 +222,11 @@ public class AmbariMetricsFetcherTask implements Runnable {
                         if (nested instanceof ArrayNode) {
                             ArrayNode nestedNodes = (ArrayNode) nested;
                             for (JsonNode nestedNode : nestedNodes) {
-                                String url = nestedNode.getTextValue();
+                                String url = nestedNode.textValue();
                                 triggerMetricsFetch(childStat, url);
                             }
                         } else {
-                            String url = nested.getTextValue();
+                            String url = nested.textValue();
                             triggerMetricsFetch(childStat, url);
                         }
                     }
@@ -241,7 +251,7 @@ public class AmbariMetricsFetcherTask implements Runnable {
 
     private void triggerMetricsFetch(Stat childStat, final String url) {
         if (filterIncludes(childStat, url)) {
-            configuration.getExecutorService().submit(new Runnable() {
+            configuration.getContext().getExecutorService().submit("ChildTask",new Runnable() {
                 public void run() {
                     try {
                         fetchMetrics(url);
@@ -261,7 +271,6 @@ public class AmbariMetricsFetcherTask implements Runnable {
             collectMetrics(stat, node, statMetricPrefix, metrics);
         }
         if (stat.getMetricGroups() != null) {
-            MetricConfig metricConfig = (MetricConfig) configuration.getMetricsXmlConfiguration();
             for (MetricGroup group : stat.getMetricGroups()) {
                 String name = group.getName();
                 MetricGroup grp = metricConfig.getMetricGroup(name);
@@ -291,7 +300,6 @@ public class AmbariMetricsFetcherTask implements Runnable {
         String attr = metric.getAttr();
         String value = JsonUtils.getTextValue(node, attr.split("\\|"));
         if (StringUtils.hasText(value)) {
-            MetricConfig metricConfig = (MetricConfig) configuration.getMetricsXmlConfiguration();
             value = metric.convertValue(attr, value, metricConfig);
             value = value.replace("%", "");
             String metricLabel = getMetricLabel(metric, node);
@@ -357,20 +365,19 @@ public class AmbariMetricsFetcherTask implements Runnable {
     private void printMetric(String metricPath, BigDecimal value, Metric metric, Stat stat) {
         String metricType = getMetricType(metric, stat);
         if (!Boolean.TRUE.equals(metric.getShowOnlyPerMin())) {
-            configuration.getMetricWriter().printMetric(metricPath, value, metricType);
+            metricWriteHelper.printMetric(metricPath, value, metricType);
         } else {
             logger.debug("Skipping the metric {}, since only perMin is needed", metricPath);
         }
         if (Boolean.TRUE.equals(metric.getCalculatePerMin())) {
             String perMinPath = metricPath + " per Min";
-            PerMinValueCalculator calculator = configuration.getPerMinValueCalculator();
             BigDecimal perMinValue = calculator.getPerMinuteValue(metricPath, value);
             if (perMinValue != null) {
                 String perMinMetricType = metric.getPerMinMetricType();
                 if (perMinMetricType == null) {
                     perMinMetricType = metricType;
                 }
-                configuration.getMetricWriter().printMetric(perMinPath, perMinValue, perMinMetricType);
+                metricWriteHelper.printMetric(perMinPath, perMinValue, perMinMetricType);
             }
         }
     }
@@ -403,4 +410,8 @@ public class AmbariMetricsFetcherTask implements Runnable {
         return null;
     }
 
+    @Override
+    public void onTaskComplete() {
+        logger.info("Completed AmbariMetricsFetcherTask for server "+server.get(Constants.DISPLAY_NAME));
+    }
 }

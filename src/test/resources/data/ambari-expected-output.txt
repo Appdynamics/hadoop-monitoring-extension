@@ -1,153 +1,153 @@
-Custom Metrics|HadoopMonitor|Ambari|Cluster Total Hosts,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|State|Healthy,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|State|Unhealthy,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|State|Heartbeat Lost,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|State|Init,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|Status|Healthy,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|Status|Unhealthy,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|Status|Unknown,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Cluster Health|Status|Alert,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|CPU|Count,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|CPU|Idle %,75,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|CPU|System %,2,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|CPU|User %,20,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|CPU|Nice %,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Disks|Free (GB),86,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Disks|Total (GB),96,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Memory|Cached MB,873,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Memory|Free MB,386,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Memory|Shared MB,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Memory|Total MB,8012,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Memory|Swap Free MB,4005,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Processes|Running,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Processes|Total,170,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|Idle %,77,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|System %,2,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|User %,16,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|Nice %,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Heap Committed MB,1004,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Heap Usage MB,262,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Non-Heap Committed MB,59,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Non-Heap Usage MB,57,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|GC|Count,54,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|GC|Time (ms),4144,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Blocked,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|New,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Runnable,14,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Terminated,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Timed Waiting,22,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Waiting,12,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Cached MB,1062,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Free MB,178,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Shared MB,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Total MB,8012,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Swap Free MB,4006,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Processes|Running,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Processes|Total,172,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|averageLoad,3,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|numDeadRegionServers,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|numRegionServers,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|masterStartTime,1473367166497,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Heap Committed MB,1004,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Heap Usage MB,29,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Non-Heap Committed MB,70,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Non-Heap Usage MB,69,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|GC|Count,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|GC|Time (ms),0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Blocked,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|New,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Runnable,20,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Terminated,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Timed Waiting,23,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Waiting,80,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|AllocatedContainers,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|AllocatedGB,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|AllocatedVCores,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|BadLocalDirs,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|BadLogDirs,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|ContainersFailed,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|GoodLocalDirsDiskUtilizationPerc,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|GoodLogDirsDiskUtilizationPerc,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|AllocatedGB,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|AvailableGB,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|AllocatedVCores,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|BadLocalDirs,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|BadLogDirs,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainerLaunchDurationAvgTime,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainerLaunchDurationNumOps,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersFailed,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersCompleted,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersIniting,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersKilled,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersLaunched,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersRunning,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|GoodLocalDirsDiskUtilizationPerc,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|GoodLogDirsDiskUtilizationPerc,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Heap Committed MB,120,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Heap Usage MB,38,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Non-Heap Committed MB,68,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Non-Heap Usage MB,66,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|GC|Count,328,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|GC|Time (ms),1391,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Blocked,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|New,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Runnable,14,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Terminated,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Timed Waiting,38,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Waiting,8,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|Idle %,92,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|System %,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|User %,7,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|Nice %,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Disks|Free (GB),86,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Disks|Total (GB),96,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Cached MB,904,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Free MB,347,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Shared MB,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Total MB,8012,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Swap Free MB,4005,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Processes|Running,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Processes|Total,170,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|AMBARI_METRICS|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|AMBARI_METRICS|Alerts|CRITICAL,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|AMBARI_METRICS|Alerts|MAINTENANCE,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|AMBARI_METRICS|Alerts|OK,6,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|AMBARI_METRICS|Alerts|UNKNOWN,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|AMBARI_METRICS|Alerts|WARNING,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Alerts|CRITICAL,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Alerts|MAINTENANCE,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Alerts|OK,5,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Alerts|UNKNOWN,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Alerts|WARNING,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_CLIENT|state,12,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_CLIENT|installed_count,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_CLIENT|started_count,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|state,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|installed_count,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|started_count,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|AverageLoad,3,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|HeapMemoryMax,1065,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|HeapMemoryUsed,63,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|NonHeapMemoryUsed,74,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HDFS|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HDFS|Alerts|CRITICAL,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HDFS|Alerts|MAINTENANCE,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HDFS|Alerts|OK,17,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HDFS|Alerts|UNKNOWN,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|HDFS|Alerts|WARNING,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|State,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Alerts|CRITICAL,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Alerts|MAINTENANCE,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Alerts|OK,2,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Alerts|UNKNOWN,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Alerts|WARNING,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_CLIENT|state,12,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_CLIENT|installed_count,1,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_CLIENT|started_count,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_SERVER|state,100,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_SERVER|installed_count,0,AVG.AVG.COL
-Custom Metrics|HadoopMonitor|Ambari|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_SERVER|started_count,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Total Hosts,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|State|Healthy,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|State|Unhealthy,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|State|Heartbeat Lost,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|State|Init,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|Status|Healthy,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|Status|Unhealthy,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|Status|Unknown,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Cluster Health|Status|Alert,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|CPU|Count,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|CPU|Idle %,75,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|CPU|System %,2,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|CPU|User %,20,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|CPU|Nice %,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Disks|Free (GB),86,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Disks|Total (GB),96,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Memory|Cached MB,873,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Memory|Free MB,386,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Memory|Shared MB,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Memory|Total MB,8012,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Memory|Swap Free MB,4005,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Processes|Running,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Processes|Total,170,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|Idle %,77,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|System %,2,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|User %,16,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|CPU|Nice %,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Heap Committed MB,1004,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Heap Usage MB,262,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Non-Heap Committed MB,59,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Memory|Non-Heap Usage MB,57,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|GC|Count,54,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|GC|Time (ms),4144,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Blocked,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|New,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Runnable,14,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Terminated,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Timed Waiting,22,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|JVM|Threads|Waiting,12,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Cached MB,1062,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Free MB,178,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Shared MB,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Total MB,8012,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Memory|Swap Free MB,4006,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Processes|Running,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|DATANODE|Processes|Total,172,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|averageLoad,3,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|numDeadRegionServers,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|numRegionServers,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|Server|masterStartTime,1473367166497,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Heap Committed MB,1004,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Heap Usage MB,29,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Non-Heap Committed MB,70,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Memory|Non-Heap Usage MB,69,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|GC|Count,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|GC|Time (ms),0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Blocked,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|New,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Runnable,20,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Terminated,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Timed Waiting,23,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|HBASE_MASTER|JVM|Threads|Waiting,80,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|AllocatedContainers,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|AllocatedGB,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|AllocatedVCores,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|BadLocalDirs,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|BadLogDirs,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|ContainersFailed,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|GoodLocalDirsDiskUtilizationPerc,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|NodeManager|GoodLogDirsDiskUtilizationPerc,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|AllocatedGB,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|AvailableGB,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|AllocatedVCores,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|BadLocalDirs,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|BadLogDirs,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainerLaunchDurationAvgTime,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainerLaunchDurationNumOps,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersFailed,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersCompleted,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersIniting,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersKilled,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersLaunched,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|ContainersRunning,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|GoodLocalDirsDiskUtilizationPerc,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Yarn|GoodLogDirsDiskUtilizationPerc,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Heap Committed MB,120,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Heap Usage MB,38,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Non-Heap Committed MB,68,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Memory|Non-Heap Usage MB,66,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|GC|Count,328,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|GC|Time (ms),1391,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Blocked,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|New,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Runnable,14,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Terminated,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Timed Waiting,38,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|JVM|Threads|Waiting,8,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|Idle %,92,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|System %,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|User %,7,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|CPU|Nice %,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Disks|Free (GB),86,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Disks|Total (GB),96,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Cached MB,904,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Free MB,347,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Shared MB,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Total MB,8012,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Memory|Swap Free MB,4005,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Processes|Running,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Hosts|localhost.localdomain|Components|NODEMANAGER|Processes|Total,170,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|AMBARI_METRICS|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|AMBARI_METRICS|Alerts|CRITICAL,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|AMBARI_METRICS|Alerts|MAINTENANCE,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|AMBARI_METRICS|Alerts|OK,6,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|AMBARI_METRICS|Alerts|UNKNOWN,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|AMBARI_METRICS|Alerts|WARNING,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Alerts|CRITICAL,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Alerts|MAINTENANCE,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Alerts|OK,5,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Alerts|UNKNOWN,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Alerts|WARNING,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_CLIENT|state,12,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_CLIENT|installed_count,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_CLIENT|started_count,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|state,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|installed_count,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|started_count,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|AverageLoad,3,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|HeapMemoryMax,1065,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|HeapMemoryUsed,63,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HBASE|Components|HBASE_MASTER|NonHeapMemoryUsed,74,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HDFS|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HDFS|Alerts|CRITICAL,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HDFS|Alerts|MAINTENANCE,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HDFS|Alerts|OK,17,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HDFS|Alerts|UNKNOWN,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|HDFS|Alerts|WARNING,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|State,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Alerts|CRITICAL,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Alerts|MAINTENANCE,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Alerts|OK,2,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Alerts|UNKNOWN,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Alerts|WARNING,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_CLIENT|state,12,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_CLIENT|installed_count,1,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_CLIENT|started_count,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_SERVER|state,100,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_SERVER|installed_count,0,AVG.AVG.COL
+Custom Metrics|Hadoop|ambariMonitor|Ambari Server|Clusters|extensions|Services|ZOOKEEPER|Components|ZOOKEEPER_SERVER|started_count,1,AVG.AVG.COL

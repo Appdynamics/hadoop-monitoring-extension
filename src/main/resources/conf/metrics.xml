@@ -1,0 +1,405 @@
+<!--
+  ~ Copyright 2013. AppDynamics LLC and its affiliates.
+  ~  * All Rights Reserved.
+  ~  * This is unpublished proprietary source code of AppDynamics LLC and its affiliates.
+  ~  * The copyright notice above does not evidence any actual or intended publication of such source code.
+  -->
+<metricStats>
+
+    <metric-config name="resourceManagerMonitor">
+        <stat url="ws/v1/cluster/metrics" metric-type="AVG.AVG.COL">
+            <metric attr="clusterMetrics|appsSubmitted" alias="Cluster|Apps|Submitted"/>
+            <metric attr="clusterMetrics|appsCompleted" alias="Cluster|Apps|Completed"/>
+            <metric attr="clusterMetrics|appsPending" alias="Cluster|Apps|Pending"/>
+            <metric attr="clusterMetrics|appsRunning" alias="Cluster|Apps|Running"/>
+            <metric attr="clusterMetrics|appsFailed" alias="Cluster|Apps|Failed"/>
+            <metric attr="clusterMetrics|appsKilled" alias="Cluster|Apps|Killed"/>
+            <metric attr="clusterMetrics|reservedMB" alias="Cluster|Memory|Reserved (MB)"/>
+            <metric attr="clusterMetrics|availableMB" alias="Cluster|Memory|Available (MB)"/>
+            <metric attr="clusterMetrics|allocatedMB" alias="Cluster|Memory|Allocated (MB)"/>
+            <metric attr="clusterMetrics|totalMB" alias="Cluster|Memory|Total (MB)"/>
+            <metric attr="clusterMetrics|reservedVirtualCores" alias="Cluster|VirtualCores|Reserved"/>
+            <metric attr="clusterMetrics|availableVirtualCores" alias="Cluster|VirtualCores|Available"/>
+            <metric attr="clusterMetrics|allocatedVirtualCores" alias="Cluster|VirtualCores|Allocated"/>
+            <metric attr="clusterMetrics|totalVirtualCores" alias="Cluster|VirtualCores|Total"/>
+            <metric attr="clusterMetrics|containersAllocated" alias="Cluster|Containers|Allocated"/>
+            <metric attr="clusterMetrics|containersReserved" alias="Cluster|Containers|Reserved"/>
+            <metric attr="clusterMetrics|containersPending" alias="Cluster|Containers|Pending"/>
+            <metric attr="clusterMetrics|totalNodes" alias="Cluster|Nodes|Total"/>
+            <metric attr="clusterMetrics|lostNodes" alias="Cluster|Nodes|Lost"/>
+            <metric attr="clusterMetrics|unhealthyNodes" alias="Cluster|Nodes|Unhealthy"/>
+            <metric attr="clusterMetrics|decommissionedNodes" alias="Cluster|Nodes|Decommissioned"/>
+            <metric attr="clusterMetrics|rebootedNodes" alias="Cluster|Nodes|Rebooted"/>
+            <metric attr="clusterMetrics|activeNodes" alias="Cluster|Nodes|Active"/>
+        </stat>
+
+        <stat url="ws/v1/cluster/nodes" children="nodes|node" label="Nodes" metric-type="AVG.AVG.COL">
+            <metric attr="state" alias="{nodeHostName}|State" converter="node-state-converter"/>
+            <metric attr="numContainers" alias="{nodeHostName}|Num of Containers"/>
+            <metric attr="usedMemoryMB" alias="{nodeHostName}|Memory Used (MB)"/>
+            <metric attr="availMemoryMB" alias="{nodeHostName}|Memory Available (MB)"/>
+            <metric attr="usedVirtualCores" alias="{nodeHostName}|Virtual Cores Used"/>
+            <metric attr="availableVirtualCores" alias="{nodeHostName}|Virtual Cores Available"/>
+        </stat>
+
+        <stat name="capacitySchedulerQueue" metric-type="AVG.AVG.COL">
+            <metric attr="state" alias="{queueName}|State" converter="node-state-converter"/>
+            <metric attr="capacity" alias="{queueName}|Capacity"/>
+            <metric attr="usedCapacity" alias="{queueName}|Capacity Used"/>
+            <metric attr="maxCapacity" alias="{queueName}|Capacity Max"/>
+            <metric attr="resourcesUsed|memory" alias="{queueName}|Memory Used"/>
+            <metric attr="resourcesUsed|vCores" alias="{queueName}|Virtual Cores Used"/>
+
+            <metric attr="numActiveApplications" alias="{queueName}|Applications Active"/>
+            <metric attr="numApplications" alias="{queueName}|Applications"/>
+            <metric attr="numContainers" alias="{queueName}|Containers"/>
+
+        </stat>
+        <stat name="fairSchedulerQueue" metric-type="AVG.AVG.COL">
+            <metric attr="maxResources|memory" alias="{queueName}|Memory|Max"/>
+            <metric attr="minResources|memory" alias="{queueName}|Memory|Min"/>
+            <metric attr="usedResources|memory" alias="{queueName}|Memory|Used"/>
+            <metric attr="maxResources|vCores" alias="{queueName}|Virtual Cores|Max"/>
+            <metric attr="minResources|vCores" alias="{queueName}|Virtual Cores|Min"/>
+            <metric attr="usedResources|vCores" alias="{queueName}|Virtual Cores|Used"/>
+        </stat>
+
+        <stat name="fifoScheduler" metric-type="AVG.AVG.COL">
+            <metric attr="capacity" alias="Capacity"/>
+            <metric attr="usedCapacity" alias="Capacity Used"/>
+            <metric attr="qstate" alias="Queue State" converter="node-state-converter"/>
+            <metric attr="minQueueMemoryCapacity" alias="Min Queue Memory Capacity"/>
+            <metric attr="maxQueueMemoryCapacity" alias="Max Queue Memory Capacity"/>
+            <metric attr="numNodes" alias="Node|Count"/>
+            <metric attr="usedNodeCapacity" alias="Node|Used Capacity"/>
+            <metric attr="availNodeCapacity" alias="Node|Available Capacity"/>
+            <metric attr="totalNodeCapacity" alias="Node|Total Capacity"/>
+            <metric attr="numContainers" alias="Containers"/>
+        </stat>
+
+        <converter-group name="node-state-converter">
+            <!-- Less Than 10 CRITICAL-->
+            <converter str="UNHEALTHY" value="2"/>
+            <converter str="DECOMMISSIONED" value="3"/>
+            <converter str="LOST" value="4"/>
+            <!-- Less Than 20 WARNING-->
+            <converter str="NEW" value="10"/>
+            <converter str="REBOOTED" value="11"/>
+
+            <converter str="RUNNING" value="100"/>
+
+        </converter-group>
+    </metric-config>
+
+    <metric-config name="ambariMonitor">
+        <stat url="**/clusters?fields=Clusters,hosts,services" children="items" metric-type="AVG.AVG.COL">
+            <metric attr="Clusters|total_hosts" alias="Cluster Total Hosts"/>
+            <metric attr="Clusters|health_report|Host/host_state/HEALTHY" alias="Cluster Health|State|Healthy"/>
+            <metric attr="Clusters|health_report|Host/host_state/UNHEALTHY" alias="Cluster Health|State|Unhealthy"/>
+            <metric attr="Clusters|health_report|Host/host_state/HEARTBEAT_LOST" alias="Cluster Health|State|Heartbeat Lost"/>
+            <metric attr="Clusters|health_report|Host/host_state/INIT" alias="Cluster Health|State|Init"/>
+            <metric attr="Clusters|health_report|Host/host_status/HEALTHY" alias="Cluster Health|Status|Healthy"/>
+            <metric attr="Clusters|health_report|Host/host_status/UNHEALTHY" alias="Cluster Health|Status|Unhealthy"/>
+            <metric attr="Clusters|health_report|Host/host_status/UNKNOWN" alias="Cluster Health|Status|Unknown"/>
+            <metric attr="Clusters|health_report|Host/host_status/ALERT" alias="Cluster Health|Status|Alert"/>
+            <stat url-attr="hosts|href">
+                <filter name="clusters" url-index="-3"/>
+                <filter name="hosts" url-index="-1"/>
+            </stat>
+            <stat url-attr="services|href">
+                <filter name="clusters" url-index="-3"/>
+                <filter name="services" url-index="-1"/>
+            </stat>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*" label="Clusters|{-3}|Hosts|{-1}" metric-type="AVG.AVG.COL">
+            <metric attr="Hosts|cpu_count" alias="CPU|Count"/>
+            <metric-group name="cpu"/>
+            <metric-group name="disks"/>
+            <metric-group name="memory"/>
+            <metric-group name="network"/>
+            <metric-group name="processes"/>
+            <!--
+            <stat children="Hosts|disk_info" label="Volumes">
+                <metric attr="size" label="{mountpoint}|Total (GB)" multiplier="1e-6"/>
+                <metric attr="percent" label="{mountpoint}|Used %"/>
+            </stat>
+            -->
+            <stat url-attr="host_components|href"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/APP_TIMELINE_SERVER" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/DATANODE" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric-group name="cpu"/>
+            <metric-group name="jvm"/>
+            <metric-group name="memory"/>
+            <metric-group name="network"/>
+            <metric-group name="processes"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/HBASE_CLIENT" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/HBASE_MASTER" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric-group name="jvm"/>
+            <metric attr="metrics|master|Server|averageLoad" alias="Server|averageLoad"/>
+            <metric attr="metrics|master|Server|numDeadRegionServers" alias="Server|numDeadRegionServers"/>
+            <metric attr="metrics|master|Server|numRegionServers" alias="Server|numRegionServers"/>
+            <metric attr="metrics|master|Server|masterStartTime" alias="Server|masterStartTime"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/HBASE_REGIONSERVER" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric-group name="jvm"/>
+            <metric-group name="cpu"/>
+            <metric-group name="disks"/>
+            <metric-group name="memory"/>
+            <metric-group name="network"/>
+            <metric-group name="processes"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/NAMENODE" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric-group name="jvm"/>
+            <metric-group name="cpu"/>
+            <metric-group name="disks"/>
+            <metric-group name="memory"/>
+            <metric-group name="network"/>
+            <metric-group name="processes"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/NODEMANAGER" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric-group name="jvm"/>
+            <metric-group name="cpu"/>
+            <metric-group name="disks"/>
+            <metric-group name="memory"/>
+            <metric-group name="network"/>
+            <metric-group name="processes"/>
+            <metric attr="metrics|nodemanager|AllocatedContainers" alias="NodeManager|AllocatedContainers"/>
+            <metric attr="metrics|nodemanager|AllocatedGB" alias="NodeManager|AllocatedGB"/>
+            <metric attr="metrics|nodemanager|AllocatedVCores" alias="NodeManager|AllocatedVCores"/>
+            <metric attr="metrics|nodemanager|BadLocalDirs" alias="NodeManager|BadLocalDirs"/>
+            <metric attr="metrics|nodemanager|BadLogDirs" alias="NodeManager|BadLogDirs"/>
+            <metric attr="metrics|nodemanager|ContainersFailed" alias="NodeManager|ContainersFailed"/>
+            <metric attr="metrics|nodemanager|GoodLocalDirsDiskUtilizationPerc" alias="NodeManager|GoodLocalDirsDiskUtilizationPerc"/>
+            <metric attr="metrics|nodemanager|GoodLogDirsDiskUtilizationPerc" alias="NodeManager|GoodLogDirsDiskUtilizationPerc"/>
+
+            <metric attr="metrics|yarn|AllocatedGB" alias="Yarn|AllocatedGB"/>
+            <metric attr="metrics|yarn|AvailableGB" alias="Yarn|AvailableGB"/>
+            <metric attr="metrics|yarn|AllocatedVCores" alias="Yarn|AllocatedVCores"/>
+            <metric attr="metrics|yarn|BadLocalDirs" alias="Yarn|BadLocalDirs"/>
+            <metric attr="metrics|yarn|BadLogDirs" alias="Yarn|BadLogDirs"/>
+            <metric attr="metrics|yarn|ContainerLaunchDurationAvgTime" alias="Yarn|ContainerLaunchDurationAvgTime"/>
+            <metric attr="metrics|yarn|ContainerLaunchDurationNumOps" alias="Yarn|ContainerLaunchDurationNumOps"/>
+            <metric attr="metrics|yarn|ContainersFailed" alias="Yarn|ContainersFailed"/>
+            <metric attr="metrics|yarn|ContainersCompleted" alias="Yarn|ContainersCompleted"/>
+            <metric attr="metrics|yarn|ContainersIniting" alias="Yarn|ContainersIniting"/>
+            <metric attr="metrics|yarn|ContainersKilled" alias="Yarn|ContainersKilled"/>
+            <metric attr="metrics|yarn|ContainersLaunched" alias="Yarn|ContainersLaunched"/>
+            <metric attr="metrics|yarn|ContainersRunning" alias="Yarn|ContainersRunning"/>
+            <metric attr="metrics|yarn|GoodLocalDirsDiskUtilizationPerc" alias="Yarn|GoodLocalDirsDiskUtilizationPerc"/>
+            <metric attr="metrics|yarn|GoodLogDirsDiskUtilizationPerc" alias="Yarn|GoodLogDirsDiskUtilizationPerc"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/HISTORYSERVER" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric attr="metrics|jvm|MemHeapCommittedM" alias="JVM|Memory|Heap Committed MB"/>
+            <metric attr="metrics|jvm|MemHeapUsedM" alias="JVM|Memory|Heap Usage MB"/>
+            <metric attr="metrics|jvm|MemNonHeapCommittedM" alias="JVM|Memory|Non-Heap Committed MB"/>
+            <metric attr="metrics|jvm|MemNonHeapUsedM" alias="JVM|Memory|Non-Heap Usage MB"/>
+
+            <metric attr="metrics|jvm|GcCount" alias="JVM|GC|Count" calculate-per-min="true"/>
+            <metric attr="metrics|jvm|GcTimeMillis" alias="JVM|GC|Time (ms)" calculate-per-min="true"/>
+
+            <metric attr="metrics|jvm|ThreadsBlocked" alias="JVM|Threads|Blocked"/>
+            <metric attr="metrics|jvm|ThreadsNew" alias="JVM|Threads|New"/>
+            <metric attr="metrics|jvm|ThreadsRunnable" alias="JVM|Threads|Runnable"/>
+            <metric attr="metrics|jvm|ThreadsTerminated" alias="JVM|Threads|Terminated"/>
+            <metric attr="metrics|jvm|ThreadsTimedWaiting" alias="JVM|Threads|Timed Waiting"/>
+            <metric attr="metrics|jvm|ThreadsWaiting" alias="JVM|Threads|Waiting"/>
+
+            <metric attr="metrics|BufferPool|direct|Count" alias="BufferPool|direct|Count"/>
+            <metric attr="metrics|BufferPool|direct|MemoryUsed" alias="BufferPool|direct|MemoryUsed" multiplier="0.001"/>
+            <metric attr="metrics|BufferPool|direct|TotalCapacity" alias="BufferPool|direct|TotalCapacity"  multiplier="0.001"/>
+            <metric attr="metrics|BufferPool|mapred|Count" alias="BufferPool|mapred|Count"/>
+            <metric attr="metrics|BufferPool|mapred|MemoryUsed" alias="BufferPool|mapred|MemoryUsed" multiplier="0.001"/>
+            <metric attr="metrics|BufferPool|mapred|TotalCapacity" alias="BufferPool|mapred|TotalCapacity"  multiplier="0.001"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/RESOURCEMANAGER" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+            <metric-group name="jvm"/>
+            <metric-group name="cpu"/>
+            <metric-group name="disks"/>
+            <metric-group name="memory"/>
+            <metric-group name="network"/>
+            <metric-group name="processes"/>
+            <metric attr="metrics|yarn|ClusterMetrics|NumLostNMs" alias="Yarn|ClusterMetrics|NumLostNMs"/>
+            <metric attr="metrics|yarn|ClusterMetrics|NumRebootedNMs" alias="Yarn|ClusterMetrics|NumRebootedNMs"/>
+            <metric attr="metrics|yarn|ClusterMetrics|NumUnhealthyNMs" alias="Yarn|ClusterMetrics|NumUnhealthyNMs"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/HDFS_CLIENT" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+        <stat url="**/clusters/*/hosts/*/host_components/MAPREDUCE2_CLIENT" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+        <stat url="**/clusters/*/hosts/*/host_components/METRICS_COLLECTOR" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/SECONDARY_NAMENODE" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/YARN_CLIENT" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+        <stat url="**/clusters/*/hosts/*/host_components/ZOOKEEPER_CLIENT" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+
+        <stat url="**/clusters/*/hosts/*/host_components/METRICS_MONITOR" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+        <!-- Catch all for all other host_components-->
+        <stat url="**/clusters/*/hosts/*/host_components/*" metric-type="AVG.AVG.COL"
+              label="Clusters|{-5}|Hosts|{-3}|Components|{-1}">
+            <metric attr="HostRoles|state" alias="State" converter="state-converter"/>
+        </stat>
+
+
+        <stat url="**/clusters/*/services/*/components/HBASE_MASTER" label="Clusters|{-5}|Services|{-3}|Components|{-1}"
+              metric-type="AVG.AVG.COL">
+            <metric attr="ServiceComponentInfo|state" alias="state" converter="state-converter"/>
+            <metric attr="ServiceComponentInfo|installed_count" alias="installed_count"/>
+            <metric attr="ServiceComponentInfo|started_count" alias="started_count"/>
+            <metric attr="ServiceComponentInfo|AverageLoad" alias="AverageLoad"/>
+            <metric attr="ServiceComponentInfo|HeapMemoryMax" alias="HeapMemoryMax" multiplier="1e-6"/>
+            <metric attr="ServiceComponentInfo|HeapMemoryUsed" alias="HeapMemoryUsed" multiplier="1e-6"/>
+            <metric attr="ServiceComponentInfo|NonHeapMemoryUsed" alias="NonHeapMemoryUsed" multiplier="1e-6"/>
+        </stat>
+
+        <stat url="**/clusters/*/services/*" label="Clusters|{-3}|Services|{-1}"
+              metric-type="AVG.AVG.COL">
+            <metric attr="ServiceInfo|state" alias="State" converter="state-converter"/>
+            <metric-group name="alerts-summary"/>
+            <stat url-attr="components|href"/>
+        </stat>
+
+        <stat url="**/clusters/*/services/*/components/*" label="Clusters|{-5}|Services|{-3}|Components|{-1}"
+              metric-type="AVG.AVG.COL">
+            <metric attr="ServiceComponentInfo|state" alias="state" converter="state-converter"/>
+            <metric attr="ServiceComponentInfo|installed_count" alias="installed_count"/>
+            <metric attr="ServiceComponentInfo|started_count" alias="started_count"/>
+        </stat>
+
+        <metric-group name="processes">
+            <metric attr="metrics|process|proc_run" alias="Processes|Running"/>
+            <metric attr="metrics|process|proc_total" alias="Processes|Total"/>
+        </metric-group>
+        <metric-group name="network">
+            <metric attr="metrics|network|bytes_in" alias="Network|Incoming MB" multiplier="1e-6"
+                    calculate-per-min="true" show-only-per-min="true"/>
+            <metric attr="metrics|network|bytes_out" alias="Network|Outgoing MB" multiplier="1e-6"
+                    calculate-per-min="true" show-only-per-min="true"/>
+            <metric attr="metrics|network|pkts_in" alias="Network|Incoming Packets" multiplier="1e-6"
+                    calculate-per-min="true" show-only-per-min="true"/>
+            <metric attr="metrics|network|pkts_out" alias="Network|Outgoing Packets" multiplier="1e-6"
+                    calculate-per-min="true" show-only-per-min="true"/>
+        </metric-group>
+        <metric-group name="memory">
+            <metric attr="metrics|memory|mem_cached" alias="Memory|Cached MB" multiplier="0.001"/>
+            <metric attr="metrics|memory|mem_free" alias="Memory|Free MB" multiplier="0.001"/>
+            <metric attr="metrics|memory|mem_shared" alias="Memory|Shared MB" multiplier="0.001"/>
+            <metric attr="metrics|memory|mem_total" alias="Memory|Total MB" multiplier="0.001"/>
+            <metric attr="metrics|memory|swap_free" alias="Memory|Swap Free MB" multiplier="0.001"/>
+        </metric-group>
+        <metric-group name="disks">
+            <metric attr="metrics|disk|disk_free" alias="Disks|Free (GB)"/>
+            <metric attr="metrics|disk|disk_total" alias="Disks|Total (GB)"/>
+            <metric attr="metrics|disk|read_bytes" alias="Disks|Read MB" multiplier="1.25e-7"
+                    calculate-per-min="true" show-only-per-min="true"/>
+            <metric attr="metrics|disk|write_bytes" alias="Disks|Write MB" multiplier="1.25e-7"
+                    calculate-per-min="true" show-only-per-min="true"/>
+            <metric attr="metrics|disk|read_count" alias="Disks|Reads"
+                    calculate-per-min="true" show-only-per-min="true"/>
+            <metric attr="metrics|disk|write_count" alias="Disks|Writes"
+                    calculate-per-min="true" show-only-per-min="true"/>
+        </metric-group>
+        <metric-group name="cpu">
+            <metric attr="metrics|cpu|cpu_idle" alias="CPU|Idle %"/>
+            <metric attr="metrics|cpu|cpu_system" alias="CPU|System %"/>
+            <metric attr="metrics|cpu|cpu_user" alias="CPU|User %"/>
+            <metric attr="metrics|cpu|cpu_nice" alias="CPU|Nice %"/>
+        </metric-group>
+
+        <metric-group name="alerts-summary">
+            <metric attr="alerts_summary|CRITICAL" alias="Alerts|CRITICAL"/>
+            <metric attr="alerts_summary|MAINTENANCE" alias="Alerts|MAINTENANCE"/>
+            <metric attr="alerts_summary|OK" alias="Alerts|OK"/>
+            <metric attr="alerts_summary|UNKNOWN" alias="Alerts|UNKNOWN"/>
+            <metric attr="alerts_summary|WARNING" alias="Alerts|WARNING"/>
+        </metric-group>
+
+        <metric-group name="jvm">
+            <metric attr="metrics|jvm|memHeapCommittedM" alias="JVM|Memory|Heap Committed MB"/>
+            <metric attr="metrics|jvm|memHeapUsedM" alias="JVM|Memory|Heap Usage MB"/>
+            <metric attr="metrics|jvm|memNonHeapCommittedM" alias="JVM|Memory|Non-Heap Committed MB"/>
+            <metric attr="metrics|jvm|memNonHeapUsedM" alias="JVM|Memory|Non-Heap Usage MB"/>
+
+            <metric attr="metrics|jvm|gcCount" alias="JVM|GC|Count" calculate-per-min="true"/>
+            <metric attr="metrics|jvm|gcTimeMillis" alias="JVM|GC|Time (ms)" calculate-per-min="true"/>
+
+            <metric attr="metrics|jvm|threadsBlocked" alias="JVM|Threads|Blocked"/>
+            <metric attr="metrics|jvm|threadsNew" alias="JVM|Threads|New"/>
+            <metric attr="metrics|jvm|threadsRunnable" alias="JVM|Threads|Runnable"/>
+            <metric attr="metrics|jvm|threadsTerminated" alias="JVM|Threads|Terminated"/>
+            <metric attr="metrics|jvm|threadsTimedWaiting" alias="JVM|Threads|Timed Waiting"/>
+            <metric attr="metrics|jvm|threadsWaiting" alias="JVM|Threads|Waiting"/>
+        </metric-group>
+
+        <converter-group name="state-converter">
+            <converter str="STOPPED" value="0"/>
+            <converter str="STOPPING" value="1"/>
+            <converter str="STARTING" value="2"/>
+            <converter str="STARTED" value="100"/>
+
+            <converter str="INIT" value="10"/>
+            <converter str="INSTALLING" value="11"/>
+            <converter str="INSTALLED" value="12"/>
+            <converter str="INSTALL_FAILED" value="13"/>
+            <converter str="UNINSTALLING" value="14"/>
+            <converter str="UNINSTALLED" value="15"/>
+            <converter str="WIPING_OUT" value="16"/>
+            <converter str="UPGRADING" value="17"/>
+            <converter str="MAINTENANCE" value="18"/>
+
+            <converter str="UNKNOWN" value="20"/>
+        </converter-group>
+    </metric-config>
+</metricStats>

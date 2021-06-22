@@ -7,22 +7,21 @@
 
 package com.appdynamics.monitors.hadoop.communicator;
 
-import com.appdynamics.extensions.NumberUtils;
-import com.appdynamics.extensions.StringUtils;
-import com.appdynamics.extensions.conf.MonitorConfiguration;
+import com.appdynamics.extensions.AMonitorTaskRunnable;
+import com.appdynamics.extensions.MetricWriteHelper;
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.extensions.http.HttpClientUtils;
 import com.appdynamics.extensions.http.UrlBuilder;
-import com.appdynamics.extensions.util.GroupCounter;
-import com.appdynamics.extensions.util.JsonUtils;
-import com.appdynamics.extensions.util.MetricUtils;
-import com.appdynamics.extensions.util.YmlUtils;
+import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
+import com.appdynamics.extensions.util.*;
+import com.appdynamics.monitors.hadoop.Utility.Constants;
+import com.appdynamics.monitors.hadoop.Utility.MetricUtils;
 import com.appdynamics.monitors.hadoop.input.Metric;
 import com.appdynamics.monitors.hadoop.input.MetricConfig;
 import com.appdynamics.monitors.hadoop.input.Stat;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -33,30 +32,34 @@ import java.util.Map;
 /**
  * Created by abey.tom on 9/22/16.
  */
-public class ResourceMgrMetricsFetcherTask implements Runnable {
+public class ResourceMgrMetricsFetcherTask implements AMonitorTaskRunnable {
+    private static final Logger logger = ExtensionsLoggerFactory.getLogger(ResourceMgrMetricsFetcherTask.class);
+
     public static final String[] KNOWN_STATUS = {"UNDEFINED", "SUCCEEDED", "FAILED", "KILLED"};
     public static final String[] KNOWN_STATES = {"NEW", "NEW_SAVING", "SUBMITTED", "ACCEPTED", "RUNNING", "FINISHED", "FAILED", "KILLED"};
-    public static final Logger logger = LoggerFactory.getLogger(ResourceMgrMetricsFetcherTask.class);
 
-    private final MonitorConfiguration configuration;
-    private final Map<String, ?> server;
+    private MonitorContextConfiguration configuration;
+    private MetricWriteHelper metricWriteHelper;
+    private Map<String, ?> server;
+    private Map<String,?> resourceManagerMonitor;
+    private String metricPrefix;
+    private MetricConfig metricConfig;
 
-    public ResourceMgrMetricsFetcherTask(MonitorConfiguration configuration, Map<String, ?> server) {
+    public ResourceMgrMetricsFetcherTask(MonitorContextConfiguration configuration, MetricWriteHelper metricWriteHelper, Map<String, ?> server, Map<String,?> resourceManagerMonitor, MetricConfig metricConfig) {
         this.configuration = configuration;
+        this.metricWriteHelper=metricWriteHelper;
         this.server = server;
+        this.resourceManagerMonitor=resourceManagerMonitor;
+        this.metricPrefix=configuration.getMetricPrefix()+ Constants.SEPARATOR+Constants.RESOURCE_MANAGER_MONITOR+Constants.SEPARATOR+server.get(Constants.DISPLAY_NAME);
+        this.metricConfig=metricConfig;
     }
 
+    @Override
     public void run() {
-        try {
-            runTask();
-        } catch (Exception e) {
-            logger.error("Exception while running the task", e);
-        }
-
+        runTask();
     }
 
-    private void runTask() {
-        MetricConfig metricConfig = (MetricConfig) configuration.getMetricsXmlConfiguration();
+    public void runTask() {
         Stat[] stats = metricConfig.getStats();
         if (stats != null && stats.length > 0) {
             for (Stat stat : stats) {
@@ -78,19 +81,19 @@ public class ResourceMgrMetricsFetcherTask implements Runnable {
     }
 
     protected JsonNode getResponseAsJson(String fullUrl) {
-        return HttpClientUtils.getResponseAsJson(configuration.getHttpClient()
+        return HttpClientUtils.getResponseAsJson(configuration.getContext().getHttpClient()
                 , fullUrl, JsonNode.class, Collections.singletonMap("Accept", "application/json"));
     }
 
     protected void printJobTypeMonitoring() {
         Map<String, ?> config = configuration.getConfigYml();
-        int monitoringTimePeriod = YmlUtils.getInt(config.get("monitoringTimePeriod"), 15);
+        int monitoringTimePeriod = YmlUtils.getInt(resourceManagerMonitor.get("monitoringTimePeriod"), 15);
         long monitoringPeriod = System.currentTimeMillis() - monitoringTimePeriod * 60 * 1000;
-        List<Map<String, ?>> applications = (List<Map<String, ?>>) config.get("applications");
+        List<Map<String, ?>> applications = (List<Map<String, ?>>) resourceManagerMonitor.get("applications");
         if (applications != null) {
             for (Map<String, ?> application : applications) {
                 String applicationType = (String) application.get("type");
-                String prefix = StringUtils.concatMetricPath(getMetricPrefix(), "Current Apps", applicationType);
+                String prefix = StringUtils.concatMetricPath(metricPrefix, "Current Apps", applicationType);
                 JsonNode response = getAppsOfTypeResponse(monitoringPeriod, application);
                 JsonNode apps = JsonUtils.getNestedObject(response, "apps", "app");
                 List<String> names = (List<String>) application.get("names");
@@ -121,10 +124,6 @@ public class ResourceMgrMetricsFetcherTask implements Runnable {
         }
     }
 
-    private String getMetricPrefix() {
-        return StringUtils.concatMetricPath(configuration.getMetricPrefix(), (String) server.get("name"));
-    }
-
     private boolean matches(String name, List<String> regexes) {
         if (regexes != null) {
             for (String regex : regexes) {
@@ -148,7 +147,7 @@ public class ResourceMgrMetricsFetcherTask implements Runnable {
                 val = new BigDecimal(value);
             }
             String metricPath = StringUtils.concatMetricPath(prefix, stat);
-            configuration.getMetricWriter().printMetric(metricPath, val, "OBS.CUR.COL");
+            metricWriteHelper.printMetric(metricPath, val, "OBS.CUR.COL");
         }
     }
 
@@ -231,8 +230,7 @@ public class ResourceMgrMetricsFetcherTask implements Runnable {
     }
 
     private Stat getStatsByName(String name) {
-        MetricConfig config = (MetricConfig) configuration.getMetricsXmlConfiguration();
-        Stat[] stats = config.getStats();
+        Stat[] stats = metricConfig.getStats();
         if (stats != null) {
             for (Stat stat : stats) {
                 if (name != null && name.equals(stat.getName())) {
@@ -262,20 +260,19 @@ public class ResourceMgrMetricsFetcherTask implements Runnable {
     }
 
     private void reportMetrics(JsonNode node, Stat stat) {
-        String statPrefix = StringUtils.concatMetricPath(getMetricPrefix(), stat.getLabel());
+        String statPrefix = StringUtils.concatMetricPath(metricPrefix, stat.getLabel());
         Metric[] metrics = stat.getMetrics();
         if (metrics != null) {
             for (Metric metric : metrics) {
                 String attr = metric.getAttr();
                 String metricValue = JsonUtils.getTextValue(node, attr.split("\\|"));
-                MetricConfig config = (MetricConfig) configuration.getMetricsXmlConfiguration();
-                metricValue = metric.convertValue(attr, metricValue, config);
+                metricValue = metric.convertValue(attr, metricValue, metricConfig);
                 if (NumberUtils.isNumber(metricValue)) {
                     BigDecimal val = MetricUtils.multiplyAndRound(metricValue, metric.getMultiplier());
                     String label = getLabel(metric, node);
                     if (label != null) {
                         String metricPath = StringUtils.concatMetricPath(statPrefix, label);
-                        configuration.getMetricWriter().printMetric(metricPath, val, getMetricType(stat, metric));
+                        metricWriteHelper.printMetric(metricPath, val, getMetricType(stat, metric));
                     }
                 } else {
                     logger.debug("The metric path {} didnt return any value", attr);
@@ -323,4 +320,12 @@ public class ResourceMgrMetricsFetcherTask implements Runnable {
             return metric.getAttr();
         }
     }
+
+
+
+    @Override
+    public void onTaskComplete() {
+        logger.info("Completed ResourceMgrMetricsFetcherTask for server "+server.get(Constants.DISPLAY_NAME));
+    }
+
 }

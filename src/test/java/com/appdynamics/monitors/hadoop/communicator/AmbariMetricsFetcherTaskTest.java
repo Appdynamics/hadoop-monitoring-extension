@@ -7,18 +7,14 @@
 
 package com.appdynamics.monitors.hadoop.communicator;
 
-import com.appdynamics.extensions.conf.MonitorConfiguration;
-import com.appdynamics.extensions.util.MetricWriteHelper;
-import com.appdynamics.extensions.util.MetricWriteHelperFactory;
+import com.appdynamics.extensions.AMonitorJob;
+import com.appdynamics.extensions.MetricWriteHelper;
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.monitors.hadoop.MetricOutput;
-import com.appdynamics.monitors.hadoop.SynchronousExecutorService;
 import com.appdynamics.monitors.hadoop.input.MetricConfig;
-import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
-import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
-import com.singularity.ee.agent.systemagent.api.TaskOutput;
-import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.appdynamics.monitors.hadoop.input.MetricStats;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -28,23 +24,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by abey.tom on 11/10/16.
  */
-public class AmbariMetricsFetcherTaskTest extends AManagedMonitor {
+public class AmbariMetricsFetcherTaskTest {
     public static final Logger logger = LoggerFactory.getLogger(AmbariMetricsFetcherTaskTest.class);
 
-    @Test
+    @Test(timeout=45000)
     public void readClustersStat() throws JAXBException, InterruptedException, IOException {
         Runnable runnable = Mockito.mock(Runnable.class);
-        MetricWriteHelper writer = MetricWriteHelperFactory.create(this);
-        writer = Mockito.spy(writer);
+        MetricWriteHelper writer = Mockito.mock(MetricWriteHelper.class);
         final List<MetricOutput> expected = MetricOutput.from("/data/ambari-expected-output.txt");
         Mockito.doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -59,19 +56,21 @@ public class AmbariMetricsFetcherTaskTest extends AManagedMonitor {
                 return null;
             }
         }).when(writer).printMetric(Mockito.anyString(), Mockito.any(BigDecimal.class), Mockito.anyString());
-        MonitorConfiguration configuration = new MonitorConfiguration("Test", runnable, writer);
+        MonitorContextConfiguration configuration = new MonitorContextConfiguration("Hadoop Monitor", "Custom Metrics|Hadoop Monitor",Mockito.mock(File.class),Mockito.mock(AMonitorJob.class));
         configuration = Mockito.spy(configuration);
-        Mockito.doReturn(new SynchronousExecutorService()).when(configuration).getExecutorService();
-        configuration.setMetricsXml("src/main/resources/conf/metrics-ambari.xml", MetricConfig.class);
-        configuration.setConfigYml("src/main/resources/conf/config.yml", "ambariMonitor");
+        configuration.setMetricXml("src/main/resources/conf/metrics.xml", MetricStats.class);
+        configuration.setConfigYml("src/test/resources/conf/config.yml");
         List<Map<String, ?>> servers = (List<Map<String, ?>>) configuration.getConfigYml().get("servers");
-        AmbariMetricsFetcherTask fetcher = createTask(configuration, servers);
+        Map<String,?> ambariMonitor = (Map<String, ?>) configuration.getConfigYml().get("ambariMonitor");
+        MetricConfig metricConfig = ((MetricStats)configuration.getMetricsXml()).getMetricConfig()[1];
+        AmbariMetricsFetcherTask fetcher = createTask(configuration, writer,servers,ambariMonitor,metricConfig);
         fetcher.run();
+        TimeUnit.SECONDS.sleep(40);
         Assert.assertTrue("It seems that these metrics are not reported " + expected, expected.isEmpty());
     }
 
-    private AmbariMetricsFetcherTask createTask(MonitorConfiguration configuration, List<Map<String, ?>> servers) {
-        AmbariMetricsFetcherTask fetcher = new AmbariMetricsFetcherTask(configuration, servers.get(0));
+    private AmbariMetricsFetcherTask createTask(MonitorContextConfiguration configuration, MetricWriteHelper metricWriteHelper, List<Map<String, ?>> servers,Map<String,?> ambariMonitor, MetricConfig metricConfig) {
+        AmbariMetricsFetcherTask fetcher = new AmbariMetricsFetcherTask(configuration, metricWriteHelper,servers.get(0),ambariMonitor,metricConfig);
         fetcher = Mockito.spy(fetcher);
         Mockito.doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -120,10 +119,6 @@ public class AmbariMetricsFetcherTaskTest extends AManagedMonitor {
     public static JsonNode getResourceAsJson(String path) throws IOException {
         InputStream in = AmbariMetricsFetcherTask.class.getResourceAsStream(path);
         return new ObjectMapper().readTree(in);
-    }
-
-    public TaskOutput execute(Map<String, String> map, TaskExecutionContext taskExecutionContext) throws TaskExecutionException {
-        return null;
     }
 
 }

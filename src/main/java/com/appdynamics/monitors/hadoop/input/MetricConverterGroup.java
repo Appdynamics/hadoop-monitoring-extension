@@ -7,7 +7,7 @@
 
 package com.appdynamics.monitors.hadoop.input;
 
-import com.appdynamics.extensions.StringUtils;
+import com.appdynamics.extensions.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

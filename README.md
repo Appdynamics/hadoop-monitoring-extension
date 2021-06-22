@@ -19,9 +19,10 @@ Metrics include:
   - Service metrics for HDFS, YARN, MapReduce, HBase, Hive, WebHCat, Oozie, Ganglia, Nagios, and ZooKeeper
 
 
-Installation
--------------
-#### Prerequisites
+
+Prerequisites
+-----------
+- Before the extension is installed, the prerequisites mentioned [here](https://community.appdynamics.com/t5/Knowledge-Base/Extensions-Prerequisites-Guide/ta-p/35213) need to be met. Please do not proceed with the extension installation if the specified prerequisites are not met.
 - Hadoop distribution that features Hadoop YARN. Distributions based on Hadoop 2.x should include YARN
 	- Examples: hadoop-2.x, hadoop-0.23.x, CDH4 from Cloudera, HDP 2 from Hortonworks, and Pivotal HD from Pivotal
 - Resource Manager hostname and port  
@@ -32,6 +33,9 @@ OR
 
 If the cluster version is 1.x and not installed by Ambari, no metrics can be gathered at this time.
 
+Installation
+-------------
+
 #### Steps
 1. To build from source, clone this repository and run `mvn clean install`. This will produce a HadoopMonitor-VERSION.zip in the target directory. Alternatively, download the latest release archive from [Github](https://github.com/Appdynamics/hadoop-monitoring-extension/releases/latest).
 2. Unzip as "HadoopMonitor" and copy the "HadoopMonitor" directory to `<MACHINE_AGENT_HOME>/monitors`.
@@ -40,60 +44,77 @@ If the cluster version is 1.x and not installed by Ambari, no metrics can be gat
 5. Restart the machine agent.
 6. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop.
 
+Please place the extension in the "monitors" directory of your Machine Agent installation directory. Do not place the extension in the "extensions" directory of your Machine Agent installation directory.
+
 ## Configuration ##
+
+### config.yml
 Note : Please make sure to not use tab (\t) while editing yaml files. You may want to validate the yaml file using a [yaml validator](http://yamllint.com/)
-1. Configure the extension by editing the config.yml file in `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/`.
 
-   For eg.
-   ```
-    # To enable or diable ResourceManager metrics, set resourceManagerMonitor to "true" or "false"
-    # The Hadoop version for the cluster you want to monitor using Resource Manager.
-    # Example: 1.3, 2.2, 0.23
-    # RESOURCE MANAGER Web UI CONFIG: Resource Manager is only usable for Hadoop 2.x and Hadoop 0.23.x
+#### Configure Metric Prefix
+Please follow section 2.1 of the [Document](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695) to set up metric prefix.
+~~~
+# Use this only if SIM is enabled
+#metricPrefix: "Custom Metrics|Hadoop|"
 
-    resourceManagerMonitor: true
-    resourceManagerConfig:
-    hadoopVersion: "2.3"
-    host: "localhost"
-    port: 8088
-    username: ""
-    password: ""
+# If SIM is not enabled, then use this
+metricPrefix:  "Server|Component:<TIER_ID>|Custom Metrics|Hadoop|"
+~~~
 
-    # application metrics within last X number of minutes to monitor
-    monitoringTimePeriod: 15
-
-    # mapReduceJobsToBeMonitored: comma separated jobs to be monitored within time specified by monitoringTimePeriod
-    # with their state (NEW, NEW_SAVING, SUBMITTED, ACCEPTED, RUNNING, FINISHED, FAILED, KILLED) as integers reported to controller
-    mapReduceJobsToBeMonitored: ["grep-search","grep-sort"]
-
-
-    # To enable or diable Ambari metrics, set ambariMonitor to "true" or "false"
-    # Ambari metrics are only available for clusters inistalled using Ambari, manual installs are not eligible
-    # ambariConfig: Only configure if 'ambariMonitor' is set to 'true'
-
-    ambariMonitor: true
-    ambariConfig:
-    host: "192.168.0.101"
-    port: 8080
-    username: "admin"
-    password: "admin"
-
-    numberOfThreads: 10
-
-    # includeClusters: comma-separated cluster names (case sensitive) you want to gather metrics for. If empty, all clusters are reported
-    # includeHosts: comma-separated host names (case sensitive) you want to gather metrics for. If empty, all hosts are reported
-    # includeServices: comma-separated service names (case sensitive) you want to gather metrics for. If empty, all services are reported
-    includeClusters: []
-    includeHosts: []
-    includeServices: []
-
-    #prefix used to show up metrics in AppDynamics
-    metricPathPrefix: "Custom Metrics|HadoopMonitor|"
+#### Configure servers section
 
    ```
+   #Please ensure that appropriate "type" is configured for all servers. "type" can be any of "resourceManagerMonitor" or "ambariMonitor" only.
+servers:
+    - uri: "http://localhost:8088"
+      username: "admin"
+      password: "admin"
+      encryptedPassword: ""
+      name: "RM Server"
+      type: "resourceManagerMonitor"
 
-3. Configure the path to the config.yml file by editing the <task-arguments> in the monitor.xml file in the `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/` directory. Below is the sample
+   #Ambari server can be configured with type as ambariMonitor
+    - uri: "http://localhost:8088/api/v1"
+      username: "admin"
+      password: "admin"
+      encryptedPassword: ""
+      name: "Ambari Server"
+      type: "ambariMonitor"
 
+#Password Encryption Support.
+#encryptionKey: welcome
+
+connection:
+  socketTimeout: 20000
+  connectTimeout: 20000
+  sslCertCheckEnabled: false
+  sslVerifyHostname: false
+  
+
+#Please do not remove any of the below monitor. Just configure the appropriate applications/filters based on type specified for your server.
+resourceManagerMonitor:
+  # This will monitor the type of applications in the monitoringTimePeriod
+  # Only the aggregate of State and Finished Status will be reported
+  applications:
+    - type: "MAPREDUCE"
+      names: [".*"]
+  #In Minutes
+  monitoringTimePeriod: 30
+
+
+ambariMonitor:
+  # Regex expressions are supported in the filters
+  filters:
+    clusters:
+      includes: ['.*']
+    hosts:
+      includes: ['.*']
+    services:
+      includes: ['.*']
+
+   ```
+### monitor.xml
+Configure the path to the config.yml file by editing the <task-arguments> in the monitor.xml file in the `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/` directory. Below is the sample
      ```
      <task-arguments>
          <!-- config file-->
@@ -193,6 +214,14 @@ https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/index.md#m
 | State       | Component state
 
 
+Credentials Encryption
+------------------
+Please visit [this page](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-use-Password-Encryption-with-Extensions/ta-p/29397) to get detailed instructions on password encryption. The steps in this document will guide you through the whole process.
+
+Extensions Workbench
+------------------
+Workbench is an inbuilt feature provided with each extension in order to assist you to fine tune the extension setup before you actually deploy it on the controller. Please review the following document on [How to use the Extensions WorkBench](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-use-the-Extensions-WorkBench/ta-p/30130).
+
 Custom Dashboard
 ------------------
 #### Hadoop 1
@@ -203,19 +232,37 @@ Custom Dashboard
 
 ![](https://raw.github.com/Appdynamics/hadoop-monitoring-extension/master/Hadoop2Dashboard.png)
 
+
+Troubleshooting
+------------------
+Please follow the steps listed in this [troubleshooting-document](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695) in order to troubleshoot your issue. These are a set of common issues that customers might have faced during the installation of the extension. If these don't solve your issue, please follow the last step on the [troubleshooting-document](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695) to contact the support team.
+
+Support Tickets
+------------------
+If after going through the [Troubleshooting Document](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695) you have not been able to get your extension working, please file a ticket with the following information:
+
+1. Stop the running machine agent.
+2. Delete all existing logs under <MachineAgent>/logs.
+3. Please enable debug logging by editing the file <MachineAgent>/conf/logging/log4j.xml. Change the level value of the following <logger> elements to debug.
+    ```
+    <logger name="com.singularity">
+    <logger name="com.appdynamics">
+   ```
+4. Start the machine agent and please let it run for 10 mins. Then zip and upload all the logs in the directory <MachineAgent>/logs/*.
+   Attach the zipped <MachineAgent>/conf/* directory.
+5. Attach the zipped <MachineAgent>/monitors/ExtensionFolderYouAreHavingIssuesWith directory.
+
+For any support related questions, you can also contact help@appdynamics.com.
+
 Contributing
 ------------
+Always feel free to fork and contribute any changes directly here on [GitHub](https://github.com/Appdynamics/hadoop-monitoring-extension).
 
-Always feel free to fork and contribute any changes directly here on GitHub.
-
-
-Community
----------
-
-Find out more in the <a href="http://appsphere.appdynamics.com/t5/eXchange/Hadoop-Monitoring-Extension/idi-p/3583">AppSphere</a>.
-
-Support
--------
-
-For any questions or feature request, please contact <a href="mailto:help@appdynamics.com">AppDynamics Center of Excellence</a>.
-
+## Version
+|          Name            |  Version   |
+|--------------------------|------------|
+|Extension Version         |3.0.0       |
+|Controller Compatibility  |4.5 or Later|
+|Machine Agent Version     |4.5.13+     |
+|Product Tested on         |2.7.0      |
+|Last Update               |21/06/2021  |
