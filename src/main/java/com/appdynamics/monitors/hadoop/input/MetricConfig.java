@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.*;
 /**
  * Created by abey.tom on 9/8/16.
  */
-@XmlRootElement(name = "metric-config")
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MetricConfig {
     @XmlElement(name = "stat")
@@ -21,6 +21,9 @@ public class MetricConfig {
     private MetricConverterGroup[] converters;
     @XmlElement(name = "metric-group")
     private MetricGroup[] metricGroups;
+
+    @XmlAttribute
+    private String name;
 
     public Stat[] getStats() {
         return stats;
@@ -55,5 +58,13 @@ public class MetricConfig {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
