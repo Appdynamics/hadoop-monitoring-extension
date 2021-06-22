@@ -1,5 +1,6 @@
+package com.appdynamics.monitors.hadoop;
 /**
- * Copyright 2013 AppDynamics
+ * Copyright 2021 AppDynamics
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,168 +15,103 @@
  * limitations under the License.
  */
 
-package com.appdynamics.monitors.hadoop;
 
-import com.appdynamics.extensions.PathResolver;
-import com.appdynamics.extensions.StringUtils;
-import com.appdynamics.extensions.conf.MonitorConfiguration;
-import com.appdynamics.extensions.conf.MonitorConfiguration.ConfItem;
-import com.appdynamics.extensions.util.MetricWriteHelper;
-import com.appdynamics.extensions.util.MetricWriteHelperFactory;
+import com.appdynamics.extensions.ABaseMonitor;
+import com.appdynamics.extensions.TasksExecutionServiceProvider;
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
+import com.appdynamics.extensions.logging.ExtensionsLoggerFactory;
+import com.appdynamics.extensions.util.AssertUtils;
+import com.appdynamics.monitors.hadoop.Utility.Constants;
+
 import com.appdynamics.monitors.hadoop.communicator.AmbariMetricsFetcherTask;
 import com.appdynamics.monitors.hadoop.communicator.ResourceMgrMetricsFetcherTask;
 import com.appdynamics.monitors.hadoop.input.MetricConfig;
+import com.appdynamics.monitors.hadoop.input.MetricStats;
 import com.google.common.base.Strings;
-import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
-import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
-import com.singularity.ee.agent.systemagent.api.TaskOutput;
-import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import org.slf4j.Logger;
+
 import java.util.List;
 import java.util.Map;
 
-public class HadoopMonitor extends AManagedMonitor {
-    public static final Logger logger = LoggerFactory.getLogger(HadoopMonitor.class);
-    public static final String CONFIG_ARG = "config-file";
-    public static final String RM_METRICS_XML_ARG = "metrics-resource-manager-file";
-    public static final String AMBARI_METRICS_XML_ARG = "metrics-ambari-file";
-    private MonitorConfiguration ambariMonitorConfig;
-    private MonitorConfiguration resourceMgrMonitorConfig;
+public class HadoopMonitor extends ABaseMonitor{
 
-    public HadoopMonitor() {
-        String msg = "Using Monitor Version [" + getImplementationVersion() + "]";
-        logger.info(msg);
-        System.out.println(msg);
+    private static final Logger logger = ExtensionsLoggerFactory.getLogger(HadoopMonitor.class);
+
+    private MonitorContextConfiguration monitorContextConfiguration;
+    private Map<String,?> configYml;
+
+    @Override
+    protected String getDefaultMetricPrefix() {
+        return Constants.DEFAULT_METRIC_PREFIX;
     }
 
-    public void init(Map<String, String> taskArgs) {
-        if (resourceMgrMonitorConfig == null) {
-            this.resourceMgrMonitorConfig = initResourceManagerConfig(taskArgs);
-        }
-        if (ambariMonitorConfig == null) {
-            this.ambariMonitorConfig = initAmbariConfig(taskArgs);
-        }
+    @Override
+    public String getMonitorName() {
+        return Constants.MONITOR_NAME;
     }
 
-    protected MonitorConfiguration initAmbariConfig(Map<String, String> taskArgs) {
-        logger.info("Initializing the Ambari Monitor Configuration");
-        String configFilename = getConfigFilename(taskArgs.get(CONFIG_ARG));
-        MetricWriteHelper metricWriteHelper = MetricWriteHelperFactory.create(this);
-        MonitorConfiguration conf = new MonitorConfiguration("Custom Metrics|HadoopMonitor|Ambari",
-                new AmbariMonitorExecutor(), metricWriteHelper);
-        String xmlPath = getPath(taskArgs, AMBARI_METRICS_XML_ARG, "monitors/HadoopMonitor/metrics-ambari.xml");
-        conf.setMetricsXml(xmlPath, MetricConfig.class);
-        conf.setConfigYml(configFilename, "ambariMonitor");
-        if (conf.isEnabled()) {
-            conf.checkIfInitialized(ConfItem.CONFIG_YML, ConfItem.METRIC_PREFIX,
-                    ConfItem.METRIC_WRITE_HELPER, ConfItem.METRICS_XML);
-        } else {
-            logger.info("The Ambari Monitor is not enabled");
-        }
-        return conf;
-    }
+    @Override
+    protected void doRun(TasksExecutionServiceProvider serviceProvider) {
+        List<Map<String,?>> servers = (List<Map<String, ?>>) configYml.get(Constants.SERVERS);
+        AssertUtils.assertNotNull(servers, "The servers section cannot be null");
 
-    protected MonitorConfiguration initResourceManagerConfig(Map<String, String> taskArgs) {
-        logger.info("Initializing the Resource Manager Monitor Configuration");
-        String configFilename = getConfigFilename(taskArgs.get(CONFIG_ARG));
-        MetricWriteHelper metricWriteHelper = MetricWriteHelperFactory.create(this);
-        MonitorConfiguration conf = new MonitorConfiguration("Custom Metrics|HadoopMonitor|ResourceManager",
-                new RMMonitorExecutor(), metricWriteHelper);
-        String xmlPath = getPath(taskArgs, RM_METRICS_XML_ARG, "monitors/HadoopMonitor/metrics-resource-manager.xml");
-        conf.setMetricsXml(xmlPath, MetricConfig.class);
-        conf.setConfigYml(configFilename, new ConfigReloader(), "resourceManagerMonitor");
-        if (conf.isEnabled()) {
-            conf.checkIfInitialized(ConfItem.CONFIG_YML, ConfItem.METRIC_PREFIX, ConfItem.METRIC_WRITE_HELPER);
-        } else{
-            logger.info("The Resource Manager Monitor is not enabled");
-        }
-        return conf;
-    }
-
-    private String getPath(Map<String, String> taskArgs, String pathKey, String defaultValue) {
-        String path = taskArgs.get(pathKey);
-        if (StringUtils.hasText(path)) {
-            return path.trim();
-        } else {
-            return defaultValue;
-        }
-    }
-
-    private class AmbariMonitorExecutor implements Runnable {
-
-        public void run() {
-            Map<String, ?> configYml = ambariMonitorConfig.getConfigYml();
-            List<Map> servers = (List<Map>) configYml.get("servers");
-            if (servers != null && !servers.isEmpty()) {
-                for (Map server : servers) {
-                    AmbariMetricsFetcherTask task = new AmbariMetricsFetcherTask(ambariMonitorConfig, server);
-                    ambariMonitorConfig.getExecutorService().execute(task);
-                }
-            }
-        }
-    }
-
-    private class RMMonitorExecutor implements Runnable {
-
-        public void run() {
-            Map<String, ?> configYml = resourceMgrMonitorConfig.getConfigYml();
-            List<Map> servers = (List<Map>) configYml.get("servers");
-            if (servers != null && !servers.isEmpty()) {
-                for (Map server : servers) {
-                    ResourceMgrMetricsFetcherTask task = new ResourceMgrMetricsFetcherTask(resourceMgrMonitorConfig, server);
-                    resourceMgrMonitorConfig.getExecutorService().execute(task);
-                }
-            }
-        }
-    }
-
-
-    private class ConfigReloader implements MonitorConfiguration.FileWatchListener {
-
-        public void onFileChange(File file) {
+        for(Map<String,?> server: servers) {
             try {
-                //loadConfigYml(file);
-            } catch (Exception e) {
-                logger.error("Error while loading the Ambari configuration" + file.getAbsolutePath(), e);
+                if (!Strings.isNullOrEmpty((String) server.get("type")) && ((String) server.get("type")).equals(Constants.RESOURCE_MANAGER_MONITOR)) {
+                    logger.info("Starting ResourceManagerMonitorTask for server " + (server.get(Constants.DISPLAY_NAME)));
+                    Map<String, ?> resourceManagerMonitor = (Map<String, ?>) configYml.get(Constants.RESOURCE_MANAGER_MONITOR);
+                    AssertUtils.assertNotNull(resourceManagerMonitor, "resourceManagerMonitor cannot be null or empty in config file");
+                    MetricConfig rmMetricConfig = getMetricConfig(Constants.RESOURCE_MANAGER_MONITOR);
+                    AssertUtils.assertNotNull(rmMetricConfig,"No configurations are provided for " + Constants.RESOURCE_MANAGER_MONITOR + " in metrics.xml file. Not collecting metrics for "+server.get(Constants.DISPLAY_NAME));
+                    ResourceMgrMetricsFetcherTask resourceMgrMetricsFetcherTask = new ResourceMgrMetricsFetcherTask(monitorContextConfiguration, serviceProvider.getMetricWriteHelper(), server, resourceManagerMonitor, rmMetricConfig);
+                    serviceProvider.submit("ResourceMgrMetricsFetcherTask", resourceMgrMetricsFetcherTask);
+                } else if (!Strings.isNullOrEmpty((String) server.get("type")) && ((String) server.get("type")).equals(Constants.AMBARI_MONITOR)) {
+                    logger.info("Starting AmbariMonitorTask for server " + (server.get(Constants.DISPLAY_NAME)));
+                    Map<String, ?> ambariMonitor = (Map<String, ?>) configYml.get(Constants.AMBARI_MONITOR);
+                    AssertUtils.assertNotNull(ambariMonitor, "ambariMonitor cannot be null or empty in config file");
+                    MetricConfig ambariMetricConfig = getMetricConfig(Constants.AMBARI_MONITOR);
+                    AssertUtils.assertNotNull(ambariMetricConfig,"No configurations are provided for " + Constants.AMBARI_MONITOR + " in metrics.xml file. Not collecting metrics for "+server.get(Constants.DISPLAY_NAME));
+                    AmbariMetricsFetcherTask ambariMetricsFetcherTask = new AmbariMetricsFetcherTask(monitorContextConfiguration, serviceProvider.getMetricWriteHelper(), server, ambariMonitor, ambariMetricConfig);
+                    serviceProvider.submit("AmbariMetricsFetcherTask", ambariMetricsFetcherTask);
+                } else {
+                    logger.info("Not starting task for server {} as type is incorrectly set in config file", server.get(Constants.DISPLAY_NAME));
+                }
+            } catch(Exception ex){
+                logger.error("Error occurred while running task for server "+server.get(Constants.DISPLAY_NAME),ex);
             }
         }
     }
 
-    public TaskOutput execute(Map<String, String> taskArgs, TaskExecutionContext arg1)
-            throws TaskExecutionException {
-        try {
-            init(taskArgs);
-            logger.debug("Executing the HadoopMonitor with args {}", taskArgs);
-            ambariMonitorConfig.executeTask();
-            resourceMgrMonitorConfig.executeTask();
-        } catch (Exception e) {
-            logger.error("Exception while running the task", e);
-            throw new TaskExecutionException(e);
-        }
-        return new TaskOutput("Execution Triggered");
+    @Override
+    protected void initializeMoreStuff(Map<String, String> args) {
+        monitorContextConfiguration = getContextConfiguration();
+        configYml = monitorContextConfiguration.getConfigYml();
+        AssertUtils.assertNotNull(configYml,"The config.yml is not available");
+        this.getContextConfiguration().setMetricXml(args.get(Constants.METRIC_FILE), MetricStats.class);
     }
 
-    public static String getConfigFilename(String filename) {
-        if (filename == null) {
-            return "";
-        }
-        // for absolute paths
-        if (new File(filename).exists()) {
-            return filename;
-        }
-        // for relative paths
-        File jarPath = PathResolver.resolveDirectory(AManagedMonitor.class);
-        String configFileName = "";
-        if (!Strings.isNullOrEmpty(filename)) {
-            configFileName = jarPath + File.separator + filename;
-        }
-        return configFileName;
+    @Override
+    protected List<Map<String, ?>> getServers() {
+        return (List<Map<String, ?>>) configYml.get(Constants.SERVERS);
     }
 
-    public static String getImplementationVersion() {
-        return HadoopMonitor.class.getPackage().getImplementationTitle();
+    protected MetricConfig getMetricConfig(String monitorName){
+        MetricStats metricStats = (MetricStats) monitorContextConfiguration.getMetricsXml();
+        for(MetricConfig metricConfig: metricStats.getMetricConfig()){
+            if(metricConfig.getName().equals(monitorName)){
+                return metricConfig;
+            }
+        }
+        return null;
     }
+
+//    public static void main(String[] args) throws TaskExecutionException {
+//
+//        HadoopMonitor monitor = new HadoopMonitor();
+//        final Map<String, String> taskArgs = new HashMap<>();
+//        taskArgs.put("config-file", "src/main/resources/conf/config.yml");
+//        taskArgs.put("metric-file", "src/main/resources/conf/metrics.xml");
+//        monitor.execute(taskArgs, null);
+//    }
 }

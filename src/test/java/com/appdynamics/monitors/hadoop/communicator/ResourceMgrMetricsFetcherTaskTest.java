@@ -7,16 +7,12 @@
 
 package com.appdynamics.monitors.hadoop.communicator;
 
-import com.appdynamics.extensions.conf.MonitorConfiguration;
-import com.appdynamics.extensions.util.MetricWriteHelper;
-import com.appdynamics.extensions.util.MetricWriteHelperFactory;
+import com.appdynamics.extensions.AMonitorJob;
+import com.appdynamics.extensions.MetricWriteHelper;
+import com.appdynamics.extensions.conf.MonitorContextConfiguration;
 import com.appdynamics.monitors.hadoop.MetricOutput;
-import com.appdynamics.monitors.hadoop.SynchronousExecutorService;
 import com.appdynamics.monitors.hadoop.input.MetricConfig;
-import com.singularity.ee.agent.systemagent.api.AManagedMonitor;
-import com.singularity.ee.agent.systemagent.api.TaskExecutionContext;
-import com.singularity.ee.agent.systemagent.api.TaskOutput;
-import com.singularity.ee.agent.systemagent.api.exception.TaskExecutionException;
+import com.appdynamics.monitors.hadoop.input.MetricStats;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,6 +21,7 @@ import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,14 +32,12 @@ import static com.appdynamics.monitors.hadoop.communicator.AmbariMetricsFetcherT
 /**
  * Created by abey.tom on 12/1/16.
  */
-public class ResourceMgrMetricsFetcherTaskTest extends AManagedMonitor {
+public class ResourceMgrMetricsFetcherTaskTest {
     public static final Logger logger = LoggerFactory.getLogger(ResourceMgrMetricsFetcherTaskTest.class);
 
     @Test
     public void resourceMgrStatsReaderTest() throws IOException {
-        Runnable runnable = Mockito.mock(Runnable.class);
-        MetricWriteHelper writer = MetricWriteHelperFactory.create(this);
-        writer = Mockito.spy(writer);
+        MetricWriteHelper writer = Mockito.mock(MetricWriteHelper.class);
         final List<MetricOutput> expected = MetricOutput.from("/data/resource-manager-expected-output.txt");
         Mockito.doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -58,20 +53,21 @@ public class ResourceMgrMetricsFetcherTaskTest extends AManagedMonitor {
                 return null;
             }
         }).when(writer).printMetric(Mockito.anyString(), Mockito.any(BigDecimal.class), Mockito.anyString());
-        MonitorConfiguration configuration = new MonitorConfiguration("Test", runnable, writer);
+        MonitorContextConfiguration configuration = new MonitorContextConfiguration("Hadoop Monitor","Custom Metrics|Hadoop",Mockito.mock(File.class),Mockito.mock(AMonitorJob.class));
         configuration = Mockito.spy(configuration);
-        Mockito.doReturn(new SynchronousExecutorService()).when(configuration).getExecutorService();
-        configuration.setMetricsXml("src/main/resources/conf/metrics-resource-manager.xml", MetricConfig.class);
-        configuration.setConfigYml("src/main/resources/conf/config.yml", "resourceManagerMonitor");
+        configuration.setMetricXml("src/main/resources/conf/metrics.xml", MetricStats.class);
+        configuration.setConfigYml("src/test/resources/conf/test-config-rm.yml");
         List<Map<String, ?>> servers = (List<Map<String, ?>>) configuration.getConfigYml().get("servers");
-        Runnable fetcher = createTask(configuration, servers);
+        Map<String,?> resourceManagerMonitor = (Map<String, ?>) configuration.getConfigYml().get("resourceManagerMonitor");
+        MetricConfig metricConfig = ((MetricStats)configuration.getMetricsXml()).getMetricConfig()[0];
+        ResourceMgrMetricsFetcherTask fetcher = createTask(configuration, writer, servers, resourceManagerMonitor,metricConfig);
         fetcher.run();
         Assert.assertTrue("It seems that these metrics are not reported " + expected, expected.isEmpty());
     }
 
-    private ResourceMgrMetricsFetcherTask createTask(MonitorConfiguration configuration, List<Map<String, ?>> servers) {
+    private ResourceMgrMetricsFetcherTask createTask(MonitorContextConfiguration configuration, MetricWriteHelper writer,List<Map<String, ?>> servers, Map<String,?> resourceManagerMonitor, MetricConfig metricConfig) {
         Map<String, ?> server = servers.get(0);
-        ResourceMgrMetricsFetcherTask task = new ResourceMgrMetricsFetcherTask(configuration, server);
+        ResourceMgrMetricsFetcherTask task = new ResourceMgrMetricsFetcherTask(configuration, writer, server, resourceManagerMonitor, metricConfig);
         task = Mockito.spy(task);
         Mockito.doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -90,9 +86,5 @@ public class ResourceMgrMetricsFetcherTaskTest extends AManagedMonitor {
             }
         }).when(task).getResponseAsJson(Mockito.anyString());
         return task;
-    }
-
-    public TaskOutput execute(Map<String, String> map, TaskExecutionContext taskExecutionContext) throws TaskExecutionException {
-        return null;
     }
 }

@@ -13,7 +13,7 @@
 
     <groupId>com.appdynamics.monitors</groupId>
     <artifactId>hadoop-monitoring-extension</artifactId>
-    <version>2.5.1</version>
+    <version>3.0.0</version>
     <name>hadoop-monitoring-extension</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -24,34 +24,14 @@
     <dependencies>
         <dependency>
             <groupId>com.appdynamics</groupId>
-            <artifactId>machine-agent</artifactId>
-            <version>3.7.11</version>
+            <artifactId>machineagent-repackaged</artifactId>
+            <version>4.0.5.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.appdynamics</groupId>
             <artifactId>appd-exts-commons</artifactId>
-            <version>1.6.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.5</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <version>2.2.4</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -65,10 +45,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.21</version>
-            <scope>test</scope>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.1-GA</version>
         </dependency>
     </dependencies>
 
@@ -80,8 +59,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -138,8 +117,7 @@
                                 <copy todir="${target.dir}">
                                     <fileset dir="src/main/resources/conf" includes="monitor.xml"/>
                                     <fileset dir="src/main/resources/conf" includes="config.yml"/>
-                                    <fileset dir="src/main/resources/conf" includes="metrics-ambari.xml"/>
-                                    <fileset dir="src/main/resources/conf" includes="metrics-resource-manager.xml"/>
+                                    <fileset dir="src/main/resources/conf" includes="metrics.xml"/>
                                 </copy>
                                 <copy todir="${target.dir}">
                                     <fileset dir="${project.build.directory}"

@@ -7,7 +7,7 @@
 
 package com.appdynamics.monitors.hadoop.input;
 
-import com.appdynamics.extensions.StringUtils;
+import com.appdynamics.extensions.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class Metric {
 
     @XmlAttribute
     private String attr;
-    @XmlAttribute
+    @XmlAttribute(name="alias")
     private String label;
     @XmlAttribute(name = "calculate-per-min")
     private Boolean calculatePerMin;
