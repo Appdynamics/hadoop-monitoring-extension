@@ -42,14 +42,13 @@ Installation
 3. Configure the extension by referring to the below section.
 4. Open `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/config.yml` and configure the HRM and/or Ambari parameters.
 5. Restart the machine agent.
-6. In the AppDynamics Metric Browser, look for: Application Infrastructure Performance | \<Tier> | Custom Metrics | Hadoop.
 
 Please place the extension in the "monitors" directory of your Machine Agent installation directory. Do not place the extension in the "extensions" directory of your Machine Agent installation directory.
 
 ## Configuration ##
 
 ### config.yml
-Note : Please make sure to not use tab (\t) while editing yaml files. You may want to validate the yaml file using a [yaml validator](http://yamllint.com/)
+Note : Please make sure to not use tab (\t) while editing yaml files. You may want to validate the yaml file using a [yaml validator](https://jsonformatter.org/yaml-validator)
 
 #### Configure Metric Prefix
 Please follow section 2.1 of the [Document](https://community.appdynamics.com/t5/Knowledge-Base/How-do-I-troubleshoot-missing-custom-metrics-or-extensions/ta-p/28695) to set up metric prefix.
@@ -114,17 +113,19 @@ ambariMonitor:
 
    ```
 ### monitor.xml
-Configure the path to the config.yml file by editing the <task-arguments> in the monitor.xml file in the `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/` directory. Below is the sample
-     ```
+Configure the path to the config.yml file by editing the <task-arguments> in the monitor.xml file in the `<MACHINE_AGENT_HOME>/monitors/HadoopMonitor/` directory. 
+
+Below is the sample
+```
      <task-arguments>
          <!-- config file-->
          <argument name="config-file" is-required="true" default-value="monitors/HadoopMonitor/config.yml" />
           ....
      </task-arguments>
-    ```
+```
 
 
-**Note** : By default, a Machine agent or a AppServer agent can send a fixed number of metrics to the controller. To change this limit, please follow the instructions mentioned [here](http://docs.appdynamics.com/display/PRO14S/Metrics+Limits).
+**Note** : By default, a Machine agent or a AppServer agent can send a fixed number of metrics to the controller. To change this limit, please follow the instructions mentioned [here](http://docs.appdynamics.com/display/latest/Metrics+Limits).
 For eg.  
 ```    
     java -Dappdynamics.agent.maxMetrics=2500 -jar machineagent.jar
@@ -245,7 +246,8 @@ Always feel free to fork and contribute any changes directly here on [GitHub](ht
 |          Name            |  Version   |
 |--------------------------|------------|
 |Extension Version         |3.0.0       |
-|Controller Compatibility  |4.5 or Later|
-|Machine Agent Version     |4.5.13+     |
 |Product Tested on         |2.7.0      |
 |Last Update               |21/06/2021  |
+|Changes list              |[ChangeLog](https://github.com/Appdynamics/hadoop-monitoring-extension/blob/master/CHANGELOG.md)|
+
+**Note**: While extensions are maintained and supported by customers under the open-source licensing model, they interact with agents and Controllers that are subject to [AppDynamics’ maintenance and support policy](https://docs.appdynamics.com/latest/en/product-and-release-announcements/maintenance-support-for-software-versions). Some extensions have been tested with AppDynamics 4.5.13+ artifacts, but you are strongly recommended against using versions that are no longer supported.
