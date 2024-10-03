@@ -1,5 +1,9 @@
 ## Hadoop Monitoring Extension Changelogs
 
+#### Version 3.0.1
+- Upgrading appd-exts-commons to 2.2.13
+- Upgrading JUnit to 4.13.2
+
 #### Version 3.0.0
 - Revamped extension to appd-exts-commons 2.2.4 to work with latest agents
 - Added seamless Workbench support
